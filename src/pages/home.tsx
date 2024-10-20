@@ -4,7 +4,7 @@ import Footer from "../components/footer.tsx";
 import { useTranslation } from "react-i18next";
 
 export default function Home() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -38,28 +38,29 @@ export default function Home() {
             <Box>
               <Heading
                 as="h2"
-                size="lg"
+                size={i18n.language === "en" ? "lg" : "2xl"}
                 lineHeight="tall"
                 fontWeight="medium"
                 color="gray.500"
               >
-                A{" "}
+                {t("landing_sentence_one_part_one")}
                 <Box as="span" color="gray.200">
-                  collective{" "}
+                  {t("landing_sentence_one_part_two_highlight")}
                 </Box>
-                memory. We aim to create future{" "}
+                {t("landing_sentence_one_part_three")}
+                {t("landing_sentence_two_part_one")}
                 <Box as="span" color="gray.200">
-                  justice{" "}
+                  {t("landing_sentence_two_part_two_highlight")}
                 </Box>
-                and{" "}
+                {t("landing_sentence_two_part_three")}
                 <Box as="span" color="gray.200">
-                  accountability{" "}
-                </Box>{" "}
-                for the wondeful people of{" "}
+                  {t("landing_sentence_two_part_four_highlight")}
+                </Box>
+                {t("landing_sentence_two_part_five")}
                 <Box as="span" color="gray.300">
-                  Sudan
+                  {t("landing_sentence_two_part_six_highlight")}
                 </Box>
-                .
+                {t("landing_sentence_two_part_seven")}
               </Heading>
             </Box>
           </VStack>

@@ -6,7 +6,7 @@ import "react-flagpack/dist/style.css";
 import { useTranslation } from "react-i18next";
 
 export default function About() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <>
       <Menu />
@@ -30,23 +30,27 @@ export default function About() {
               >
                 {t("about_heading")}
               </Heading>
-              <Text as="div" fontSize="lg">
-                We are a <Box as="b">grassroots </Box> organization of people
-                who care about what is going on in Sudan{" "}
+              <Text as="div" fontSize={i18n.language === "en" ? "lg" : "2xl"}>
+                {t("about_sentence_one_part_one")}
+                <Box as="b">{t("about_sentence_one_part_two_bold")}</Box>
+                {t("about_sentence_one_part_three_before_flag")}{" "}
                 <Flag code="SD" gradient="real-linear" size="m" hasDropShadow />
-                . We don't want important historical events to go{" "}
-                <Box as="b">undocumented</Box>.
+                .{t("about_sentence_two_part_one")}
+                <Box as="b">{t("about_sentence_two_part_two_bold")}</Box>
+                {t("about_sentence_two_part_three")}
               </Text>
-
-              <Text fontSize="lg">
-                You might think that's <Box as="b">impossible</Box> - everything
-                goes online these days! But that's exactly the problem. There is
-                so much content on the internet that it can be{" "}
-                <Box as="b">hard to find </Box>what you are looking for. Even
-                worse, things often <Box as="b">disappear</Box> within a few
-                years.
+              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
+                {t("about_sentence_three_part_one")}
+                <Box as="b">{t("about_sentence_three_part_two_bold")}</Box>
+                {t("about_sentence_three_part_three")}
+                <Box as="b">{t("about_sentence_three_part_four_bold")}</Box>
+                {t("about_sentence_three_part_five")}
+                <Box as="b">{t("about_sentence_three_part_six_bold")}</Box>
+                {t("about_sentence_three_part_seven")}
               </Text>
-              <Text fontSize="lg">So, we decided to build an archive.</Text>
+              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
+                {t("about_sentence_four")}
+              </Text>
             </VStack>
           </Box>
         </Box>

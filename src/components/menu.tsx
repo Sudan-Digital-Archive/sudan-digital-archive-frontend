@@ -3,24 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { Home } from "react-feather";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-const links = [
-  {
-    url: "/archive",
-    title: "The Archive",
-  },
-  {
-    url: "/about",
-    title: "About",
-  },
-];
 
 const Navbar = () => {
-  const [language, setLanguage] = useState("en");
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const [language, setLanguage] = useState(i18n.language);
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
   const navigate = useNavigate();
+  const links = [
+    {
+      url: "/archive",
+      title: t("nav_the_archive"),
+    },
+    {
+      url: "/about",
+      title: t("nav_about"),
+    },
+  ];
   const MenuBar = () => {
     return (
       <HStack spacing={4} alignItems="center" aria-label="navigation-menu">
