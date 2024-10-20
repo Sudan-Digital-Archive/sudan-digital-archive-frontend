@@ -6,9 +6,9 @@ import "./il18n.ts";
 import "./styles.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home.tsx";
-import { ChakraProvider } from "@chakra-ui/react";
-import theme from "./theme.ts";
+import ChakraThemeRTLProvider from "./components/chakra-theme-rtl-provider.tsx";
 import { ColorModeScript } from "@chakra-ui/react";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -22,13 +22,17 @@ const router = createBrowserRouter([
     path: "/archive",
     element: <Archive />,
   },
+  {
+    path: "*",
+    element: <Home />,
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <ChakraProvider theme={theme}>
+    <ColorModeScript initialColorMode="dark" />
+    <ChakraThemeRTLProvider>
       <RouterProvider router={router} />
-    </ChakraProvider>
+    </ChakraThemeRTLProvider>
   </StrictMode>
 );

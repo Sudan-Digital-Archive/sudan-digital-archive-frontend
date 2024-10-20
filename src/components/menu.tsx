@@ -49,6 +49,18 @@ const Navbar = () => {
               const newLanguage = language === "en" ? "ar" : "en";
               setLanguage(newLanguage);
               changeLanguage(newLanguage);
+              switch (newLanguage) {
+                case "en":
+                  document.documentElement.lang = "en";
+                  document.documentElement.dir = "ltr";
+                  break;
+                case "ar":
+                  document.documentElement.lang = "ar";
+                  document.documentElement.dir = "rtl";
+                  break;
+                default:
+                  throw `Language ${newLanguage} is not supported`;
+              }
             }}
           >
             {language === "en" ? "عربي" : "English"}
