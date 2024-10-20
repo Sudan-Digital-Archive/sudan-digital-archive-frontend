@@ -7,14 +7,16 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
-      "Welcome to React": "Welcome to React and react-i18next"
-    }
+      about_heading: "Who are we?",
+      landing_heading: "Sudan Digital Archive",
+    },
   },
-  fr: {
+  ar: {
     translation: {
-      "Welcome to React": "Bienvenue à React et react-i18next"
-    }
-  }
+      about_heading: "من نحن؟",
+      landing_heading: "الأرشيف الرقمي للسودان"
+    },
+  },
 };
 
 i18n
@@ -26,8 +28,8 @@ i18n
     // if you're using a language detector, do not define the lng option
 
     interpolation: {
-      escapeValue: false // react already safes from xss
-    }
+      escapeValue: false, // react already safes from xss
+    },
   });
 
-  export default i18n;
+export default i18n;

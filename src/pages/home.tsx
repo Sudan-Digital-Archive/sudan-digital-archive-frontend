@@ -1,14 +1,11 @@
 import { Box, SlideFade, VStack, Heading, Text } from "@chakra-ui/react";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
-/*
-Internationalize the site
-Do about page
-Push code
-Sort out favicons
-Fix layout of components
-*/
+import { useTranslation } from "react-i18next";
+
 export default function Home() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Menu />
@@ -30,12 +27,12 @@ export default function Home() {
           >
             <Box>
               <Text
-                className="gradient-text-landing-page"
+                className="gradientText"
                 bgClip="text"
                 fontSize="6xl"
                 fontWeight="extrabold"
               >
-                Sudan Digital Archive
+                {t("landing_heading")}
               </Text>
             </Box>
             <Box>
@@ -58,7 +55,7 @@ export default function Home() {
                 <Box as="span" color="gray.200">
                   accountability{" "}
                 </Box>{" "}
-                for the wondeful people of {" "}
+                for the wondeful people of{" "}
                 <Box as="span" color="gray.300">
                   Sudan
                 </Box>

@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import About from "./pages/about.tsx";
+import Archive from "./pages/archive.tsx";
 import "./il18n.ts";
 import "./styles.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -18,8 +19,8 @@ const router = createBrowserRouter([
     element: <About />,
   },
   {
-    path: "/the-archive",
-    element: <About />,
+    path: "/archive",
+    element: <Archive />,
   },
 ]);
 

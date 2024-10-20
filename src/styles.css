@@ -1,5 +1,15 @@
+/*
+In general styles should be not need custom CSS in this app.
+Should be possible to mostly use Chakra props and then do custom inline styles props when 
+you need to tweak things.
+
+This file is therefore more when you want to really flex your CSS muscles and do something
+seriously groovy. Or when you just can't center something and you want to scream. We've
+all been there.
+*/
+
 /*  from https://web.dev/articles/speedy-css-tip-animated-gradient-text */
-.gradient-text-landing-page {
+.gradientText{
   --bg-size: 400%;
   --color-one: var(--chakra-colors-cyan-300);
   --color-two: var(--chakra-colors-pink-600);

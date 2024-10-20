@@ -1,7 +1,8 @@
-import { Box, HStack, Link } from "@chakra-ui/react";
+import { Box, HStack, Link, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { Home } from "react-feather";
-
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
 const links = [
   {
     url: "/archive",
@@ -11,19 +12,16 @@ const links = [
     url: "/about",
     title: "About",
   },
-  {
-    url: "/archive",
-    title: "Arabic",
-  },
 ];
 
-/**
- * Navigation menu component.
- * @return {ReactElement} the menubar.
- */
 const Navbar = () => {
+  const [language, setLanguage] = useState("en");
+  const { i18n } = useTranslation();
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
   const navigate = useNavigate();
-  const menuBar = () => {
+  const MenuBar = () => {
     return (
       <HStack spacing={4} alignItems="center" aria-label="navigation-menu">
         {[
@@ -43,6 +41,19 @@ const Navbar = () => {
             );
           }),
         ]}
+        <Box>
+          <Button
+            colorScheme="pink"
+            variant="ghost"
+            onClick={() => {
+              const newLanguage = language === "en" ? "ar" : "en";
+              setLanguage(newLanguage);
+              changeLanguage(newLanguage);
+            }}
+          >
+            {language === "en" ? "عربي" : "English"}
+          </Button>
+        </Box>
       </HStack>
     );
   };
@@ -74,7 +85,7 @@ const Navbar = () => {
               <Home />
             </Link>
           </Box>
-          {menuBar()}
+          <MenuBar />
         </HStack>
       </Box>
     </Box>

@@ -3,7 +3,10 @@ import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
 import Flag from "react-flagpack";
 import "react-flagpack/dist/style.css";
+import { useTranslation } from "react-i18next";
+
 export default function About() {
+  const { t } = useTranslation();
   return (
     <>
       <Menu />
@@ -19,8 +22,15 @@ export default function About() {
         >
           <Box>
             <VStack spacing={2} align="left">
-              <Heading textAlign="center" py={2}>Who are we?</Heading>
-              <Text fontSize="lg">
+              <Heading
+                textAlign="center"
+                py={2}
+                bgGradient="linear(to-r, cyan.300, pink.600)"
+                bgClip="text"
+              >
+                {t("about_heading")}
+              </Heading>
+              <Text as="div" fontSize="lg">
                 We are a <Box as="b">grassroots </Box> organization of people
                 who care about what is going on in Sudan{" "}
                 <Flag code="SD" gradient="real-linear" size="m" hasDropShadow />
