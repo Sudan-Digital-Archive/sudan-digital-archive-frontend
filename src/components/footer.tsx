@@ -33,7 +33,7 @@ const Footer = () => {
                 </Highlight>
               </Text>
               <Link
-                href="https://github.com"
+                href="https://github.com/Sudan-Digital-Archive/sudan-digital-archive-frontend"
                 rounded="sm"
                 color="gray.100"
                 fontWeight="bold"
