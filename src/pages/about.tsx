@@ -1,12 +1,21 @@
-import { Box, SlideFade, VStack, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  SlideFade,
+  VStack,
+  Heading,
+  Text,
+  HStack,
+  Button,
+  Highlight,
+} from "@chakra-ui/react";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
 import Flag from "react-flagpack";
 import "react-flagpack/dist/style.css";
 import { useTranslation } from "react-i18next";
-
 export default function About() {
   const { t, i18n } = useTranslation();
+
   return (
     <>
       <Menu />
@@ -49,7 +58,8 @@ export default function About() {
                 {t("about_sentence_three_part_seven")}
               </Text>
               <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("about_sentence_four")}
+                {t("about_sentence_four")} Get in touch at{" "}
+                <Box as="b">sudan_archiving@proton.me</Box>.
               </Text>
             </VStack>
           </Box>
