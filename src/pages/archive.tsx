@@ -1,27 +1,27 @@
 import {
-  Badge,
   Box,
   Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-  Heading,
   SimpleGrid,
   SlideFade,
   Spinner,
-  Link as ChakraLink,
-  Text,
   VStack,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
-
+import {
+  Date,
+  Subject,
+  Title,
+  Description,
+  OriginalURL,
+} from "../components/metadata";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 export default function Archive() {
-  const [isLoading, setIsLoading] = useState(true);
   const [accessions, setAccessions] = useState([]);
   useEffect(() => {
     fetch(
@@ -35,7 +35,6 @@ export default function Archive() {
       .then((response) => response.json())
       .then((data) => {
         setAccessions(data.items);
-        setIsLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -50,51 +49,37 @@ export default function Archive() {
       <Menu />
       <SlideFade in>
         <VStack alignItems="center" justifyContent="center">
-          <Box border='1px' borderColor='gray.200' w="100%" p={2} >Filters will go here</Box>
-          {isLoading ? (
+          <Box border="1px" borderColor="cyan" w="100%" p={2}>
+            Filters will go here
+          </Box>
+          <Box border="1px" borderColor="cyan" w="100%" p={2}>
+            CREATE
+          </Box>
+          {accessions.length === 0 ? (
             <Spinner />
           ) : (
-            <SimpleGrid
-              // h={"calc(80vh - 50px)"}
-              // w={"calc(80vw - 50px)"}
-              spacing={10}
-              // minChildWidth={240}
-              columns={{ sm: 1, md: 2, lg: 4 }}
-              mt={5}
-            >
+            <SimpleGrid spacing={10} columns={{ sm: 1, md: 2, lg: 4 }} mt={5}>
               {accessions.map((record, index) => {
                 if (record && record[1]) {
                   return (
-                    <Card key={`accession-card-${index}`} overflow="auto">
+                    <Card
+                      border="2px"
+                      borderColor="gray.200"
+                      borderStyle="inset"
+                      key={`accession-card-${index}`}
+                      overflow="auto"
+                    >
                       <CardHeader>
-                        <Heading as="h5" size="sm">
-                          <Badge colorScheme="cyan" fontSize="0.9em">
-                            Title:
-                          </Badge>{" "}
-                          {record[1].title}
-                        </Heading>
+                        <Title title={record[1].title} />
                       </CardHeader>
                       <CardBody>
-                        <Heading as="h6" size="xs">
-                          <Badge colorScheme="cyan">Subject:</Badge>{" "}
-                          {record[1].subject}
-                        </Heading>
-                        <Text>
-                          <Badge colorScheme="cyan">Description:</Badge>{" "}
-                          {record[1].description}
-                        </Text>
+                        <Subject subject={record[1].subject} />
+                        <Description description={record[1].description} />
+                        {record[1].description}
                         <Box>
-                          <Badge colorScheme="cyan">Date:</Badge>{" "}
-                          {/* TODO: Create a timestamp component */}
-                          <Text as="i" fontSize="0.9em">
-                            {record[0].dublin_metadata_date}
-                          </Text>
+                          <Date date={record[0].dublin_metadata_date} />
                         </Box>
-                        <ChakraLink href={record[0].seed_url} isExternal>
-                          <Badge colorScheme="cyan">
-                            View original url <ExternalLinkIcon mx="2px" />
-                          </Badge>
-                        </ChakraLink>
+                        <OriginalURL url={record[0].seed_url} />
                       </CardBody>
                       <CardFooter>
                         <Button colorScheme="purple" fontSize="0.8em">
@@ -110,36 +95,24 @@ export default function Archive() {
               {accessions.map((record, index) => {
                 if (record && record[1]) {
                   return (
-                    <Card key={`accession-card-${index}`}>
+                    <Card
+                      border="2px"
+                      borderColor="gray.200"
+                      borderStyle="inset"
+                      key={`accession-card-${index}`}
+                      overflow="auto"
+                    >
                       <CardHeader>
-                        <Heading as="h5" size="sm">
-                          <Badge colorScheme="cyan" fontSize="0.9em">
-                            Title:
-                          </Badge>{" "}
-                          {record[1].title}
-                        </Heading>
+                        <Title title={record[1].title} />
                       </CardHeader>
                       <CardBody>
-                        <Heading as="h6" size="xs">
-                          <Badge colorScheme="cyan">Subject:</Badge>{" "}
-                          {record[1].subject}
-                        </Heading>
-                        <Text>
-                          <Badge colorScheme="cyan">Description:</Badge>{" "}
-                          {record[1].description}
-                        </Text>
+                        <Subject subject={record[1].subject} />
+                        <Description description={record[1].description} />
+                        {record[1].description}
                         <Box>
-                          <Badge colorScheme="cyan">Date:</Badge>{" "}
-                          {/* TODO: Create a timestamp component */}
-                          <Text as="i" fontSize="0.9em">
-                            {record[0].dublin_metadata_date}
-                          </Text>
+                          <Date date={record[0].dublin_metadata_date} />
                         </Box>
-                        <ChakraLink href={record[0].seed_url} isExternal>
-                          <Badge colorScheme="cyan">
-                            View original url <ExternalLinkIcon mx="2px" />
-                          </Badge>
-                        </ChakraLink>
+                        <OriginalURL url={record[0].seed_url} />
                       </CardBody>
                       <CardFooter>
                         <Button colorScheme="purple" fontSize="0.8em">
@@ -155,36 +128,24 @@ export default function Archive() {
               {accessions.map((record, index) => {
                 if (record && record[1]) {
                   return (
-                    <Card key={`accession-card-${index}`}>
+                    <Card
+                      border="2px"
+                      borderColor="gray.200"
+                      borderStyle="inset"
+                      key={`accession-card-${index}`}
+                      overflow="auto"
+                    >
                       <CardHeader>
-                        <Heading as="h5" size="sm">
-                          <Badge colorScheme="cyan" fontSize="0.9em">
-                            Title:
-                          </Badge>{" "}
-                          {record[1].title}
-                        </Heading>
+                        <Title title={record[1].title} />
                       </CardHeader>
                       <CardBody>
-                        <Heading as="h6" size="xs">
-                          <Badge colorScheme="cyan">Subject:</Badge>{" "}
-                          {record[1].subject}
-                        </Heading>
-                        <Text>
-                          <Badge colorScheme="cyan">Description:</Badge>{" "}
-                          {record[1].description}
-                        </Text>
+                        <Subject subject={record[1].subject} />
+                        <Description description={record[1].description} />
+                        {record[1].description}
                         <Box>
-                          <Badge colorScheme="cyan">Date:</Badge>{" "}
-                          {/* TODO: Create a timestamp component */}
-                          <Text as="i" fontSize="0.9em">
-                            {record[0].dublin_metadata_date}
-                          </Text>
+                          <Date date={record[0].dublin_metadata_date} />
                         </Box>
-                        <ChakraLink href={record[0].seed_url} isExternal>
-                          <Badge colorScheme="cyan">
-                            View original url <ExternalLinkIcon mx="2px" />
-                          </Badge>
-                        </ChakraLink>
+                        <OriginalURL url={record[0].seed_url} />
                       </CardBody>
                       <CardFooter>
                         <Button colorScheme="purple" fontSize="0.8em">
@@ -199,6 +160,7 @@ export default function Archive() {
               })}
             </SimpleGrid>
           )}
+          {/*Highlight component on the numbers would look good or just bold */}
           <Box mt={3}>Page 1 out of 5</Box>
           <Footer />
         </VStack>
