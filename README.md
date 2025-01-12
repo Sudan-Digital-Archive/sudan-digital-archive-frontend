@@ -8,7 +8,8 @@ This is the frontend for the Sudan Digital Archive project.
 - Put in some more interesting records from eyes on sudan
 - Add a create form 
 - Sort out pagination
-- Add arabic support for pagination and display
+- Add arabic support for list and display and create
+- Sort types for production build
 
 ## Local Development
 

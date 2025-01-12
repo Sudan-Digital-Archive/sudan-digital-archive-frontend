@@ -5,11 +5,24 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   SimpleGrid,
   SlideFade,
   Spinner,
   VStack,
+  useDisclosure,
 } from "@chakra-ui/react";
+import { FilePlus } from "react-feather";
 import {
   Date,
   Subject,
@@ -17,12 +30,15 @@ import {
   Description,
   OriginalURL,
 } from "../components/metadata";
+import { CreateAccession } from "../components/forms/create_accession.tsx";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 export default function Archive() {
   const [accessions, setAccessions] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   useEffect(() => {
     fetch(
       `http://localhost:5000/api/v1/accessions?page=0&per_page=200&lang=english`,
@@ -49,12 +65,28 @@ export default function Archive() {
       <Menu />
       <SlideFade in>
         <VStack alignItems="center" justifyContent="center">
+          <Button
+            colorScheme="pink"
+            rightIcon={<FilePlus />}
+            variant="solid"
+            onClick={onOpen}
+          >
+            Add record
+          </Button>
           <Box border="1px" borderColor="cyan" w="100%" p={2}>
-            Filters will go here
+            Search filters will go here
           </Box>
-          <Box border="1px" borderColor="cyan" w="100%" p={2}>
-            CREATE
-          </Box>
+          <Modal onClose={onClose} isOpen={isOpen} isCentered>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Archive a URL</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <CreateAccession />
+              </ModalBody>
+              <ModalFooter />
+            </ModalContent>
+          </Modal>
           {accessions.length === 0 ? (
             <Spinner />
           ) : (
