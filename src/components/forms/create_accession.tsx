@@ -5,48 +5,168 @@ import {
   FormLabel,
   Input,
   useToast,
+  Textarea,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
+import { Subject } from "../metadata";
 
 export function CreateAccession() {
   const toast = useToast();
-  function validateName(value) {
-    let error;
+  function validateTitle(value) {
     if (!value) {
-      error = "Name is required";
-    } else if (value.toLowerCase() !== "naruto") {
-      error = "Jeez! You're not a fan 😱";
+      return "Title is required";
     }
-    return error;
+    return "";
+  }
+  function validateSubject(value) {
+    if (!value) {
+      return "Subject is required";
+    }
+    return "";
+  }
+  function validateDescription(value) {
+    if (!value) {
+      return "Description is required";
+    }
+    return "";
+  }
+
+  function validateURL(value) {
+    if (!value) {
+      return "URL is required";
+    }
+    try {
+      new URL(value);
+    } catch (_) {
+      return "Invalid URL";
+    }
+    return "";
+  }
+  function validateDate(value) {
+    if (!value) {
+      return "Date is required";
+    }
+    try {
+      new Date(value);
+    } catch (_) {
+      return "Invalid Date";
+    }
+    return "";
   }
   return (
     <Formik
-      initialValues={{ name: "Sasuke" }}
+      initialValues={{
+        url: "",
+        title: "",
+        subject: "",
+        description: "",
+        date: "",
+      }}
       onSubmit={(values, actions) => {
-        // setTimeout(() => {
-        //   alert(JSON.stringify(values, null, 2));
-        //   actions.setSubmitting(false);
-        // }, 1000);
+        let success = false;
+        fetch(`http://localhost:5000/api/v1/accessions`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            // TODO: Make dynamic based on lang context
+            metadata_language: "english",
+            url: values.url,
+            metadata_title: values.title,
+            metadata_subject: values.subject,
+            metadata_description: values.description,
+            metadata_time: `${values.date}T00:00:00`,
+          }),
+        })
+          .then((response) => {
+            if (response.status === 201) {
+              success = true;
+            } else {
+              success = false;
+            }
+            return response.text();
+          })
+          .then((response_text) => {
+            if (!success) {
+              console.error(response_text);
+              toast({
+                title: "Oh no!",
+                description: `Something went wrong archiving your url ${response_text}`,
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+            } else {
+              toast({
+                title: "Crawling URL",
+                description: `We're crawling your url ${values.url}, it will appear in the archive soon`,
+                status: "success",
+                duration: 9000,
+                isClosable: true,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
 
-        toast({
-          title: "Crawling URL",
-          description: `We're crawling your url ${values.name}, it will appear in the archive soon`,
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        //   position: "top",
-        });
         actions.setSubmitting(false);
       }}
     >
       {(props) => (
         <Form>
-          <Field name="name" validate={validateName}>
+          <Field name="url" validate={validateURL}>
             {({ field, form }) => (
-              <FormControl isInvalid={form.errors.name && form.touched.name}>
-                <FormLabel>First name</FormLabel>
-                <Input {...field} placeholder="name" />
-                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+              <FormControl isInvalid={form.errors.url && form.touched.url}>
+                <FormLabel>URL</FormLabel>
+                <Input {...field} placeholder="https://example.com" />
+                <FormErrorMessage>{form.errors.url}</FormErrorMessage>
+              </FormControl>
+            )}
+          </Field>
+          <Field name="title" validate={validateTitle}>
+            {({ field, form }) => (
+              <FormControl isInvalid={form.errors.title && form.touched.title}>
+                <FormLabel mt={2}>Title</FormLabel>
+                <Input {...field} />
+                <FormErrorMessage>{form.errors.title}</FormErrorMessage>
+              </FormControl>
+            )}
+          </Field>
+          <Field name="subject" validate={validateSubject}>
+            {({ field, form }) => (
+              <FormControl
+                isInvalid={form.errors.subject && form.touched.subject}
+              >
+                <FormLabel mt={2}>Subject</FormLabel>
+                <Textarea {...field} />
+                <FormErrorMessage mb={2}>
+                  {form.errors.subject}
+                </FormErrorMessage>
+              </FormControl>
+            )}
+          </Field>
+          <Field name="description" validate={validateDescription}>
+            {({ field, form }) => (
+              <FormControl
+                isInvalid={form.errors.description && form.touched.description}
+              >
+                <FormLabel mt={2}>Description</FormLabel>
+                <Textarea {...field} />
+                <FormErrorMessage mb={2}>
+                  {form.errors.description}
+                </FormErrorMessage>
+              </FormControl>
+            )}
+          </Field>
+          <Field name="date" validate={validateDate}>
+            {({ field, form }) => (
+              <FormControl isInvalid={form.errors.date && form.touched.date}>
+                <FormLabel mt={2}>Date</FormLabel>
+                <Input size="md" type="date" {...field} />
+                <FormErrorMessage mb={2}>{form.errors.date}</FormErrorMessage>
               </FormControl>
             )}
           </Field>
@@ -55,6 +175,7 @@ export function CreateAccession() {
             colorScheme="cyan"
             isLoading={props.isSubmitting}
             type="submit"
+            disabled={!(props.isValid && props.dirty)}
           >
             Submit
           </Button>

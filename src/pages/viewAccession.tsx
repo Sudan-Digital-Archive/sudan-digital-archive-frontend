@@ -73,7 +73,7 @@ export default function ViewAccession() {
       setAccession({});
     };
   }, [id]);
-  return (
+  return (˚∑
     <>
       <Menu />
       <SlideFade in>
@@ -112,7 +112,7 @@ export default function ViewAccession() {
                 h="70vh"
                 w="80vw"
               >
-                <replay-web-page
+                <replay-web-page className="replayPlayer"
                   replayBase="/replay/"
                   source={replayerState.source}
                   url={replayerState.url}
