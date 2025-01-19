@@ -4,11 +4,14 @@ This is the frontend for the Sudan Digital Archive project.
 
 ## TODOs:
 
-- Nuke the database
-- Put in some more interesting records from eyes on sudan
-- Sort out pagination
 - Add arabic support everywhere
+- Improve about page
 - Sort types for production build
+- Per env config for backend urls
+- Tidy up filters and put in own component on archive page
+- Create custom date picker component and reuse
+- Extract some kind of helper date function
+- Show timestamps the same way
 
 ## Local Development
 

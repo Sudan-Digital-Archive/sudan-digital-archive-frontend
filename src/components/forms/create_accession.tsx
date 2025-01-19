@@ -6,10 +6,12 @@ import {
   Input,
   useToast,
   Textarea,
+  Box,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
-import { Subject } from "../metadata";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "../../css/date-picker.css";
 export function CreateAccession() {
   const toast = useToast();
   function validateTitle(value) {
@@ -53,6 +55,18 @@ export function CreateAccession() {
     }
     return "";
   }
+  const DatePickerField = ({ name, value, onChange }) => {
+    return (
+      <DatePicker
+        dateFormat="YYYY-MM-DD"
+        isClearable
+        selected={(value && new Date(value)) || null}
+        onChange={(val) => {
+          onChange(name, val);
+        }}
+      />
+    );
+  };
   return (
     <Formik
       initialValues={{
@@ -77,7 +91,7 @@ export function CreateAccession() {
             metadata_title: values.title,
             metadata_subject: values.subject,
             metadata_description: values.description,
-            metadata_time: `${values.date}T00:00:00`,
+            metadata_time: `${new Date(values.date).toISOString().split("T")[0]}T00:00:00`,
           }),
         })
           .then((response) => {
@@ -162,10 +176,17 @@ export function CreateAccession() {
             )}
           </Field>
           <Field name="date" validate={validateDate}>
-            {({ field, form }) => (
+            {({ form }) => (
               <FormControl isInvalid={form.errors.date && form.touched.date}>
                 <FormLabel mt={2}>Date</FormLabel>
-                <Input size="md" type="date" {...field} />
+                {/* <Input size="md" type="date" {...field} /> */}
+                <Box className="dark-theme">
+                  <DatePickerField
+                    name="date"
+                    value={props.values.date}
+                    onChange={props.setFieldValue}
+                  />
+                </Box>
                 <FormErrorMessage mb={2}>{form.errors.date}</FormErrorMessage>
               </FormControl>
             )}

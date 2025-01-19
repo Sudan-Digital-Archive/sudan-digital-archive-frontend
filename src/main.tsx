@@ -4,7 +4,7 @@ import About from "./pages/about.tsx";
 import Archive from "./pages/archive.tsx";
 import ViewAccession from "./pages/viewAccession.tsx";
 import "./il18n.ts";
-import "./styles.css";
+import "./css/styles.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home.tsx";
 import ChakraThemeRTLProvider from "./components/chakra-theme-rtl-provider.tsx";

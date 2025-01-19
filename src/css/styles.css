@@ -31,8 +31,3 @@ all been there.
     background-position: var(--bg-size) 0;
   }
 }
-
-.replayPlayer {
-  height: "70vh";
-  width: "80vw";
-}
