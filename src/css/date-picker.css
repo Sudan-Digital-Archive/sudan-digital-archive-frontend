@@ -154,6 +154,25 @@
   color: var(--text);
 }
 
+.react-datepicker__year-option:hover {
+  background: var(--blue700);
+  color: var(--negative-text);
+}
+.react-datepicker__header__dropdown {
+  font-size: inherit;
+  font-weight: 600;
+  color: var(--text);
+  background-color: var(--monthBackground);
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.react-datepicker__year-option {
+  background-color: var(--monthBackground);
+  font-weight: normal;
+  color: var(--text);
+}
+
 .react-datepicker__day--keyboard-selected:hover,
 .react-datepicker__day--keyboard-selected,
 .react-datepicker__day--selected,

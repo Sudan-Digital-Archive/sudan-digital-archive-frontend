@@ -1,9 +1,19 @@
-import { Box, HStack, Link, Button } from "@chakra-ui/react";
+import {
+  Box,
+  HStack,
+  Link,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Heading,
+} from "@chakra-ui/react";
+import { ChevronDown } from "react-feather";
 import { useNavigate } from "react-router-dom";
 import { Home } from "react-feather";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-
 const Navbar = () => {
   const { i18n, t } = useTranslation();
   const [language, setLanguage] = useState(i18n.language);
@@ -11,36 +21,43 @@ const Navbar = () => {
     i18n.changeLanguage(lng);
   };
   const navigate = useNavigate();
-  const links = [
-    {
-      url: "/archive",
-      title: t("nav_the_archive"),
-    },
-    {
-      url: "/about",
-      title: t("nav_about"),
-    },
-  ];
   const MenuBar = () => {
     return (
       <HStack spacing={4} alignItems="center" aria-label="navigation-menu">
-        {[
-          links.map((link) => {
-            return (
-              <Box key={link.url}>
-                <Link
-                  px={4}
-                  py={2}
-                  onClick={() => navigate(link.url)}
-                  rounded="sm"
-                  fontSize="sm"
-                >
-                  {link.title}
-                </Link>
-              </Box>
-            );
-          }),
-        ]}
+        <Menu>
+          <MenuButton
+            as={Button}
+            px={4}
+            py={2}
+            onClick={() => navigate("/archive")}
+            size="sm"
+            variant="ghost"
+          >
+            {t("nav_the_archive")}
+          </MenuButton>
+        </Menu>
+        <Menu>
+          <MenuButton
+            as={Button}
+            rightIcon={<ChevronDown />}
+            size="sm"
+            variant="ghost"
+          >
+            {t("nav_about")}
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={() => navigate("/who-are-we")}>
+              {t("nav_who_are_we")}
+            </MenuItem>
+            <MenuItem onClick={() => navigate("/mission")}>Mission</MenuItem>
+            <MenuItem onClick={() => navigate("/why-another-archive")}>
+              {t("nav_why_another_archive")}
+            </MenuItem>
+            <MenuItem onClick={() => navigate("/code-of-conduct")}>
+              {t("nav_coc")}
+            </MenuItem>
+          </MenuList>
+        </Menu>
         <Box>
           <Button
             colorScheme="pink"

@@ -5,11 +5,12 @@ This is the frontend for the Sudan Digital Archive project.
 ## TODOs:
 
 - Add arabic support everywhere
-- Improve about page
+    - Add it for code of conduct
+    - Add for archive components and page
+    - Add for updated home text
 - Sort types for production build
 - Per env config for backend urls
 - Tidy up filters and put in own component on archive page
-- Create custom date picker component and reuse
 - Extract some kind of helper date function
 - Show timestamps the same way
 

@@ -36,9 +36,7 @@ import Footer from "../components/footer.tsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../css/date-picker.css";
+import { ArchiveDatePicker } from "../components/date_picker.tsx";
 export default function Archive() {
   const { i18n } = useTranslation();
   const [queryFilters, setQueryFilters] = useState({
@@ -144,40 +142,32 @@ export default function Archive() {
               <Tag size="lg" colorScheme="cyan" w="110px">
                 Date from:{" "}
               </Tag>
+              <ArchiveDatePicker
+                selected={dateFrom}
+                onChange={(date) => {
+                  setDateFrom(date);
+                  let newFilters;
+                  if (!date) {
+                    newFilters = {
+                      ...queryFilters,
+                      ["date_from"]: "",
+                    };
+                  } else {
+                    const newQueryDate = `${date.toISOString().split("T")[0]}`;
+                    newFilters = {
+                      ...queryFilters,
+                      ["date_from"]: `${newQueryDate}T00:00:00`,
+                    };
+                  }
+                  setQueryFilters(newFilters);
+                }}
+              />
 
-              <Box className="dark-theme" mr={2} ml={2}>
-                <DatePicker
-                  dateFormat="YYYY-MM-DD"
-                  isClearable
-                  selected={dateFrom}
-                  onChange={(date) => {
-                    setDateFrom(date);
-                    let newFilters;
-                    if (!date) {
-                      newFilters = {
-                        ...queryFilters,
-                        ["date_from"]: "",
-                      };
-                    } else {
-                      const newQueryDate = `${
-                        date.toISOString().split("T")[0]
-                      }`;
-                      newFilters = {
-                        ...queryFilters,
-                        ["date_from"]: `${newQueryDate}T00:00:00`,
-                      };
-                    }
-                    setQueryFilters(newFilters);
-                  }}
-                />
-              </Box>
               <Tag size="lg" colorScheme="cyan" w="110px">
                 Date to:{" "}
               </Tag>
               <Box className="dark-theme" mr={2} ml={2}>
-                <DatePicker
-                  dateFormat="YYYY-MM-DD"
-                  isClearable
+                <ArchiveDatePicker
                   selected={dateTo}
                   onChange={(date) => {
                     setDateTo(date);
@@ -295,7 +285,7 @@ export default function Archive() {
           )}
           {!isLoading && accessions.length === 0 && (
             <Box mt={3} as="i">
-             No records matched your search!
+              No records matched your search!
             </Box>
           )}
           <Footer />

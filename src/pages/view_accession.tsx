@@ -17,11 +17,12 @@ import {
   Title,
   Description,
   OriginalURL,
-} from "../components/metadata";
+} from "../components/metadata/index.tsx";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 export default function ViewAccession() {
   const { id } = useParams();
   const [replayerState, setReplayerState] = useState({ source: "", url: "" });

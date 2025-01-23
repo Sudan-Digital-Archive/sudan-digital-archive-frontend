@@ -9,9 +9,8 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../../css/date-picker.css";
+import { ArchiveDatePicker } from "../date_picker.tsx";
+
 export function CreateAccession() {
   const toast = useToast();
   function validateTitle(value) {
@@ -57,9 +56,8 @@ export function CreateAccession() {
   }
   const DatePickerField = ({ name, value, onChange }) => {
     return (
-      <DatePicker
-        dateFormat="YYYY-MM-DD"
-        isClearable
+      <ArchiveDatePicker
+        isClearable={false}
         selected={(value && new Date(value)) || null}
         onChange={(val) => {
           onChange(name, val);
@@ -91,7 +89,9 @@ export function CreateAccession() {
             metadata_title: values.title,
             metadata_subject: values.subject,
             metadata_description: values.description,
-            metadata_time: `${new Date(values.date).toISOString().split("T")[0]}T00:00:00`,
+            metadata_time: `${
+              new Date(values.date).toISOString().split("T")[0]
+            }T00:00:00`,
           }),
         })
           .then((response) => {
