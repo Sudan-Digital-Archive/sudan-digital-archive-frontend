@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 export default function CodeOfConduct() {
-  const { t, i18n } = useTranslation();
+  const {  i18n } = useTranslation();
   const { hash, key } = useLocation();
   useEffect(() => {
     if (hash) {

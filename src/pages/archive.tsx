@@ -1,10 +1,6 @@
 import {
   Box,
   Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,7 +8,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  SimpleGrid,
   SlideFade,
   Spinner,
   useDisclosure,
@@ -23,22 +18,17 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
-import {
-  Date,
-  Subject,
-  Title,
-  Description,
-  OriginalURL,
-} from "../components/metadata";
 import { CreateAccession } from "../components/forms/create_accession.tsx";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArchiveDatePicker } from "../components/date_picker.tsx";
+import { appConfig } from "../constants.ts";
+import { AccessionsCards } from "../components/accessions_cards.tsx";
+import type { AccessionsQueryFilters } from "../types/api_requests.ts";
 export default function Archive() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [queryFilters, setQueryFilters] = useState({
     page: "0",
     per_page: "50",
@@ -58,15 +48,44 @@ export default function Archive() {
   const [dateTo, setDateTo] = useState<null | Date>(null);
   const [queryTerm, setQueryTerm] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const navigate = useNavigate();
-  function buildFilters(queryFilters) {
-    const nonNullFilters = {};
+  function buildFilters(queryFilters: AccessionsQueryFilters) {
+    const nonNullFilters: AccessionsQueryFilters = {};
     for (const [key, value] of Object.entries(queryFilters)) {
       if (value) {
-        nonNullFilters[key] = value;
+        nonNullFilters[key as keyof AccessionsQueryFilters] = value;
       }
     }
     return new URLSearchParams(nonNullFilters);
+  }
+  function handleDateChange(
+    date: Date | null,
+    dateField: "date_from" | "date_to"
+  ) {
+    if (!date) return;
+    let newFilters;
+    switch (dateField) {
+      case "date_from":
+        setDateFrom(date);
+        break;
+      case "date_to":
+        setDateTo(date);
+        break;
+      default:
+        throw `Unsupported dateField arg ${dateField}`;
+    }
+    if (!date) {
+      newFilters = {
+        ...queryFilters,
+        [dateField]: "",
+      };
+    } else {
+      const newQueryDate = `${date.toISOString().split("T")[0]}`;
+      newFilters = {
+        ...queryFilters,
+        [dateField]: `${newQueryDate}T00:00:00`,
+      };
+    }
+    setQueryFilters(newFilters);
   }
 
   useEffect(() => {
@@ -89,14 +108,11 @@ export default function Archive() {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(
-      `http://localhost:5000/api/v1/accessions?${buildFilters(queryFilters)}`,
-      {
-        headers: {
-          Accept: "application/json",
-        },
-      }
-    )
+    fetch(`${appConfig.apiURL}accessions?${buildFilters(queryFilters)}`, {
+      headers: {
+        Accept: "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         setAccessions(data.items);
@@ -126,7 +142,7 @@ export default function Archive() {
             variant="solid"
             onClick={onOpen}
           >
-            Add record
+            {t("archive_add_record")}
           </Button>
           <Box w="100%" p={10}>
             <Input
@@ -134,68 +150,33 @@ export default function Archive() {
               onChange={(event) => {
                 setQueryTerm(event.target.value);
               }}
-              placeholder="Enter search term here..."
+              placeholder={t("archive_text_search_query_placeholder")}
               size="lg"
               mb={5}
             />
             <Flex>
               <Tag size="lg" colorScheme="cyan" w="110px">
-                Date from:{" "}
+                {t("archive_date_from_filter")}
               </Tag>
               <ArchiveDatePicker
                 selected={dateFrom}
-                onChange={(date) => {
-                  setDateFrom(date);
-                  let newFilters;
-                  if (!date) {
-                    newFilters = {
-                      ...queryFilters,
-                      ["date_from"]: "",
-                    };
-                  } else {
-                    const newQueryDate = `${date.toISOString().split("T")[0]}`;
-                    newFilters = {
-                      ...queryFilters,
-                      ["date_from"]: `${newQueryDate}T00:00:00`,
-                    };
-                  }
-                  setQueryFilters(newFilters);
-                }}
+                onChange={(date) => handleDateChange(date, "date_from")}
               />
-
               <Tag size="lg" colorScheme="cyan" w="110px">
-                Date to:{" "}
+                {t("archive_date_to_filter")}
               </Tag>
-              <Box className="dark-theme" mr={2} ml={2}>
-                <ArchiveDatePicker
-                  selected={dateTo}
-                  onChange={(date) => {
-                    setDateTo(date);
-                    let newFilters;
-                    if (!date) {
-                      newFilters = {
-                        ...queryFilters,
-                        ["date_to"]: "",
-                      };
-                    } else {
-                      const newQueryDate = `${
-                        date.toISOString().split("T")[0]
-                      }`;
-                      newFilters = {
-                        ...queryFilters,
-                        ["date_to"]: `${newQueryDate}T00:00:00`,
-                      };
-                    }
-                    setQueryFilters(newFilters);
-                  }}
-                />
-              </Box>
+              <ArchiveDatePicker
+                selected={dateTo}
+                onChange={(date) => handleDateChange(date, "date_to")}
+              />
             </Flex>
           </Box>
           <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader textAlign="center">Archive a URL</ModalHeader>
+              <ModalHeader textAlign="center">
+                {t("archive_create_modal_header")}
+              </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <CreateAccession />
@@ -206,43 +187,7 @@ export default function Archive() {
           {isLoading ? (
             <Spinner />
           ) : (
-            <SimpleGrid spacing={10} columns={{ sm: 1, md: 2, lg: 5 }} mt={5}>
-              {accessions.map((record, index) => {
-                if (record && record[1]) {
-                  return (
-                    <Card
-                      border="2px"
-                      borderColor="gray.200"
-                      borderStyle="inset"
-                      key={`accession-card-${index}`}
-                      overflow="auto"
-                    >
-                      <CardHeader>
-                        <Title title={record[1].title} />
-                      </CardHeader>
-                      <CardBody>
-                        <Subject subject={record[1].subject} />
-                        <Description description={record[1].description} />
-                        {record[1].description}
-                        <Box>
-                          <Date date={record[0].dublin_metadata_date} />
-                        </Box>
-                        <OriginalURL url={record[0].seed_url} />
-                      </CardBody>
-                      <CardFooter>
-                        <Button
-                          colorScheme="purple"
-                          fontSize="0.8em"
-                          onClick={() => navigate(`/archive/${record[0].id}`)}
-                        >
-                          View record
-                        </Button>
-                      </CardFooter>
-                    </Card>
-                  );
-                }
-              })}
-            </SimpleGrid>
+            <AccessionsCards accessions={accessions} />
           )}
           {accessions.length > 0 && !isLoading && (
             <HStack mt={3}>
@@ -263,7 +208,9 @@ export default function Archive() {
                   />
                 )}
               <Box>
-                Page <b>{pagination.currentPage + 1}</b> out of{" "}
+                {t("archive_pagination_page")}
+                <b>{pagination.currentPage + 1}</b>
+                {t("archive_pagination_page_out_of")}
                 <b>{pagination.totalPages}</b>
               </Box>
               {pagination.currentPage + 1 < pagination.totalPages && (
@@ -285,7 +232,7 @@ export default function Archive() {
           )}
           {!isLoading && accessions.length === 0 && (
             <Box mt={3} as="i">
-              No records matched your search!
+              {t("archive_no_records_found")}
             </Box>
           )}
           <Footer />

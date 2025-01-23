@@ -10,9 +10,6 @@ This is the frontend for the Sudan Digital Archive project.
     - Add for updated home text
 - Sort types for production build
 - Per env config for backend urls
-- Tidy up filters and put in own component on archive page
-- Extract some kind of helper date function
-- Show timestamps the same way
 
 ## Local Development
 

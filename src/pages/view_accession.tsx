@@ -22,12 +22,16 @@ import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import { useTranslation } from "react-i18next";
+import { appConfig } from "../constants.ts";
+import type { AccessionOne } from "../types/api_responses.ts";
 export default function ViewAccession() {
   const { id } = useParams();
   const [replayerState, setReplayerState] = useState({ source: "", url: "" });
-  const [accession, setAccession] = useState({});
+  const [accession, setAccession] = useState<null | AccessionOne>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { t, i18n } = useTranslation();
+
   // this service worker is seriously cool
   // it lives in public/replay/sw.js
   // and imports a service worker that webrecorder built
@@ -45,10 +49,12 @@ export default function ViewAccession() {
           registration.scope
         )
       )
-      .catch((err) => console.log("Service Worker registration failed: ", err));
+      .catch((err) =>
+        console.error("Service Worker registration failed: ", err)
+      );
   }, []);
   useEffect(() => {
-    fetch(`http://localhost:5000/api/v1/accessions/${id}`, {
+    fetch(`${appConfig.apiURL}accessions/${id}`, {
       headers: {
         Accept: "application/json",
       },
@@ -71,7 +77,7 @@ export default function ViewAccession() {
 
     return () => {
       setReplayerState({ source: "", url: "" });
-      setAccession({});
+      setAccession(null);
     };
   }, [id]);
   return (
@@ -79,7 +85,7 @@ export default function ViewAccession() {
       <Menu />
       <SlideFade in>
         <VStack display="flex">
-          {!accession.accession ? (
+          {!accession ? (
             <Spinner />
           ) : (
             <>
@@ -92,12 +98,28 @@ export default function ViewAccession() {
                 <DrawerOverlay />
                 <DrawerContent>
                   <DrawerHeader borderBottomWidth="1px">
-                    <Title title={accession.metadata_en.title} />
+                    <Title
+                      title={
+                        i18n.language === "en"
+                          ? accession.metadata_en.title
+                          : accession.metadata_ar.title
+                      }
+                    />
                   </DrawerHeader>
                   <DrawerBody>
-                    <Subject subject={accession.metadata_en.subject} />
+                    <Subject
+                      subject={
+                        i18n.language === "en"
+                          ? accession.metadata_en.subject
+                          : accession.metadata_ar.subject
+                      }
+                    />
                     <Description
-                      description={accession.metadata_en.description}
+                      description={
+                        i18n.language === "en"
+                          ? accession.metadata_en.description
+                          : accession.metadata_ar.description
+                      }
                     />
                     <Box>
                       <Date date={accession.accession.dublin_metadata_date} />
@@ -120,7 +142,7 @@ export default function ViewAccession() {
                 ></replay-web-page>
               </Box>
               <Button colorScheme="pink" onClick={onOpen} mt={5}>
-                See metadata
+                {t("view_accession_see_metadata")}
               </Button>
             </>
           )}

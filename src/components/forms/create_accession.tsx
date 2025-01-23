@@ -6,55 +6,65 @@ import {
   Input,
   useToast,
   Textarea,
-  Box,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { ArchiveDatePicker } from "../date_picker.tsx";
+import { useTranslation } from "react-i18next";
+import { appConfig } from "../../constants.ts";
+interface DatePickerFieldProps {
+  name: string;
+  value: string | null;
+  onChange: (name: string, val: Date | null) => void;
+}
 
 export function CreateAccession() {
+  const { t, i18n } = useTranslation();
+
   const toast = useToast();
-  function validateTitle(value) {
+  function validateTitle(value: string) {
     if (!value) {
-      return "Title is required";
+      return t("create_accession_invalid_title");
     }
     return "";
   }
-  function validateSubject(value) {
+  function validateSubject(value: string) {
     if (!value) {
-      return "Subject is required";
+      return t("create_accession_invalid_subject");
     }
     return "";
   }
-  function validateDescription(value) {
+  function validateDescription(value: string) {
     if (!value) {
-      return "Description is required";
+      return t("create_accession_invalid_description");
     }
     return "";
   }
 
-  function validateURL(value) {
+  function validateURL(value: string) {
     if (!value) {
-      return "URL is required";
+      return t("create_accession_missing_url");
     }
     try {
       new URL(value);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
-      return "Invalid URL";
+      return t("create_accession_invalid_url");
     }
     return "";
   }
-  function validateDate(value) {
+  function validateDate(value: string) {
     if (!value) {
       return "Date is required";
     }
     try {
       new Date(value);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
-      return "Invalid Date";
+      return t("create_accession_invalid_date");
     }
     return "";
   }
-  const DatePickerField = ({ name, value, onChange }) => {
+  const DatePickerField = ({ name, value, onChange }: DatePickerFieldProps) => {
     return (
       <ArchiveDatePicker
         isClearable={false}
@@ -76,15 +86,14 @@ export function CreateAccession() {
       }}
       onSubmit={(values, actions) => {
         let success = false;
-        fetch(`http://localhost:5000/api/v1/accessions`, {
+        fetch(`${appConfig.apiURL}accessions`, {
           method: "POST",
           headers: {
             Accept: "application/json",
             "content-type": "application/json",
           },
           body: JSON.stringify({
-            // TODO: Make dynamic based on lang context
-            metadata_language: "english",
+            metadata_language: i18n.language === "en" ? "english" : "arabic",
             url: values.url,
             metadata_title: values.title,
             metadata_subject: values.subject,
@@ -106,8 +115,10 @@ export function CreateAccession() {
             if (!success) {
               console.error(response_text);
               toast({
-                title: "Oh no!",
-                description: `Something went wrong archiving your url ${response_text}`,
+                title: t("create_accession_error_toast_title"),
+                description: `${t(
+                  "create_accession_error_toast_description"
+                )} ${response_text}`,
                 status: "error",
                 duration: 9000,
                 isClosable: true,
@@ -115,7 +126,7 @@ export function CreateAccession() {
             } else {
               toast({
                 title: "Crawling URL",
-                description: `We're crawling your url ${values.url}, it will appear in the archive soon`,
+                description: t("create_accession_success_description"),
                 status: "success",
                 duration: 9000,
                 isClosable: true,
@@ -134,8 +145,11 @@ export function CreateAccession() {
           <Field name="url" validate={validateURL}>
             {({ field, form }) => (
               <FormControl isInvalid={form.errors.url && form.touched.url}>
-                <FormLabel>URL</FormLabel>
-                <Input {...field} placeholder="https://example.com" />
+                <FormLabel>{t("create_accession_url_field_label")}</FormLabel>
+                <Input
+                  {...field}
+                  placeholder={t("create_accession_url_field_placeholder")}
+                />
                 <FormErrorMessage>{form.errors.url}</FormErrorMessage>
               </FormControl>
             )}
@@ -143,7 +157,9 @@ export function CreateAccession() {
           <Field name="title" validate={validateTitle}>
             {({ field, form }) => (
               <FormControl isInvalid={form.errors.title && form.touched.title}>
-                <FormLabel mt={2}>Title</FormLabel>
+                <FormLabel mt={2}>
+                  {t("create_accession_title_field_label")}
+                </FormLabel>
                 <Input {...field} />
                 <FormErrorMessage>{form.errors.title}</FormErrorMessage>
               </FormControl>
@@ -154,7 +170,9 @@ export function CreateAccession() {
               <FormControl
                 isInvalid={form.errors.subject && form.touched.subject}
               >
-                <FormLabel mt={2}>Subject</FormLabel>
+                <FormLabel mt={2}>
+                  {t("create_accession_subject_field_label")}
+                </FormLabel>
                 <Textarea {...field} />
                 <FormErrorMessage mb={2}>
                   {form.errors.subject}
@@ -167,7 +185,9 @@ export function CreateAccession() {
               <FormControl
                 isInvalid={form.errors.description && form.touched.description}
               >
-                <FormLabel mt={2}>Description</FormLabel>
+                <FormLabel mt={2}>
+                  {t("create_accession_description_field_label")}
+                </FormLabel>
                 <Textarea {...field} />
                 <FormErrorMessage mb={2}>
                   {form.errors.description}
@@ -178,15 +198,14 @@ export function CreateAccession() {
           <Field name="date" validate={validateDate}>
             {({ form }) => (
               <FormControl isInvalid={form.errors.date && form.touched.date}>
-                <FormLabel mt={2}>Date</FormLabel>
-                {/* <Input size="md" type="date" {...field} /> */}
-                <Box className="dark-theme">
-                  <DatePickerField
-                    name="date"
-                    value={props.values.date}
-                    onChange={props.setFieldValue}
-                  />
-                </Box>
+                <FormLabel mt={2}>
+                  {t("create_accession_date_field_label")}
+                </FormLabel>
+                <DatePickerField
+                  name="date"
+                  value={props.values.date}
+                  onChange={props.setFieldValue}
+                />
                 <FormErrorMessage mb={2}>{form.errors.date}</FormErrorMessage>
               </FormControl>
             )}
@@ -198,7 +217,7 @@ export function CreateAccession() {
             type="submit"
             disabled={!(props.isValid && props.dirty)}
           >
-            Submit
+            {t("create_accession_submit_field_label")}
           </Button>
         </Form>
       )}

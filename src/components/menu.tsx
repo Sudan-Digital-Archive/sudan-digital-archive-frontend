@@ -7,7 +7,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  Heading,
 } from "@chakra-ui/react";
 import { ChevronDown } from "react-feather";
 import { useNavigate } from "react-router-dom";
@@ -49,7 +48,7 @@ const Navbar = () => {
             <MenuItem onClick={() => navigate("/who-are-we")}>
               {t("nav_who_are_we")}
             </MenuItem>
-            <MenuItem onClick={() => navigate("/mission")}>Mission</MenuItem>
+            <MenuItem onClick={() => navigate("/mission")}>{t("nav_mission")}</MenuItem>
             <MenuItem onClick={() => navigate("/why-another-archive")}>
               {t("nav_why_another_archive")}
             </MenuItem>
