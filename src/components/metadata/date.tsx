@@ -1,6 +1,6 @@
 import { Badge, Text } from "@chakra-ui/react";
 
-export function Date({ date }: { date: string }) {
+export function DateMetadata({ date }: { date: string }) {
   function parseDate(date: string): string {
     try {
       const parsed = new Date(date);

@@ -1,4 +1,4 @@
-export { Date } from "./date";
+export { DateMetadata } from "./date";
 export { Description } from "./description";
 export { Subject } from "./subject";
 export { Title } from "./title";

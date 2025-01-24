@@ -8,7 +8,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import {
-  Date,
+  DateMetadata,
   Subject,
   Title,
   Description,
@@ -46,7 +46,7 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
                 <Description description={record[1].description} />
                 {record[1].description}
                 <Box>
-                  <Date date={record[0].dublin_metadata_date} />
+                  <DateMetadata date={record[0].dublin_metadata_date} />
                 </Box>
                 <OriginalURL url={record[0].seed_url} />
               </CardBody>

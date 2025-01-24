@@ -1,4 +1,7 @@
+const apiURL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000/api/v1/"
+    : "prod";
 export const appConfig = {
-  // TODO: Change to vite env stuff
-  apiURL: "http://localhost:5000/api/v1/",
+  apiURL: apiURL,
 };

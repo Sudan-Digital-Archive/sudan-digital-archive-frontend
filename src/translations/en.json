@@ -71,8 +71,19 @@
     "create_accession_subject_field_label": "Subject",
     "create_accession_description_field_label": "Description",
     "create_accession_date_field_label": "Date",
-    "create_accession_submit_field_label": "Submit"
-
-
+    "create_accession_submit_field_label": "Submit",
+    "code_of_conduct_title": "Code of Conduct",
+    "code_of_conduct_toc": "Table of Contents ",
+    "code_of_conduct_our_values_content_heading": "Our Values",
+    "code_of_conduct_standards_inappropriate_behavior_heading": "Standards and Inappropriate Behavior",
+    "code_of_conduct_boundaries_heading": "Boundaries",
+    "code_of_conduct_accountability_processes_heading": "Accountability Processes",
+    "code_of_conduct_back_to_top": "Back to top",
+    "code_of_conduct_standards_inappropriate_behavior_para_one": "Every member of our community has the right to have their identity respected. The Sudan Digital Archive collective is dedicated to providing a positive experience for everyone, regardless of age, gender identity and expression, sexual orientation, disability, physical appearance, body size, ethnicity, nationality, race, or religion (or lack thereof), education, or socio-economic status.",
+    "code_of_conduct_standards_inappropriate_behavior_para_two": "Examples of unacceptable behavior by community members include:",
+    "code_of_conduct_standards_inappropriate_behavior_para_three": "Community members asked to stop any inappropriate behavior are expected to comply immediately.",
+    "code_of_conduct_standards_inappropriate_behavior_para_four": "If a participant engages in behavior that violates this code of conduct, the community organizers will take the following steps:",
+    "code_of_conduct_standards_inappropriate_behavior_para_five": "Throughout this process, we will prioritize the safety and well-being of the community while also embodying our commitment to rehabilitation and transformative justice. Our goal is to create opportunities for positive change, recognizing that people can evolve and improve their behavior with proper support. While bans are considered final, we remain hopeful of redemption if presented with compelling evidence of sincere transformation.",
+    "code_of_conduct_standards_inappropriate_behavior_para_six": "Our accountability process consists of five key steps, facilitated through mediation by designated collective members:"
   }
 }

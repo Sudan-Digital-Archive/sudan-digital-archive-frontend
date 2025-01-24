@@ -143,72 +143,91 @@ export function CreateAccession() {
       {(props) => (
         <Form>
           <Field name="url" validate={validateURL}>
-            {({ field, form }) => (
-              <FormControl isInvalid={form.errors.url && form.touched.url}>
-                <FormLabel>{t("create_accession_url_field_label")}</FormLabel>
-                <Input
-                  {...field}
-                  placeholder={t("create_accession_url_field_placeholder")}
-                />
-                <FormErrorMessage>{form.errors.url}</FormErrorMessage>
-              </FormControl>
-            )}
+            {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ({ field, form }: any) => (
+                <FormControl isInvalid={form.errors.url && form.touched.url}>
+                  <FormLabel>{t("create_accession_url_field_label")}</FormLabel>
+                  <Input
+                    {...field}
+                    placeholder={t("create_accession_url_field_placeholder")}
+                  />
+                  <FormErrorMessage>{form.errors.url}</FormErrorMessage>
+                </FormControl>
+              )
+            }
           </Field>
           <Field name="title" validate={validateTitle}>
-            {({ field, form }) => (
-              <FormControl isInvalid={form.errors.title && form.touched.title}>
-                <FormLabel mt={2}>
-                  {t("create_accession_title_field_label")}
-                </FormLabel>
-                <Input {...field} />
-                <FormErrorMessage>{form.errors.title}</FormErrorMessage>
-              </FormControl>
-            )}
+            {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ({ field, form }: any) => (
+                <FormControl
+                  isInvalid={form.errors.title && form.touched.title}
+                >
+                  <FormLabel mt={2}>
+                    {t("create_accession_title_field_label")}
+                  </FormLabel>
+                  <Input {...field} />
+                  <FormErrorMessage>{form.errors.title}</FormErrorMessage>
+                </FormControl>
+              )
+            }
           </Field>
           <Field name="subject" validate={validateSubject}>
-            {({ field, form }) => (
-              <FormControl
-                isInvalid={form.errors.subject && form.touched.subject}
-              >
-                <FormLabel mt={2}>
-                  {t("create_accession_subject_field_label")}
-                </FormLabel>
-                <Textarea {...field} />
-                <FormErrorMessage mb={2}>
-                  {form.errors.subject}
-                </FormErrorMessage>
-              </FormControl>
-            )}
+            {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ({ field, form }: any) => (
+                <FormControl
+                  isInvalid={form.errors.subject && form.touched.subject}
+                >
+                  <FormLabel mt={2}>
+                    {t("create_accession_subject_field_label")}
+                  </FormLabel>
+                  <Textarea {...field} />
+                  <FormErrorMessage mb={2}>
+                    {form.errors.subject}
+                  </FormErrorMessage>
+                </FormControl>
+              )
+            }
           </Field>
           <Field name="description" validate={validateDescription}>
-            {({ field, form }) => (
-              <FormControl
-                isInvalid={form.errors.description && form.touched.description}
-              >
-                <FormLabel mt={2}>
-                  {t("create_accession_description_field_label")}
-                </FormLabel>
-                <Textarea {...field} />
-                <FormErrorMessage mb={2}>
-                  {form.errors.description}
-                </FormErrorMessage>
-              </FormControl>
-            )}
+            {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ({ field, form }: any) => (
+                <FormControl
+                  isInvalid={
+                    form.errors.description && form.touched.description
+                  }
+                >
+                  <FormLabel mt={2}>
+                    {t("create_accession_description_field_label")}
+                  </FormLabel>
+                  <Textarea {...field} />
+                  <FormErrorMessage mb={2}>
+                    {form.errors.description}
+                  </FormErrorMessage>
+                </FormControl>
+              )
+            }
           </Field>
           <Field name="date" validate={validateDate}>
-            {({ form }) => (
-              <FormControl isInvalid={form.errors.date && form.touched.date}>
-                <FormLabel mt={2}>
-                  {t("create_accession_date_field_label")}
-                </FormLabel>
-                <DatePickerField
-                  name="date"
-                  value={props.values.date}
-                  onChange={props.setFieldValue}
-                />
-                <FormErrorMessage mb={2}>{form.errors.date}</FormErrorMessage>
-              </FormControl>
-            )}
+            {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ({ form }: any) => (
+                <FormControl isInvalid={form.errors.date && form.touched.date}>
+                  <FormLabel mt={2}>
+                    {t("create_accession_date_field_label")}
+                  </FormLabel>
+                  <DatePickerField
+                    name="date"
+                    value={props.values.date}
+                    onChange={props.setFieldValue}
+                  />
+                  <FormErrorMessage mb={2}>{form.errors.date}</FormErrorMessage>
+                </FormControl>
+              )
+            }
           </Field>
           <Button
             mt={4}

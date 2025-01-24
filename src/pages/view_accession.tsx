@@ -12,7 +12,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import {
-  Date,
+  DateMetadata,
   Subject,
   Title,
   Description,
@@ -122,7 +122,9 @@ export default function ViewAccession() {
                       }
                     />
                     <Box>
-                      <Date date={accession.accession.dublin_metadata_date} />
+                      <DateMetadata
+                        date={accession.accession.dublin_metadata_date}
+                      />
                     </Box>
                     <OriginalURL url={accession.accession.seed_url} />
                   </DrawerBody>
