@@ -47,15 +47,7 @@ export default function Mission() {
               </Text>
               <Image boxSize="lg" objectFit="cover" src="https://blah" />
               <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                As a Sudanese-led initiative, all key decisions about content
-                selection, storage methods, promotion strategies, and annotation
-                practices center Sudanese perspectives and needs. We are
-                committed to ensuring our collections remain as accessible as
-                possible while respecting privacy and security considerations.
-                Through this approach, we aim to provide a robust and trusted
-                foundation for understanding Sudan's past and present,
-                contributing to a more informed and equitable future for all
-                Sudanese people.
+                {t("mission_para_seven")}
               </Text>
             </VStack>
           </Box>

@@ -14,16 +14,18 @@ import Footer from "../components/footer.tsx";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import EnArCoCTranslations from "../translations/code_of_conduct.json";
+import EnCoCTranslations from "../translations/code_of_conduct_en.json";
+import ArCoCTranslations from "../translations/code_of_conduct_ar.json";
+
 export default function CodeOfConduct() {
   const { i18n, t } = useTranslation();
   const { hash, key } = useLocation();
   const [CoCTranslations, setCoCTranslations] = useState(
-    i18n.language === "en" ? EnArCoCTranslations.en : EnArCoCTranslations.ar
+    i18n.language === "en" ? EnCoCTranslations : ArCoCTranslations
   );
   useEffect(() => {
     setCoCTranslations(
-      i18n.language === "en" ? EnArCoCTranslations.en : EnArCoCTranslations.ar
+      i18n.language === "en" ? EnCoCTranslations : ArCoCTranslations
     );
   }, [i18n.language]);
   useEffect(() => {

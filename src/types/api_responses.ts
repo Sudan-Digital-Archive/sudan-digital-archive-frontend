@@ -9,7 +9,7 @@ type AccessionMetadata = {
   subject: string;
   description: string;
 };
-export type AccessionList = [AccessionListRecord, AccessionMetadata][];
+export type AccessionList = [AccessionListRecord, AccessionMetadata | null][];
 
 export type AccessionOne = {
   accession: { dublin_metadata_date: string; seed_url: string };

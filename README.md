@@ -4,8 +4,7 @@ This is the frontend for the Sudan Digital Archive project.
 
 ## TODOs:
 
-- Add arabic support everywhere
-- Sort types for production build
+- Add one basic test just to check the app has loaded fine 
 
 ## Local Development
 

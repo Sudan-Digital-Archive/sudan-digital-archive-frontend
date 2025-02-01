@@ -87,6 +87,14 @@ export default function Archive() {
     }
     setQueryFilters(newFilters);
   }
+  
+  useEffect(() => {
+    const newFilters = {
+      ...queryFilters,
+      lang: i18n.language === "en" ? "english" : "arabic",
+    };
+    setQueryFilters(newFilters);
+  }, [i18n.language]);
 
   useEffect(() => {
     const handler = setTimeout(() => {

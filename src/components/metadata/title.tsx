@@ -1,14 +1,12 @@
-import {
-    Badge,
- 
-    Heading,
+import { Badge, Heading } from "@chakra-ui/react";
+import { useTranslation } from "react-i18next";
 
-  } from "@chakra-ui/react";
-export function Title({title}: {title: string}) {
+export function Title({ title, fontSize = "md" }: { title: string; fontSize?: string }) {
+  const { t } = useTranslation();
   return (
-    <Heading as="h5" size="sm">
+    <Heading as="h5" size="sm" fontSize={fontSize}>
       <Badge colorScheme="cyan" fontSize="0.9em">
-        Title:
+        {t("metadata_title_label")}
       </Badge>{" "}
       {title}
     </Heading>

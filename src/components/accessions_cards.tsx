@@ -23,45 +23,58 @@ interface AccessionsCardsProps {
 }
 
 export function AccessionsCards({ accessions }: AccessionsCardsProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   return (
     <SimpleGrid spacing={10} columns={{ sm: 1, md: 2, lg: 5 }} mt={5}>
       {accessions.map((record, index) => {
-        if (record && record[1]) {
-          return (
-            <Card
-              border="2px"
-              borderColor="gray.200"
-              borderStyle="inset"
-              key={`accession-card-${index}`}
-              overflow="auto"
-            >
-              <CardHeader>
-                <Title title={record[1].title} />
-              </CardHeader>
-              <CardBody>
-                <Subject subject={record[1].subject} />
-                <Description description={record[1].description} />
-                {record[1].description}
-                <Box>
-                  <DateMetadata date={record[0].dublin_metadata_date} />
-                </Box>
-                <OriginalURL url={record[0].seed_url} />
-              </CardBody>
-              <CardFooter>
-                <Button
-                  colorScheme="purple"
-                  fontSize="0.8em"
-                  onClick={() => navigate(`/archive/${record[0].id}`)}
-                >
-                  {t("archive_view_record_button")}
-                </Button>
-              </CardFooter>
-            </Card>
-          );
-        }
+        const [accession, metadata] = record;
+        return (
+          <Card
+            border="2px"
+            borderColor="gray.200"
+            borderStyle="inset"
+            key={`accession-card-${index}`}
+            overflow="auto"
+          >
+            <CardHeader>
+              <Title 
+                title={metadata?.title ?? t("metadata_missing_title")} 
+                fontSize={i18n.language === "en" ? "md" : "lg"}
+              />
+            </CardHeader>
+            <CardBody>
+              <Subject 
+                subject={metadata?.subject ?? t("metadata_missing_subject")}
+                fontSize={i18n.language === "en" ? "md" : "lg"}
+              />
+              <Description 
+                description={metadata?.description ?? t("metadata_missing_description")}
+                fontSize={i18n.language === "en" ? "md" : "lg"}
+              />
+              <Box>
+                <DateMetadata 
+                  date={accession.dublin_metadata_date}
+                  fontSize={i18n.language === "en" ? "md" : "lg"}
+                />
+              </Box>
+              <OriginalURL 
+                url={accession.seed_url}
+                fontSize={i18n.language === "en" ? "md" : "lg"}
+              />
+            </CardBody>
+            <CardFooter>
+              <Button
+                colorScheme="purple"
+                fontSize={i18n.language === "en" ? "0.8em" : "1em"}
+                onClick={() => navigate(`/archive/${accession.id}`)}
+              >
+                {t("archive_view_record_button")}
+              </Button>
+            </CardFooter>
+          </Card>
+        );
       })}
     </SimpleGrid>
   );

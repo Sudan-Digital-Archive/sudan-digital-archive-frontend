@@ -12,6 +12,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home.tsx";
 import ChakraThemeRTLProvider from "./components/chakra-theme-rtl-provider.tsx";
 import { ColorModeScript } from "@chakra-ui/react";
+import { registerLocale } from "react-datepicker";
+import { ar } from "date-fns/locale";
 
 const router = createBrowserRouter([
   {
@@ -27,7 +29,7 @@ const router = createBrowserRouter([
     element: <WhoAreWe />,
   },
   { path: "/why-another-archive", element: <WhyAnotherArchive /> },
-  {path: "/code-of-conduct", element: <CodeOfConduct/>},
+  { path: "/code-of-conduct", element: <CodeOfConduct /> },
   {
     path: "/archive",
     element: <Archive />,
@@ -41,6 +43,7 @@ const router = createBrowserRouter([
     element: <Home />,
   },
 ]);
+registerLocale("ar", ar);
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ColorModeScript initialColorMode="dark" />

@@ -27,6 +27,7 @@ import { appConfig } from "../constants.ts";
 import type { AccessionOne } from "../types/api_responses.ts";
 export default function ViewAccession() {
   const { id } = useParams();
+  const [serviceWorkerRegistered, setServiceWorkerRegistered] = useState(false);
   const [replayerState, setReplayerState] = useState({ source: "", url: "" });
   const [accession, setAccession] = useState<null | AccessionOne>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,15 +44,18 @@ export default function ViewAccession() {
   useEffect(() => {
     navigator.serviceWorker
       .register("/replay/sw.js")
-      .then((registration) =>
+      .then((registration) => {
         console.log(
           "Service Worker registration successful with scope: ",
           registration.scope
-        )
-      )
+        );
+        setServiceWorkerRegistered(true);
+      })
       .catch((err) =>
         console.error("Service Worker registration failed: ", err)
       );
+
+    return () => setServiceWorkerRegistered(false);
   }, []);
   useEffect(() => {
     fetch(`${appConfig.apiURL}accessions/${id}`, {
@@ -85,7 +89,10 @@ export default function ViewAccession() {
       <Menu />
       <SlideFade in>
         <VStack display="flex">
-          {!accession ? (
+          {!accession ||
+          !replayerState.source ||
+          !replayerState.url ||
+          !serviceWorkerRegistered ? (
             <Spinner />
           ) : (
             <>
@@ -101,32 +108,39 @@ export default function ViewAccession() {
                     <Title
                       title={
                         i18n.language === "en"
-                          ? accession.metadata_en.title
-                          : accession.metadata_ar.title
+                          ? accession.metadata_en?.title ?? t("metadata_missing_title")
+                          : accession.metadata_ar?.title ?? t("metadata_missing_title")
                       }
+                      fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
                   </DrawerHeader>
                   <DrawerBody>
                     <Subject
                       subject={
                         i18n.language === "en"
-                          ? accession.metadata_en.subject
-                          : accession.metadata_ar.subject
+                          ? accession.metadata_en?.subject ?? t("metadata_missing_subject")
+                          : accession.metadata_ar?.subject ?? t("metadata_missing_subject")
                       }
+                      fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
                     <Description
                       description={
                         i18n.language === "en"
-                          ? accession.metadata_en.description
-                          : accession.metadata_ar.description
+                          ? accession.metadata_en?.description ?? t("metadata_missing_description")
+                          : accession.metadata_ar?.description ?? t("metadata_missing_description")
                       }
+                      fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
                     <Box>
                       <DateMetadata
                         date={accession.accession.dublin_metadata_date}
+                        fontSize={i18n.language === "en" ? "md" : "lg"}
                       />
                     </Box>
-                    <OriginalURL url={accession.accession.seed_url} />
+                    <OriginalURL 
+                      url={accession.accession.seed_url}
+                      fontSize={i18n.language === "en" ? "md" : "lg"}
+                    />
                   </DrawerBody>
                 </DrawerContent>
               </Drawer>
