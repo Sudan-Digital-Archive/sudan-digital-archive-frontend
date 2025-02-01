@@ -100,31 +100,41 @@ export default function Archive() {
     updateFilters({ query_term: debouncedQuery });
   }, [debouncedQuery, updateFilters]);
 
-  useEffect(() => {
-    setIsLoading(true);
-    fetch(`${appConfig.apiURL}accessions?${buildFilters(queryFilters)}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
+  const fetchAccessions = useCallback(
+    async (filters: AccessionsQueryFilters) => {
+      try {
+        const response = await fetch(
+          `${appConfig.apiURL}accessions?${buildFilters(filters)}`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+        const data = await response.json();
         setAccessions(data.items);
         setPagination({
           currentPage: data.page,
           totalPages: data.num_pages,
         });
-        setIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
-      });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
+  useEffect(() => {
+    setIsLoading(true);
+    fetchAccessions(queryFilters);
     return () => {
       setAccessions([]);
       setIsLoading(false);
     };
-  }, [queryFilters]);
+  }, [fetchAccessions, queryFilters]);
+
   return (
     <>
       <Menu

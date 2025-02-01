@@ -55,16 +55,20 @@ export default function ViewAccession() {
         console.error("Service Worker registration failed: ", err)
       );
 
-    return () => setServiceWorkerRegistered(false);
+    return () => {
+      setServiceWorkerRegistered(false);
+    };
   }, []);
+
   useEffect(() => {
-    fetch(`${appConfig.apiURL}accessions/${id}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchAccession = async () => {
+      try {
+        const response = await fetch(`${appConfig.apiURL}accessions/${id}`, {
+          headers: {
+            Accept: "application/json",
+          },
+        });
+        const data = await response.json();
         setReplayerState({
           source: data.wacz_url,
           url: data.accession.seed_url,
@@ -74,11 +78,11 @@ export default function ViewAccession() {
           metadata_en: data.metadata_en,
           metadata_ar: data.metadata_ar,
         });
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(error);
-      });
-
+      }
+    };
+    fetchAccession();
     return () => {
       setReplayerState({ source: "", url: "" });
       setAccession(null);
@@ -108,8 +112,10 @@ export default function ViewAccession() {
                     <Title
                       title={
                         i18n.language === "en"
-                          ? accession.metadata_en?.title ?? t("metadata_missing_title")
-                          : accession.metadata_ar?.title ?? t("metadata_missing_title")
+                          ? accession.metadata_en?.title ??
+                            t("metadata_missing_title")
+                          : accession.metadata_ar?.title ??
+                            t("metadata_missing_title")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
@@ -118,16 +124,20 @@ export default function ViewAccession() {
                     <Subject
                       subject={
                         i18n.language === "en"
-                          ? accession.metadata_en?.subject ?? t("metadata_missing_subject")
-                          : accession.metadata_ar?.subject ?? t("metadata_missing_subject")
+                          ? accession.metadata_en?.subject ??
+                            t("metadata_missing_subject")
+                          : accession.metadata_ar?.subject ??
+                            t("metadata_missing_subject")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
                     <Description
                       description={
                         i18n.language === "en"
-                          ? accession.metadata_en?.description ?? t("metadata_missing_description")
-                          : accession.metadata_ar?.description ?? t("metadata_missing_description")
+                          ? accession.metadata_en?.description ??
+                            t("metadata_missing_description")
+                          : accession.metadata_ar?.description ??
+                            t("metadata_missing_description")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
@@ -137,7 +147,7 @@ export default function ViewAccession() {
                         fontSize={i18n.language === "en" ? "md" : "lg"}
                       />
                     </Box>
-                    <OriginalURL 
+                    <OriginalURL
                       url={accession.accession.seed_url}
                       fontSize={i18n.language === "en" ? "md" : "lg"}
                     />

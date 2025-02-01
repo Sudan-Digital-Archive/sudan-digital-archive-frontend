@@ -19,51 +19,38 @@ interface DatePickerFieldProps {
 
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
-
   const toast = useToast();
-  function validateTitle(value: string) {
-    if (!value) {
-      return t("create_accession_invalid_title");
-    }
-    return "";
-  }
-  function validateSubject(value: string) {
-    if (!value) {
-      return t("create_accession_invalid_subject");
-    }
-    return "";
-  }
-  function validateDescription(value: string) {
-    if (!value) {
-      return t("create_accession_invalid_description");
-    }
-    return "";
-  }
 
-  function validateURL(value: string) {
-    if (!value) {
-      return t("create_accession_missing_url");
-    }
+  const validateURL = (value: string) => {
     try {
       new URL(value);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      return "";
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       return t("create_accession_invalid_url");
     }
-    return "";
-  }
+  };
+
+  const validateRequired = (value: string, fieldName: string, customValidator?: (val: string) => string) => {
+    if (!value) {
+      return t(`create_accession_invalid_${fieldName}`);
+    }
+    return customValidator ? customValidator(value) : "";
+  };
+
   function validateDate(value: string) {
     if (!value) {
       return "Date is required";
     }
     try {
       new Date(value);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      return "";
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       return t("create_accession_invalid_date");
     }
-    return "";
   }
+
   const DatePickerField = ({ name, value, onChange }: DatePickerFieldProps) => {
     return (
       <ArchiveDatePicker
@@ -84,65 +71,61 @@ export function CreateAccession() {
         description: "",
         date: "",
       }}
-      onSubmit={(values, actions) => {
-        let success = false;
-        fetch(`${appConfig.apiURL}accessions`, {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            metadata_language: i18n.language === "en" ? "english" : "arabic",
-            url: values.url,
-            metadata_title: values.title,
-            metadata_subject: values.subject,
-            metadata_description: values.description,
-            metadata_time: `${
-              new Date(values.date).toISOString().split("T")[0]
-            }T00:00:00`,
-          }),
-        })
-          .then((response) => {
-            if (response.status === 201) {
-              success = true;
-            } else {
-              success = false;
-            }
-            return response.text();
-          })
-          .then((response_text) => {
-            if (!success) {
-              console.error(response_text);
-              toast({
-                title: t("create_accession_error_toast_title"),
-                description: `${t(
-                  "create_accession_error_toast_description"
-                )} ${response_text}`,
-                status: "error",
-                duration: 9000,
-                isClosable: true,
-              });
-            } else {
-              toast({
-                title: "Crawling URL",
-                description: t("create_accession_success_description"),
-                status: "success",
-                duration: 9000,
-                isClosable: true,
-              });
-            }
-          })
-          .catch((error) => {
-            console.error(error);
+      onSubmit={async (values, actions) => {
+        try {
+          const response = await fetch(`${appConfig.apiURL}accessions`, {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              metadata_language: i18n.language === "en" ? "english" : "arabic",
+              url: values.url,
+              metadata_title: values.title,
+              metadata_subject: values.subject,
+              metadata_description: values.description,
+              metadata_time: `${new Date(values.date).toISOString().split("T")[0]}T00:00:00`,
+            }),
           });
 
-        actions.setSubmitting(false);
+          const responseText = await response.text();
+
+          if (response.status === 201) {
+            toast({
+              title: "Crawling URL",
+              description: t("create_accession_success_description"),
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            });
+          } else {
+            console.error(responseText);
+            toast({
+              title: t("create_accession_error_toast_title"),
+              description: `${t("create_accession_error_toast_description")} ${responseText}`,
+              status: "error",
+              duration: 9000,
+              isClosable: true,
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          toast({
+            title: t("create_accession_error_toast_title"),
+            description: t("create_accession_error_toast_description"),
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+        } finally {
+          actions.setSubmitting(false);
+        }
       }}
     >
       {(props) => (
         <Form>
-          <Field name="url" validate={validateURL}>
+          <Field name="url" validate={(val: string) => validateRequired(val, "url", validateURL)}>
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -157,7 +140,7 @@ export function CreateAccession() {
               )
             }
           </Field>
-          <Field name="title" validate={validateTitle}>
+          <Field name="title" validate={(val: string) => validateRequired(val, "title")}>
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -173,7 +156,7 @@ export function CreateAccession() {
               )
             }
           </Field>
-          <Field name="subject" validate={validateSubject}>
+          <Field name="subject" validate={(val: string) => validateRequired(val, "subject")}>
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -191,7 +174,7 @@ export function CreateAccession() {
               )
             }
           </Field>
-          <Field name="description" validate={validateDescription}>
+          <Field name="description" validate={(val: string) => validateRequired(val, "description")}>
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
