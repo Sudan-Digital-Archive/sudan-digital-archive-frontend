@@ -21,7 +21,7 @@ import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
 import { CreateAccession } from "../components/forms/create_accession.tsx";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ArchiveDatePicker } from "../components/date_picker.tsx";
 import { appConfig } from "../constants.ts";
@@ -57,12 +57,23 @@ export default function Archive() {
     }
     return new URLSearchParams(nonNullFilters);
   }
+
+  const updateFilters = useCallback((updates: AccessionsQueryFilters) => {
+    setQueryFilters((prev) => ({
+      ...prev,
+      ...updates,
+    }));
+  }, []);
+
   function handleDateChange(
     date: Date | null,
     dateField: "date_from" | "date_to"
   ) {
-    if (!date) return;
-    let newFilters;
+    if (!date) {
+      updateFilters({ [dateField]: "" });
+      return;
+    }
+
     switch (dateField) {
       case "date_from":
         setDateFrom(date);
@@ -73,28 +84,10 @@ export default function Archive() {
       default:
         throw `Unsupported dateField arg ${dateField}`;
     }
-    if (!date) {
-      newFilters = {
-        ...queryFilters,
-        [dateField]: "",
-      };
-    } else {
-      const newQueryDate = `${date.toISOString().split("T")[0]}`;
-      newFilters = {
-        ...queryFilters,
-        [dateField]: `${newQueryDate}T00:00:00`,
-      };
-    }
-    setQueryFilters(newFilters);
+
+    const newQueryDate = `${date.toISOString().split("T")[0]}T00:00:00`;
+    updateFilters({ [dateField]: newQueryDate });
   }
-  
-  useEffect(() => {
-    const newFilters = {
-      ...queryFilters,
-      lang: i18n.language === "en" ? "english" : "arabic",
-    };
-    setQueryFilters(newFilters);
-  }, [i18n.language]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -104,15 +97,8 @@ export default function Archive() {
   }, [queryTerm]);
 
   useEffect(() => {
-    const newFilters = {
-      ...queryFilters,
-      ["query_term"]: debouncedQuery,
-    };
-    setQueryFilters(newFilters);
-    // Want to do this because otherwise it will continuously rerender
-    // since it will keep changing `queryFilters`
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedQuery]);
+    updateFilters({ query_term: debouncedQuery });
+  }, [debouncedQuery, updateFilters]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -141,7 +127,26 @@ export default function Archive() {
   }, [queryFilters]);
   return (
     <>
-      <Menu />
+      <Menu
+        changeLanguageOverride={() => {
+          setIsLoading(true);
+          const newLanguage = i18n.language === "en" ? "ar" : "en";
+          i18n.changeLanguage(newLanguage);
+          switch (newLanguage) {
+            case "en":
+              document.documentElement.lang = "en";
+              document.documentElement.dir = "ltr";
+              break;
+            case "ar":
+              document.documentElement.lang = "ar";
+              document.documentElement.dir = "rtl";
+              break;
+            default:
+              throw `Language ${newLanguage} is not supported`;
+          }
+          updateFilters({ lang: newLanguage === "en" ? "english" : "arabic" });
+        }}
+      />
       <SlideFade in>
         <VStack alignItems="center" justifyContent="center">
           <Button
@@ -206,13 +211,11 @@ export default function Archive() {
                     leftIcon={<ArrowLeft />}
                     colorScheme="purple"
                     variant="link"
-                    onClick={() => {
-                      const newFilters = {
-                        ...queryFilters,
-                        ["page"]: (pagination.currentPage - 1).toString(),
-                      };
-                      setQueryFilters(newFilters);
-                    }}
+                    onClick={() =>
+                      updateFilters({
+                        page: (pagination.currentPage - 1).toString(),
+                      })
+                    }
                   />
                 )}
               <Box>
@@ -227,13 +230,11 @@ export default function Archive() {
                   leftIcon={<ArrowRight />}
                   colorScheme="purple"
                   variant="link"
-                  onClick={() => {
-                    const newFilters = {
-                      ...queryFilters,
-                      ["page"]: (pagination.currentPage + 1).toString(),
-                    };
-                    setQueryFilters(newFilters);
-                  }}
+                  onClick={() =>
+                    updateFilters({
+                      page: (pagination.currentPage + 1).toString(),
+                    })
+                  }
                 />
               )}
             </HStack>

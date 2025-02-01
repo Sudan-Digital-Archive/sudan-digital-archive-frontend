@@ -12,14 +12,34 @@ import { ChevronDown } from "react-feather";
 import { useNavigate } from "react-router-dom";
 import { Home } from "react-feather";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
-const Navbar = () => {
+
+interface NavbarProps {
+  // useful if you want to prevent layout shifts
+  // e.g. refresh data before everything goes right to left
+  changeLanguageOverride?: () => void;
+}
+
+const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
   const { i18n, t } = useTranslation();
-  const [language, setLanguage] = useState(i18n.language);
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
   const navigate = useNavigate();
+
+  const handleLanguageChange = () => {
+    const newLanguage = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLanguage);
+    switch (newLanguage) {
+      case "en":
+        document.documentElement.lang = "en";
+        document.documentElement.dir = "ltr";
+        break;
+      case "ar":
+        document.documentElement.lang = "ar";
+        document.documentElement.dir = "rtl";
+        break;
+      default:
+        throw `Language ${newLanguage} is not supported`;
+    }
+  };
+
   const MenuBar = () => {
     return (
       <HStack spacing={4} alignItems="center" aria-label="navigation-menu">
@@ -48,7 +68,9 @@ const Navbar = () => {
             <MenuItem onClick={() => navigate("/who-are-we")}>
               {t("nav_who_are_we")}
             </MenuItem>
-            <MenuItem onClick={() => navigate("/mission")}>{t("nav_mission")}</MenuItem>
+            <MenuItem onClick={() => navigate("/mission")}>
+              {t("nav_mission")}
+            </MenuItem>
             <MenuItem onClick={() => navigate("/why-another-archive")}>
               {t("nav_why_another_archive")}
             </MenuItem>
@@ -61,25 +83,9 @@ const Navbar = () => {
           <Button
             colorScheme="pink"
             variant="ghost"
-            onClick={() => {
-              const newLanguage = language === "en" ? "ar" : "en";
-              setLanguage(newLanguage);
-              changeLanguage(newLanguage);
-              switch (newLanguage) {
-                case "en":
-                  document.documentElement.lang = "en";
-                  document.documentElement.dir = "ltr";
-                  break;
-                case "ar":
-                  document.documentElement.lang = "ar";
-                  document.documentElement.dir = "rtl";
-                  break;
-                default:
-                  throw `Language ${newLanguage} is not supported`;
-              }
-            }}
+            onClick={changeLanguageOverride || handleLanguageChange}
           >
-            {language === "en" ? "عربي" : "English"}
+            {i18n.language === "en" ? "عربي" : "English"}
           </Button>
         </Box>
       </HStack>

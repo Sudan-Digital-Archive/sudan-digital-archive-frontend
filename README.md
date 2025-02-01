@@ -4,7 +4,7 @@ This is the frontend for the Sudan Digital Archive project.
 
 ## TODOs:
 
-- Add one basic test just to check the app has loaded fine 
+- Docstring stuff
 
 ## Local Development
 
