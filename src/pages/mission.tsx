@@ -2,6 +2,9 @@ import { Box, SlideFade, VStack, Heading, Text, Image } from "@chakra-ui/react";
 import Menu from "../components/menu.tsx";
 import Footer from "../components/footer.tsx";
 import { useTranslation } from "react-i18next";
+import atbara from "./hussein_merghani.jpg";
+import kandaka from "./merghani_salih_kandaka.jpg";
+
 export default function Mission() {
   const { t, i18n } = useTranslation();
 
@@ -26,7 +29,13 @@ export default function Mission() {
               >
                 {t("mission_title")}
               </Heading>
-              <Image boxSize="lg" objectFit="cover" src="https://blah" />
+              <Image
+                boxSize="lg"
+                objectFit="cover"
+                src={kandaka}
+                alt={t("mission_image_one_alt")}
+              />
+              <Text as="i">{t("mission_image_one_caption")}</Text>
               <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
                 {t("mission_para_one")}
               </Text>
@@ -45,7 +54,14 @@ export default function Mission() {
               <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
                 {t("mission_para_six")}
               </Text>
-              <Image boxSize="lg" objectFit="cover" src="https://blah" />
+              <Image
+                boxSize="lg"
+                objectFit="cover"
+                src={atbara}
+                alt={t("mission_image_two_alt")}
+              />
+              <Text as="i">{t("mission_image_two_caption")}</Text>
+
               <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
                 {t("mission_para_seven")}
               </Text>
