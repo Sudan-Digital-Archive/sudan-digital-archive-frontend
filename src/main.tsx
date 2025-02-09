@@ -44,11 +44,23 @@ const router = createBrowserRouter([
   },
 ]);
 registerLocale("ar", ar);
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ColorModeScript initialColorMode="dark" />
-    <ChakraThemeRTLProvider>
-      <RouterProvider router={router} />
-    </ChakraThemeRTLProvider>
-  </StrictMode>
-);
+// replay routes we DO want react router to render - they need to
+// serve files from our static site
+// however the service worker that the replay web page component uses
+// intercepts all other requests to /replay/ so we don't want those
+// to go through react router
+const replayRoutes = new Set(["/replay/sw.js", "/replay/ui.js"]);
+const isNonReplayRoute = (path: string) => {
+  return !path.startsWith("/replay/") || replayRoutes.has(path);
+};
+
+if (isNonReplayRoute(window.location.pathname)) {
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <ColorModeScript initialColorMode="dark" />
+      <ChakraThemeRTLProvider>
+        <RouterProvider router={router} />
+      </ChakraThemeRTLProvider>
+    </StrictMode>
+  );
+}
