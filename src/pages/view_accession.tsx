@@ -43,7 +43,7 @@ export default function ViewAccession() {
   // https://github.com/webrecorder/replayweb.page
   useEffect(() => {
     navigator.serviceWorker
-      .register("/replay/sw.js")
+      .register("%PUBLIC_URL%/replay/sw.js")
       .then((registration) => {
         console.log(
           "Service Worker registration successful with scope: ",
