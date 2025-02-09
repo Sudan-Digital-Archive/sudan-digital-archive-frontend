@@ -27,38 +27,10 @@ import { appConfig } from "../constants.ts";
 import type { AccessionOne } from "../types/api_responses.ts";
 export default function ViewAccession() {
   const { id } = useParams();
-  const [serviceWorkerRegistered, setServiceWorkerRegistered] = useState(false);
   const [replayerState, setReplayerState] = useState({ source: "", url: "" });
   const [accession, setAccession] = useState<null | AccessionOne>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { t, i18n } = useTranslation();
-
-  // this service worker is seriously cool
-  // it lives in public/replay/sw.js
-  // and imports a service worker that webrecorder built
-  // it intercepts all requests to /replay/sw.js to allow
-  // use of a <replay-web-page/> component that lets you embed
-  // full browser crawls in a webpage using JS injected
-  // with a script tag in `index.html`
-  // https://github.com/webrecorder/replayweb.page
-  useEffect(() => {
-    navigator.serviceWorker
-      .register("/replay/sw.js")
-      .then((registration) => {
-        console.log(
-          "Service Worker registration successful with scope: ",
-          registration.scope
-        );
-        setServiceWorkerRegistered(true);
-      })
-      .catch((err) =>
-        console.error("Service Worker registration failed: ", err)
-      );
-
-    return () => {
-      setServiceWorkerRegistered(false);
-    };
-  }, []);
 
   useEffect(() => {
     const fetchAccession = async () => {
@@ -82,6 +54,7 @@ export default function ViewAccession() {
         console.error(error);
       }
     };
+
     fetchAccession();
     return () => {
       setReplayerState({ source: "", url: "" });
@@ -93,10 +66,7 @@ export default function ViewAccession() {
       <Menu />
       <SlideFade in>
         <VStack display="flex">
-          {!accession ||
-          !replayerState.source ||
-          !replayerState.url ||
-          !serviceWorkerRegistered ? (
+          {!accession || !replayerState.source || !replayerState.url ? (
             <Spinner />
           ) : (
             <>
