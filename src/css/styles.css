@@ -9,7 +9,7 @@ all been there.
 */
 
 /*  from https://web.dev/articles/speedy-css-tip-animated-gradient-text */
-.gradientText{
+.gradientText {
   --bg-size: 400%;
   --color-one: var(--chakra-colors-cyan-300);
   --color-two: var(--chakra-colors-pink-600);
@@ -31,4 +31,3 @@ all been there.
     background-position: var(--bg-size) 0;
   }
 }
-

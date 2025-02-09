@@ -20,7 +20,7 @@ const Footer = () => {
                   query={
                     i18n.language === "en"
                       ? ["free", "open source", "software"]
-                      : ["مجاني", "برنامج", "مفتوح المصدر"]
+                      : ["برمجيات", "مفتوحة", "المصدر"]
                   }
                   styles={{
                     px: "1.5",

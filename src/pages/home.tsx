@@ -12,7 +12,6 @@ export default function Home() {
       <SlideFade in>
         <Box
           as="section"
-          h={"calc(80vh - 50px)"}
           display="flex"
           alignItems="center"
           maxW="2xl"
@@ -61,6 +60,11 @@ export default function Home() {
                   {t("landing_sentence_two_part_six_highlight")}
                 </Box>
                 {t("landing_sentence_two_part_seven")}
+                <Box as="span" color="gray.300">
+                  {t("landing_sentence_two_part_eight_highlight")}
+                </Box>
+                {t("landing_sentence_two_part_nine")}
+
               </Heading>
             </Box>
           </VStack>
