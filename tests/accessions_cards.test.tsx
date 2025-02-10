@@ -44,4 +44,27 @@ describe("AccessionsCards", () => {
     expect(document.documentElement.dir).toBe("rtl");
     expect(document.documentElement.lang).toBe("ar");
   });
+
+  it("should truncate long descriptions", () => {
+    const longDescription = "A".repeat(300); 
+    const accessionsWithLongDesc = [
+      [
+        {
+          id: "789",
+          seed_url: "https://example.com",
+          dublin_metadata_date: "2023-01-01",
+        },
+        {
+          title: "Test Title",
+          subject: "Test Subject",
+          description: longDescription,
+        },
+      ],
+    ];
+
+    renderWithProviders(<AccessionsCards accessions={accessionsWithLongDesc} />);
+    const displayedDescription = screen.getByText((content) => content.includes("A"));
+    expect(displayedDescription.textContent?.length).toBeLessThan(longDescription.length);
+    expect(displayedDescription.textContent?.endsWith("...")).toBeTruthy();
+  });
 });

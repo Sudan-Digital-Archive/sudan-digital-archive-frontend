@@ -39,27 +39,32 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
             overflow="auto"
           >
             <CardHeader>
-              <Title 
-                title={metadata?.title ?? t("metadata_missing_title")} 
+              <Title
+                title={metadata?.title ?? t("metadata_missing_title")}
                 fontSize={i18n.language === "en" ? "md" : "lg"}
+                truncate
               />
             </CardHeader>
             <CardBody>
-              <Subject 
+              <Subject
                 subject={metadata?.subject ?? t("metadata_missing_subject")}
                 fontSize={i18n.language === "en" ? "md" : "lg"}
+                truncate
               />
-              <Description 
-                description={metadata?.description ?? t("metadata_missing_description")}
+              <Description
+                description={
+                  metadata?.description ?? t("metadata_missing_description")
+                }
                 fontSize={i18n.language === "en" ? "md" : "lg"}
+                truncate
               />
               <Box>
-                <DateMetadata 
+                <DateMetadata
                   date={accession.dublin_metadata_date}
                   fontSize={i18n.language === "en" ? "md" : "lg"}
                 />
               </Box>
-              <OriginalURL 
+              <OriginalURL
                 url={accession.seed_url}
                 fontSize={i18n.language === "en" ? "md" : "lg"}
               />
