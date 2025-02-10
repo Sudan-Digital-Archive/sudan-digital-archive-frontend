@@ -2,13 +2,42 @@
 
 This is the frontend for the Sudan Digital Archive project.
 
-## TODOs:
-
-- Docstring stuff
+It is a static site written in React and bundled with Vite.
 
 ## Local Development
 
-Clone the repo, install `https://pnpm.io/`, run `pnpm i` and then
-`pnpm run dev`. 
+First, you will need the backend running. Follow the steps in the repo
+[here](https://github.com/Sudan-Digital-Archive/sudan-digital-archive-api)
+to get it stood up.
 
-https://vite-pwa-org.netlify.app/guide/service-worker-without-pwa-capabilities.html
+Clone the repo, install `https://pnpm.io/`, run `pnpm i` and then
+`pnpm run dev`.
+
+### Notes on Replay Web Page
+
+This site makes heavy use of
+[replayweb.page](https://github.com/webrecorder/replayweb.page)
+to embed web archives in the browser. This is cool but it was quite fiddly
+to make it work in React. Things to note:
+
+- It uses two scripts, both of which are in the `public/replay` directory.
+- The documentation suggests dynamically loading these; I got more reliable results
+  by `curl`ing the output of the js deliver content and writing them to file.
+- The replay web component handles service worker stuff out of the box. You
+  DO NOT need to add this into the app; the web component does it for you.
+- The web component does need access to a `ui.js` file, which is served in a
+  `<script>` tag from `index.html`.
+- This replay web component does not play well with React router. This cost me hours
+  of dev time to debug. Apart from requests to `/replay/sw.js` and `/replay/ui.js`,
+  React router must not intercept any requests to `/replay/*`. The replay web
+  component intercepts all requests to `/replay/` urls in order to render the archive
+  file, so you will get very weird errors if these are also intercepted by React router.
+
+## Testing
+
+Run `pnpm run test`. Note that tests run in CI on pull and merge to main.
+
+## Deployment
+
+Merging to main automatically deploys the application. This is configured in Digital
+Ocean.
