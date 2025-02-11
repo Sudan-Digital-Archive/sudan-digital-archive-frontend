@@ -75,6 +75,10 @@ export default function WhoAreWe() {
                   {t("who_are_we_point_three_description")}
                 </ListItem>
               </OrderedList>
+              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
+                {t("who_are_we_email_text")}
+                <Text as="i">{t("who_are_we_email")}</Text>
+              </Text>
             </VStack>
           </Box>
         </Box>

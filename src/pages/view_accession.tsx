@@ -6,6 +6,7 @@ import {
   DrawerBody,
   Button,
   DrawerHeader,
+  DrawerCloseButton,
   DrawerOverlay,
   DrawerContent,
   useDisclosure,
@@ -78,6 +79,7 @@ export default function ViewAccession() {
               >
                 <DrawerOverlay />
                 <DrawerContent>
+                  <DrawerCloseButton />
                   <DrawerHeader borderBottomWidth="1px">
                     <Title
                       title={
