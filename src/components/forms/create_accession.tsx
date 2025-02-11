@@ -54,7 +54,6 @@ export function CreateAccession() {
   const DatePickerField = ({ name, value, onChange }: DatePickerFieldProps) => {
     return (
       <ArchiveDatePicker
-        isClearable={false}
         selected={(value && new Date(value)) || null}
         onChange={(val) => {
           onChange(name, val);
