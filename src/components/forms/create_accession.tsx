@@ -6,6 +6,7 @@ import {
   Input,
   useToast,
   Textarea,
+  Tooltip,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { ArchiveDatePicker } from "../date_picker.tsx";
@@ -25,13 +26,17 @@ export function CreateAccession() {
     try {
       new URL(value);
       return "";
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       return t("create_accession_invalid_url");
     }
   };
 
-  const validateRequired = (value: string, fieldName: string, customValidator?: (val: string) => string) => {
+  const validateRequired = (
+    value: string,
+    fieldName: string,
+    customValidator?: (val: string) => string
+  ) => {
     if (!value) {
       return t(`create_accession_invalid_${fieldName}`);
     }
@@ -45,7 +50,7 @@ export function CreateAccession() {
     try {
       new Date(value);
       return "";
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       return t("create_accession_invalid_date");
     }
@@ -84,7 +89,9 @@ export function CreateAccession() {
               metadata_title: values.title,
               metadata_subject: values.subject,
               metadata_description: values.description,
-              metadata_time: `${new Date(values.date).toISOString().split("T")[0]}T00:00:00`,
+              metadata_time: `${
+                new Date(values.date).toISOString().split("T")[0]
+              }T00:00:00`,
             }),
           });
 
@@ -102,7 +109,9 @@ export function CreateAccession() {
             console.error(responseText);
             toast({
               title: t("create_accession_error_toast_title"),
-              description: `${t("create_accession_error_toast_description")} ${responseText}`,
+              description: `${t(
+                "create_accession_error_toast_description"
+              )} ${responseText}`,
               status: "error",
               duration: 9000,
               isClosable: true,
@@ -124,7 +133,12 @@ export function CreateAccession() {
     >
       {(props) => (
         <Form>
-          <Field name="url" validate={(val: string) => validateRequired(val, "url", validateURL)}>
+          <Field
+            name="url"
+            validate={(val: string) =>
+              validateRequired(val, "url", validateURL)
+            }
+          >
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -139,7 +153,10 @@ export function CreateAccession() {
               )
             }
           </Field>
-          <Field name="title" validate={(val: string) => validateRequired(val, "title")}>
+          <Field
+            name="title"
+            validate={(val: string) => validateRequired(val, "title")}
+          >
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -155,7 +172,10 @@ export function CreateAccession() {
               )
             }
           </Field>
-          <Field name="subject" validate={(val: string) => validateRequired(val, "subject")}>
+          <Field
+            name="subject"
+            validate={(val: string) => validateRequired(val, "subject")}
+          >
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -173,7 +193,10 @@ export function CreateAccession() {
               )
             }
           </Field>
-          <Field name="description" validate={(val: string) => validateRequired(val, "description")}>
+          <Field
+            name="description"
+            validate={(val: string) => validateRequired(val, "description")}
+          >
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -198,9 +221,16 @@ export function CreateAccession() {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ form }: any) => (
                 <FormControl isInvalid={form.errors.date && form.touched.date}>
-                  <FormLabel mt={2}>
-                    {t("create_accession_date_field_label")}
-                  </FormLabel>
+                  <Tooltip
+                    label={t("create_accession_date_tooltip")}
+                    placement={
+                      i18n.language === "en" ? "left-start" : "right-start"
+                    }
+                  >
+                    <FormLabel mt={2}>
+                      {t("create_accession_date_field_label")}
+                    </FormLabel>
+                  </Tooltip>
                   <DatePickerField
                     name="date"
                     value={props.values.date}
