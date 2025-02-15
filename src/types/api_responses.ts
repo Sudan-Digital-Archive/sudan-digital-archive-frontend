@@ -7,7 +7,7 @@ type AccessionMetadata = {
   id: string;
   title: string;
   subject: string;
-  description: string;
+  description?: string;
 };
 export type AccessionList = [AccessionListRecord, AccessionMetadata | null][];
 

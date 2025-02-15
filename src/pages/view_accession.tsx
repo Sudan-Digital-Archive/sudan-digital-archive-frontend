@@ -103,16 +103,21 @@ export default function ViewAccession() {
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
-                    <Description
-                      description={
-                        i18n.language === "en"
-                          ? accession.metadata_en?.description ??
-                            t("metadata_missing_description")
-                          : accession.metadata_ar?.description ??
-                            t("metadata_missing_description")
-                      }
-                      fontSize={i18n.language === "en" ? "md" : "lg"}
-                    />
+                    {((i18n.language === "en" &&
+                      accession.metadata_en?.description) ||
+                      (i18n.language === "ar" &&
+                        accession.metadata_ar?.description)) && (
+                      <Description
+                        description={
+                          i18n.language === "en"
+                            ? accession.metadata_en?.description ??
+                              t("metadata_missing_description")
+                            : accession.metadata_ar?.description ??
+                              t("metadata_missing_description")
+                        }
+                        fontSize={i18n.language === "en" ? "md" : "lg"}
+                      />
+                    )}
                     <Box>
                       <DateMetadata
                         date={accession.accession.dublin_metadata_date}

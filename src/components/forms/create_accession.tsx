@@ -72,7 +72,7 @@ export function CreateAccession() {
         url: "",
         title: "",
         subject: "",
-        description: "",
+        description: null,
         date: "",
       }}
       onSubmit={async (values, actions) => {
@@ -142,7 +142,10 @@ export function CreateAccession() {
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
-                <FormControl isInvalid={form.errors.url && form.touched.url}>
+                <FormControl
+                  isInvalid={form.errors.url && form.touched.url}
+                  isRequired
+                >
                   <FormLabel>{t("create_accession_url_field_label")}</FormLabel>
                   <Input
                     {...field}
@@ -162,6 +165,7 @@ export function CreateAccession() {
               ({ field, form }: any) => (
                 <FormControl
                   isInvalid={form.errors.title && form.touched.title}
+                  isRequired
                 >
                   <FormLabel mt={2}>
                     {t("create_accession_title_field_label")}
@@ -181,6 +185,7 @@ export function CreateAccession() {
               ({ field, form }: any) => (
                 <FormControl
                   isInvalid={form.errors.subject && form.touched.subject}
+                  isRequired
                 >
                   <FormLabel mt={2}>
                     {t("create_accession_subject_field_label")}
@@ -195,7 +200,7 @@ export function CreateAccession() {
           </Field>
           <Field
             name="description"
-            validate={(val: string) => validateRequired(val, "description")}
+            // validate={(val: string) => validateRequired(val, "description")}
           >
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -220,7 +225,10 @@ export function CreateAccession() {
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ form }: any) => (
-                <FormControl isInvalid={form.errors.date && form.touched.date}>
+                <FormControl
+                  isInvalid={form.errors.date && form.touched.date}
+                  isRequired
+                >
                   <Tooltip
                     label={t("create_accession_date_tooltip")}
                     placement={

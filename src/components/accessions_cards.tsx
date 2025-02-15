@@ -51,13 +51,15 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
                 fontSize={i18n.language === "en" ? "md" : "lg"}
                 truncate
               />
-              <Description
-                description={
-                  metadata?.description ?? t("metadata_missing_description")
-                }
-                fontSize={i18n.language === "en" ? "md" : "lg"}
-                truncate
-              />
+              {metadata?.description && (
+                <Description
+                  description={
+                    metadata?.description ?? t("metadata_missing_description")
+                  }
+                  fontSize={i18n.language === "en" ? "md" : "lg"}
+                  truncate
+                />
+              )}
               <Box>
                 <DateMetadata
                   date={accession.dublin_metadata_date}
