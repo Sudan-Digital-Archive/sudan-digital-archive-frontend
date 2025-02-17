@@ -15,6 +15,7 @@ import { ArchiveDatePicker } from "../date_picker.tsx";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../../constants.ts";
 import { useState } from "react";
+
 interface DatePickerFieldProps {
   name: string;
   value: string | null;
@@ -24,9 +25,18 @@ interface DatePickerFieldProps {
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
-  const [browserProfile, setBrowserProfile] = useState(
+  const [browserProfile, setBrowserProfile] = useState<string>(
     t("create_accession_crawl_type_default")
   );
+
+  const getBrowserProfile = (profile: string) => {
+    switch (profile) {
+      case t("create_accession_crawl_type_facebook"):
+        return "facebook";
+      default:
+        return null;
+    }
+  };
 
   const validateURL = (value: string) => {
     try {
@@ -101,7 +111,7 @@ export function CreateAccession() {
               metadata_time: `${
                 new Date(values.date).toISOString().split("T")[0]
               }T00:00:00`,
-              browser_profile: browserProfile.toLowerCase(),
+              browser_profile: getBrowserProfile(browserProfile),
             }),
           });
 
