@@ -6,12 +6,15 @@ import {
   Input,
   useToast,
   Textarea,
-  Tooltip,
+  Radio,
+  RadioGroup,
+  Stack,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { ArchiveDatePicker } from "../date_picker.tsx";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../../constants.ts";
+import { useState } from "react";
 interface DatePickerFieldProps {
   name: string;
   value: string | null;
@@ -21,6 +24,7 @@ interface DatePickerFieldProps {
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
+  const [browserProfile, setBrowserProfile] = useState("Default");
 
   const validateURL = (value: string) => {
     try {
@@ -63,6 +67,7 @@ export function CreateAccession() {
         onChange={(val) => {
           onChange(name, val);
         }}
+        showPlaceholder={true}
       />
     );
   };
@@ -72,7 +77,7 @@ export function CreateAccession() {
         url: "",
         title: "",
         subject: "",
-        description: null,
+        description: "",
         date: "",
       }}
       onSubmit={async (values, actions) => {
@@ -88,10 +93,11 @@ export function CreateAccession() {
               url: values.url,
               metadata_title: values.title,
               metadata_subject: values.subject,
-              metadata_description: values.description,
+              metadata_description: values.description ? values.description : null,
               metadata_time: `${
                 new Date(values.date).toISOString().split("T")[0]
               }T00:00:00`,
+              browser_profile: browserProfile.toLowerCase(),
             }),
           });
 
@@ -200,7 +206,6 @@ export function CreateAccession() {
           </Field>
           <Field
             name="description"
-            // validate={(val: string) => validateRequired(val, "description")}
           >
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -229,22 +234,42 @@ export function CreateAccession() {
                   isInvalid={form.errors.date && form.touched.date}
                   isRequired
                 >
-                  <Tooltip
-                    label={t("create_accession_date_tooltip")}
-                    placement={
-                      i18n.language === "en" ? "left-start" : "right-start"
-                    }
-                  >
-                    <FormLabel mt={2}>
-                      {t("create_accession_date_field_label")}
-                    </FormLabel>
-                  </Tooltip>
+                  <FormLabel mt={2}>
+                    {t("create_accession_date_field_label")}
+                  </FormLabel>
                   <DatePickerField
                     name="date"
                     value={props.values.date}
                     onChange={props.setFieldValue}
                   />
                   <FormErrorMessage mb={2}>{form.errors.date}</FormErrorMessage>
+                </FormControl>
+              )
+            }
+          </Field>
+          <Field name="browserProfile">
+            {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ({ form }: any) => (
+                <FormControl
+                  isInvalid={
+                    form.errors.browserProfile && form.touched.browserProfile
+                  }
+                  isRequired
+                >
+                  <FormLabel mt={2}>Crawl Type</FormLabel>
+                  <RadioGroup
+                    onChange={setBrowserProfile}
+                    value={browserProfile}
+                  >
+                    <Stack direction="row">
+                      <Radio value="Default">Default</Radio>
+                      <Radio value="Facebook">Facebook</Radio>
+                    </Stack>
+                  </RadioGroup>
+                  <FormErrorMessage mb={2}>
+                    {form.errors.browserProfile}
+                  </FormErrorMessage>
                 </FormControl>
               )
             }

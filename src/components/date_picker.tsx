@@ -7,12 +7,14 @@ import { useTranslation } from "react-i18next";
 interface ArchiveDatePickerProps {
   selected: Date | null;
   onChange: (date: Date | null) => void;
+  showPlaceholder?: boolean;
 }
 export function ArchiveDatePicker({
   onChange,
   selected,
+  showPlaceholder = false
 }: ArchiveDatePickerProps) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   return (
     <Box className="dark-theme" mr={2} ml={2}>
       <DatePicker
@@ -22,7 +24,7 @@ export function ArchiveDatePicker({
         showYearDropdown
         dropdownMode="select"
         locale={i18n.language === "ar" ? "ar" : "en"}
-        placeholderText={i18n.language === "ar" ? "اختر تاريخ" : "Select date"}
+        placeholderText={showPlaceholder ? t("create_accession_date_placeholder"): ""}
       />
     </Box>
   );
