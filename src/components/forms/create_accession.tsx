@@ -24,7 +24,9 @@ interface DatePickerFieldProps {
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
-  const [browserProfile, setBrowserProfile] = useState("Default");
+  const [browserProfile, setBrowserProfile] = useState(
+    t("create_accession_crawl_type_default")
+  );
 
   const validateURL = (value: string) => {
     try {
@@ -93,7 +95,9 @@ export function CreateAccession() {
               url: values.url,
               metadata_title: values.title,
               metadata_subject: values.subject,
-              metadata_description: values.description ? values.description : null,
+              metadata_description: values.description
+                ? values.description
+                : null,
               metadata_time: `${
                 new Date(values.date).toISOString().split("T")[0]
               }T00:00:00`,
@@ -105,7 +109,7 @@ export function CreateAccession() {
 
           if (response.status === 201) {
             toast({
-              title: "Crawling URL",
+              title: t("create_accession_crawling_url_title"),
               description: t("create_accession_success_description"),
               status: "success",
               duration: 9000,
@@ -204,9 +208,7 @@ export function CreateAccession() {
               )
             }
           </Field>
-          <Field
-            name="description"
-          >
+          <Field name="description">
             {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ({ field, form }: any) => (
@@ -257,14 +259,20 @@ export function CreateAccession() {
                   }
                   isRequired
                 >
-                  <FormLabel mt={2}>Crawl Type</FormLabel>
+                  <FormLabel mt={2}>
+                    {t("create_accession_crawl_type_label")}
+                  </FormLabel>
                   <RadioGroup
                     onChange={setBrowserProfile}
                     value={browserProfile}
                   >
                     <Stack direction="row">
-                      <Radio value="Default">Default</Radio>
-                      <Radio value="Facebook">Facebook</Radio>
+                      <Radio value={t("create_accession_crawl_type_default")}>
+                        {t("create_accession_crawl_type_default")}
+                      </Radio>
+                      <Radio value={t("create_accession_crawl_type_facebook")}>
+                        {t("create_accession_crawl_type_facebook")}
+                      </Radio>
                     </Stack>
                   </RadioGroup>
                   <FormErrorMessage mb={2}>
