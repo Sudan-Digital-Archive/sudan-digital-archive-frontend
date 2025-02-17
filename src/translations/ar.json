@@ -99,6 +99,10 @@
     "mission_image_one_alt": "فسيفساء كندكة",
     "mission_image_one_caption": "فن بواسطة مرغني صالح",
     "mission_image_two_alt": "متظاهرون على قطار من عطبرة",
-    "mission_image_two_caption": "فن بواسطة حسين مرغني"
+    "mission_image_two_caption": "فن بواسطة حسين مرغني",
+    "create_accession_crawling_url_title": "جاري فحص الرابط",
+    "create_accession_crawl_type_label": "نوع الزحف",
+    "create_accession_crawl_type_default": "افتراضي",
+    "create_accession_crawl_type_facebook": "فيسبوك"
   }
 }
