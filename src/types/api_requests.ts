@@ -4,4 +4,5 @@ export type AccessionsQueryFilters = {
   lang?: string;
   page?: string;
   query_term?: string;
+  metadata_subjects?: string[]
 };

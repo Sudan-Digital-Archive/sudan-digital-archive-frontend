@@ -38,6 +38,7 @@ export default function Archive() {
     query_term: "",
     date_from: "",
     date_to: "",
+    metadata_subjects: [],
   });
   const [accessions, setAccessions] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,16 +52,19 @@ export default function Archive() {
   const [queryTerm, setQueryTerm] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   function buildFilters(queryFilters: AccessionsQueryFilters) {
-    const nonNullFilters: AccessionsQueryFilters = {};
+    let queryParams = "";
     for (const [key, value] of Object.entries(queryFilters)) {
-      if (value) {
-        nonNullFilters[key as keyof AccessionsQueryFilters] = value;
+      if (Array.isArray(value)) {
+        value.forEach((item) => (queryParams += `${key}=${item}&`));
+      } else if (value) {
+        queryParams += `${key}=${value}&`;
       }
     }
-    return new URLSearchParams(nonNullFilters);
+    console.log(`query params are ${queryParams}`);
+    return new URLSearchParams(queryParams);
   }
 
-  const updateFilters = useCallback((updates: AccessionsQueryFilters) => {
+  const updateFilters = useCallback((updates) => {
     setQueryFilters((prev) => ({
       ...prev,
       ...updates,
@@ -197,7 +201,16 @@ export default function Archive() {
               />
             </Flex>
             <Flex py={5}>
-              <SubjectsAutocomplete />
+              <SubjectsAutocomplete
+                onChange={(subjects) => {
+                  console.log(`subjects in archive filters`);
+                  updateFilters({
+                    ["metadata_subjects"]: subjects.map(
+                      (subject) => subject.value
+                    ),
+                  });
+                }}
+              />
             </Flex>
           </Box>
           <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">

@@ -1,23 +1,21 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Box,
-  useToast
-} from "@chakra-ui/react";
-import { CreatableSelect, chakraComponents } from "chakra-react-select";
+import { Box, useToast } from "@chakra-ui/react";
+import { CreatableSelect } from "chakra-react-select";
 import { appConfig } from "../constants";
 import { Subject, SubjectsResponse } from "../types/api_responses";
 import { SubjectTag } from "./SubjectTag";
 
 interface SubjectsAutocompleteProps {
-  onChange?: (values: string[]) => void;
+  onChange?: (values: SubjectOption[]) => void;
 }
 
 interface SubjectOption {
   label: string;
-  value: string;
+  value: number;
 }
 
+// TODO: Figure out why this renders so much
 export const SubjectsAutocomplete = ({
   onChange,
 }: SubjectsAutocompleteProps) => {
@@ -33,7 +31,7 @@ export const SubjectsAutocomplete = ({
 
   // Convert subjects to options format
   const subjectOptions: SubjectOption[] = subjects.map((subject) => ({
-    value: subject.subject,
+    value: subject.id,
     label: subject.subject,
   }));
 
@@ -122,37 +120,40 @@ export const SubjectsAutocomplete = ({
   }, [fetchSubjects, apiLang]);
 
   // Handle selection change
-  const handleChange = (newValue: readonly SubjectOption[]) => {
+  const handleChange = (newValue: SubjectOption[]) => {
     setSelectedOptions(newValue as SubjectOption[]);
-    
+
     if (onChange) {
       // Extract just the values to match the expected output format
-      onChange(newValue.map(option => option.value));
+      onChange(newValue);
     }
   };
 
   // Handle creating a new option
   const handleCreateOption = async (inputValue: string) => {
     const newSubject = await createNewSubject(inputValue);
-    
+
     if (newSubject) {
-      const newOption = { value: newSubject.subject, label: newSubject.subject };
+      const newOption = {
+        value: newSubject.subject,
+        label: newSubject.subject,
+      };
       setSelectedOptions((prev) => [...prev, newOption]);
-      
+
       if (onChange) {
-        onChange([...selectedOptions.map(o => o.value), newSubject.subject]);
+        onChange([...selectedOptions.map((o) => o.value), newSubject.subject]);
       }
     }
   };
 
   // Custom components for the select
   const customComponents = {
-    MultiValue: ({ children, removeProps, ...props }: any) => {
+    MultiValue: ({ removeProps, ...props }: any) => {
       return (
-        <SubjectTag 
-          label={props.data.label} 
+        <SubjectTag
+          label={props.data.label}
           hasCloseButton={true}
-          onClose={removeProps.onClick} 
+          onClose={removeProps.onClick}
         />
       );
     },
@@ -175,7 +176,7 @@ export const SubjectsAutocomplete = ({
         chakraStyles={{
           loadingIndicator: (provided) => ({
             ...provided,
-            marginRight: 2
+            marginRight: 2,
           }),
           dropdownIndicator: (provided) => ({
             ...provided,
@@ -194,28 +195,20 @@ export const SubjectsAutocomplete = ({
           }),
           valueContainer: (provided) => ({
             ...provided,
-            padding: '8px',
-            flexWrap: 'wrap',
-            gap: '4px',
+            padding: "8px",
+            flexWrap: "wrap",
+            gap: "4px",
           }),
           // Add styling for selected options in the dropdown
-          option: (provided, { isSelected, isFocused }) => ({
+          option: (provided, { isSelected }) => ({
             ...provided,
-            // backgroundColor: isSelected 
-            //   ? "cyan.500" 
-            //   : isFocused 
-            //     ? "red.50" 
-            //     : provided.backgroundColor,
+
             color: isSelected ? "grey.300" : provided.color,
             _dark: {
-              backgroundColor: isSelected 
-                ? "cyan.700" 
+              backgroundColor: isSelected
+                ? "cyan.700"
                 : provided.backgroundColor,
-              // color: isSelected ? "white" : provided.color,
             },
-            // ':active': {
-            //   backgroundColor: "red.400",
-            // }
           }),
         }}
         components={customComponents}
@@ -223,8 +216,6 @@ export const SubjectsAutocomplete = ({
         size="md"
         hideSelectedOptions={false}
         controlShouldRenderValue={true}
-        // To override the default blue highlight color
-        selectedOptionColorScheme="red"
       />
     </Box>
   );
