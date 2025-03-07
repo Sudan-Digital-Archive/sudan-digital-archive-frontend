@@ -19,7 +19,12 @@ export type AccessionWithMetadata = {
   has_arabic_metadata: boolean;
 };
 
-
+export type ListAccessions = {
+  items: AccessionWithMetadata[];
+  num_pages: number;
+  page: number;
+  per_page: number;
+};
 export type AccessionOne = {
   accession: AccessionWithMetadata;
   wacz_url: string;

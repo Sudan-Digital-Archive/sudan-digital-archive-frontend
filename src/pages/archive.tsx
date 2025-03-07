@@ -27,6 +27,10 @@ import { ArchiveDatePicker } from "../components/DatePicker.tsx";
 import { appConfig } from "../constants.ts";
 import { AccessionsCards } from "../components/AccessionsCards.tsx";
 import type { AccessionsQueryFilters } from "../apiTypes/apiRequests.ts";
+import type {
+  ListAccessions,
+  AccessionWithMetadata,
+} from "../apiTypes/apiResponses.ts";
 import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/SubjectsAutocomplete.tsx";
 
 export default function Archive() {
@@ -38,7 +42,7 @@ export default function Archive() {
     query_term: "",
     metadata_subjects: [],
   });
-  const [accessions, setAccessions] = useState([]);
+  const [accessions, setAccessions] = useState<ListAccessions | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -114,12 +118,11 @@ export default function Archive() {
             },
           }
         );
-        const data = await response.json();
-        setAccessions(data[0]);
-        // TODO: Send back nicer api response
+        const data: ListAccessions = await response.json();
+        setAccessions(data);
         setPagination({
-          currentPage: filters.page,
-          totalPages: data[1],
+          currentPage: data.page,
+          totalPages: data.num_pages,
         });
       } catch (error) {
         console.error(error);
@@ -134,7 +137,7 @@ export default function Archive() {
     setIsLoading(true);
     fetchAccessions(queryFilters);
     return () => {
-      setAccessions([]);
+      setAccessions(null);
       setIsLoading(false);
     };
   }, [fetchAccessions, queryFilters]);
@@ -222,12 +225,14 @@ export default function Archive() {
               <ModalFooter />
             </ModalContent>
           </Modal>
-          {isLoading ? (
+          {isLoading && accessions?.items ? (
             <Spinner />
           ) : (
-            <AccessionsCards accessions={accessions} />
+            <AccessionsCards
+              accessions={accessions?.items as AccessionWithMetadata[]}
+            />
           )}
-          {accessions.length > 0 && !isLoading && (
+          {accessions && accessions.items.length > 0 && !isLoading && (
             <HStack mt={3}>
               {pagination.currentPage != 0 &&
                 pagination.currentPage != pagination.totalPages && (
@@ -264,7 +269,7 @@ export default function Archive() {
               )}
             </HStack>
           )}
-          {!isLoading && accessions.length === 0 && (
+          {!isLoading && accessions && accessions.items.length === 0 && (
             <Box mt={3} as="i">
               {t("archive_no_records_found")}
             </Box>
