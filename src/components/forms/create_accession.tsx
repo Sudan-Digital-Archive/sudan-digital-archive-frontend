@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { appConfig } from "../../constants.ts";
 import { useState, useEffect, useCallback } from "react";
 import { SubjectsAutocomplete } from "../subjects_autocomplete.tsx";
-
+import type { FormEvent } from "react";
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
@@ -29,7 +29,7 @@ export function CreateAccession() {
     readonly { label: string; value: number }[]
   >([]);
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState<string>("");
+  const [date, setDate] = useState<Date | null>(null);
   const [browserProfile, setBrowserProfile] = useState<string>(
     t("create_accession_crawl_type_default")
   );
@@ -38,6 +38,8 @@ export function CreateAccession() {
   const [urlError, setUrlError] = useState("");
   const [titleError, setTitleError] = useState("");
   const [dateError, setDateError] = useState("");
+  const [subjectsError, setSubjectsError] = useState("");
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form validity state
@@ -46,36 +48,58 @@ export function CreateAccession() {
     (value: string) => {
       try {
         new URL(value);
-        return "";
+        return { valid: true, error: "" };
       } catch (_) {
-        return t("create_accession_invalid_url");
+        return { valid: false, error: t("create_accession_invalid_url") };
       }
     },
     [t]
   );
   const validateDate = useCallback(
-    (value: string) => {
+    (value: Date | null) => {
       if (!value) {
-        return "Date is required";
+        return { valid: false, error: t("create_accession_date_required") };
       }
       try {
         new Date(value);
-        return "";
+        return { valid: true, error: "" };
       } catch (_) {
-        return t("create_accession_invalid_date");
+        return { valid: false, error: t("create_accession_invalid_date") };
       }
     },
     [t]
   );
+  const validateTitle = useCallback(
+    (value: string) => {
+      if (!value) {
+        return { valid: false, error: t("create_accession_title_required") };
+      }
+      return { valid: true, error: "" };
+    },
+    [t]
+  );
+
+  const validateForm = useCallback(() => {
+    const urlValid = validateURL(url).valid;
+    const titleValid = validateTitle(title).valid;
+    const subjectsValid = subjects.length > 0;
+    const dateValid = validateDate(date).valid;
+    return urlValid && titleValid && subjectsValid && dateValid;
+  }, [
+    date,
+    subjects.length,
+    title,
+    url,
+    validateDate,
+    validateTitle,
+    validateURL,
+  ]);
   // Validate form whenever inputs change
   useEffect(() => {
-    const urlValid = url !== "" && validateURL(url) === "";
-    const titleValid = title !== "";
-    const subjectsValid = subjects.length > 0;
-    const dateValid = date !== "" && validateDate(date) === "";
+    const isFormValid = validateForm();
 
-    setIsFormValid(urlValid && titleValid && subjectsValid && dateValid);
-  }, [url, title, subjects, date, browserProfile, validateURL, validateDate]);
+    setIsFormValid(isFormValid);
+  }, [validateForm]);
 
   const getBrowserProfile = (profile: string) => {
     switch (profile) {
@@ -86,32 +110,32 @@ export function CreateAccession() {
     }
   };
 
-  const validateRequired = (
-    value: string,
-    fieldName: string,
-    customValidator?: (val: string) => string
-  ) => {
-    if (!value) {
-      return t(`create_accession_invalid_${fieldName}`);
-    }
-    return customValidator ? customValidator(value) : "";
-  };
-
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setUrl(value);
-    // Remove validation on change - will validate on blur instead
   };
 
   const handleUrlBlur = () => {
-    // Validate URL on blur
-    setUrlError(validateRequired(url, "url", validateURL));
+    const urlCheck = validateURL(url);
+    if (!urlCheck.valid) {
+      setUrlError(urlCheck.error);
+    } else {
+      setUrlError("");
+    }
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTitle(value);
-    setTitleError(validateRequired(value, "title"));
+  };
+
+  const handleTitleBlur = () => {
+    const titleCheck = validateTitle(title);
+    if (!titleCheck.valid) {
+      setTitleError(titleCheck.error);
+    } else {
+      setTitleError("");
+    }
   };
 
   const handleSubjectsChange = (
@@ -127,31 +151,37 @@ export function CreateAccession() {
   };
 
   const handleDateChange = (val: Date | null) => {
-    if (val) {
-      const dateStr = val.toISOString();
-      setDate(dateStr);
-      setDateError(validateDate(dateStr));
+    const dateCheck = validateDate(val);
+    if (!dateCheck.valid) {
+      setDateError(dateCheck.error);
     } else {
-      setDate("");
-      setDateError(validateDate(""));
+      setDate(val);
+      setDateError("");
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    // Validate all fields before submission
-    const urlValidation = validateRequired(url, "url", validateURL);
-    const titleValidation = validateRequired(title, "title");
-    const dateValidation = validateDate(date);
-    setUrlError(urlValidation);
-    setTitleError(titleValidation);
-    setDateError(dateValidation);
-
+    // TODO: This duplicates the blur check, refactor to simplify
+    const urlCheck = validateURL(url);
+    if (!urlCheck.valid) {
+      setUrlError(urlCheck.error);
+    }
+    const titleCheck = validateTitle(title);
+    if (!titleCheck.valid) {
+      setTitleError(titleCheck.error);
+    }
+    const dateCheck = validateDate(date);
+    if (!dateCheck.valid) {
+      setDateError(dateCheck.error);
+    }
+    if (subjects.length === 0) {
+      setSubjectsError(t("create_accession_subjects_error"));
+    }
     if (
-      urlValidation ||
-      titleValidation ||
-      dateValidation ||
+      !urlCheck.valid ||
+      !titleCheck.valid ||
+      !dateCheck.valid ||
       subjects.length === 0
     ) {
       return;
@@ -240,17 +270,22 @@ export function CreateAccession() {
 
       <FormControl isInvalid={!!titleError} isRequired>
         <FormLabel mt={5}>{t("create_accession_title_field_label")}</FormLabel>
-        <Input value={title} onChange={handleTitleChange} />
+        <Input
+          value={title}
+          onChange={handleTitleChange}
+          onBlur={handleTitleBlur}
+        />
         <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isRequired>
+      <FormControl isRequired isInvalid={!!subjectsError}>
         <FormLabel mt={5}>
           {t("create_accession_subjects_field_label")}
         </FormLabel>
         <Box my={2}>
           <SubjectsAutocomplete onChange={handleSubjectsChange} />
         </Box>
+        <FormErrorMessage>{subjectsError}</FormErrorMessage>
       </FormControl>
 
       <FormControl>

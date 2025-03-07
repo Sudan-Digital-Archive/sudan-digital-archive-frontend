@@ -25,6 +25,7 @@ export function ArchiveDatePicker({
         dropdownMode="select"
         locale={i18n.language === "ar" ? "ar" : "en"}
         placeholderText={showPlaceholder ? t("create_accession_date_placeholder"): ""}
+        preventOpenOnFocus
       />
     </Box>
   );
