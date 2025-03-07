@@ -8,8 +8,8 @@ import {
   ListItem,
   Link,
 } from "@chakra-ui/react";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useTranslation } from "react-i18next";
 import { Link as ReactRouterLink } from "react-router-dom";
 export default function WhoAreWe() {

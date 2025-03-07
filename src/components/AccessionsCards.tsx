@@ -13,10 +13,10 @@ import {
   Description,
   OriginalURL,
   Subject,
-} from "../components/metadata";
+} from "./metadata";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { AccessionWithMetadata } from "../types/api_responses";
+import type { AccessionWithMetadata } from "../apiTypes/apiResponses";
 
 interface AccessionsCardsProps {
   accessions: AccessionWithMetadata[];

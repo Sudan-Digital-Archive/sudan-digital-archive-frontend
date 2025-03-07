@@ -19,13 +19,13 @@ import {
   Description,
   OriginalURL,
 } from "../components/metadata/index.tsx";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../constants.ts";
-import type { AccessionOne } from "../types/api_responses.ts";
+import type { AccessionOne } from "../apiTypes/apiResponses.ts";
 
 export default function ViewAccession() {
   const { id } = useParams();
@@ -82,9 +82,9 @@ export default function ViewAccession() {
                     <Title
                       title={
                         i18n.language === "en"
-                          ? accession.accession.title_en ?? 
+                          ? accession.accession.title_en ??
                             t("metadata_missing_title")
-                          : accession.accession.title_ar ?? 
+                          : accession.accession.title_ar ??
                             t("metadata_missing_title")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
@@ -94,9 +94,9 @@ export default function ViewAccession() {
                     <Subject
                       subject={
                         i18n.language === "en"
-                          ? accession.accession.subjects_en?.join(", ") ?? 
+                          ? accession.accession.subjects_en?.join(", ") ??
                             t("metadata_missing_subject")
-                          : accession.accession.subjects_ar?.join(", ") ?? 
+                          : accession.accession.subjects_ar?.join(", ") ??
                             t("metadata_missing_subject")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
@@ -108,9 +108,9 @@ export default function ViewAccession() {
                       <Description
                         description={
                           i18n.language === "en"
-                            ? accession.accession.description_en ?? 
+                            ? accession.accession.description_en ??
                               t("metadata_missing_description")
-                            : accession.accession.description_ar ?? 
+                            : accession.accession.description_ar ??
                               t("metadata_missing_description")
                         }
                         fontSize={i18n.language === "en" ? "md" : "lg"}

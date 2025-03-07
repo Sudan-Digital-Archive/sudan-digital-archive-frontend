@@ -11,12 +11,13 @@ import {
   Stack,
   Box,
 } from "@chakra-ui/react";
-import { ArchiveDatePicker } from "../date_picker.tsx";
+import { ArchiveDatePicker } from "../DatePicker.tsx";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../../constants.ts";
 import { useState, useEffect, useCallback } from "react";
-import { SubjectsAutocomplete } from "../subjects_autocomplete.tsx";
+import { SubjectsAutocomplete } from "../subjectsAutocomplete/SubjectsAutocomplete.tsx";
 import type { FormEvent } from "react";
+import type { SubjectOption } from "../subjectsAutocomplete/types.ts";
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
@@ -25,9 +26,7 @@ export function CreateAccession() {
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
   // TODO Use proper type
-  const [subjects, setSubjects] = useState<
-    readonly { label: string; value: number }[]
-  >([]);
+  const [subjects, setSubjects] = useState<readonly SubjectOption[]>([]);
   const [description, setDescription] = useState("");
   const [date, setDate] = useState<Date | null>(null);
   const [browserProfile, setBrowserProfile] = useState<string>(
@@ -138,9 +137,7 @@ export function CreateAccession() {
     }
   };
 
-  const handleSubjectsChange = (
-    values: readonly { label: string; value: number }[]
-  ) => {
+  const handleSubjectsChange = (values: readonly SubjectOption[]) => {
     setSubjects(values);
   };
 
@@ -206,7 +203,7 @@ export function CreateAccession() {
           metadata_subjects: subjectIds,
           metadata_description: description ? description : null,
           metadata_time: `${
-            new Date(date).toISOString().split("T")[0]
+            new Date(date as Date).toISOString().split("T")[0]
           }T00:00:00`,
           browser_profile: getBrowserProfile(browserProfile),
         }),
@@ -222,12 +219,11 @@ export function CreateAccession() {
           duration: 9000,
           isClosable: true,
         });
-        // Reset form after successful submission
         setUrl("");
         setTitle("");
         setSubjects([]);
         setDescription("");
-        setDate("");
+        setDate(null);
         setBrowserProfile(t("create_accession_crawl_type_default"));
       } else {
         console.error(responseText);

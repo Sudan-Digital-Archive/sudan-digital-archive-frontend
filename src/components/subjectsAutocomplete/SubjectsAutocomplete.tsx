@@ -2,20 +2,14 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, useToast } from "@chakra-ui/react";
 import { CreatableSelect } from "chakra-react-select";
-import { appConfig } from "../constants";
-import { Subject, SubjectsResponse } from "../types/api_responses";
-import { SubjectTag } from "./SubjectTag";
-
+import { appConfig } from "../../constants";
+import type { Subject, SubjectsResponse } from "../../apiTypes/apiResponses";
+import { SubjectTag } from "../SubjectTag";
+import type { SubjectOption } from "./types";
 interface SubjectsAutocompleteProps {
   onChange?: (values: readonly SubjectOption[]) => void;
 }
 
-interface SubjectOption {
-  label: string;
-  value: number;
-}
-
-// TODO: Figure out why this renders so much
 export const SubjectsAutocomplete = ({
   onChange,
 }: SubjectsAutocompleteProps) => {

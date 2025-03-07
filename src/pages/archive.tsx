@@ -19,16 +19,16 @@ import {
 } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
 import { CreateAccession } from "../components/forms/create_accession.tsx";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArchiveDatePicker } from "../components/date_picker.tsx";
+import { ArchiveDatePicker } from "../components/DatePicker.tsx";
 import { appConfig } from "../constants.ts";
-import { AccessionsCards } from "../components/accessions_cards.tsx";
-import type { AccessionsQueryFilters } from "../types/api_requests.ts";
-import { SubjectsAutocomplete } from "../components/subjects_autocomplete.tsx";
-// TODO: Support query filters like metadata_subjects=3&metadata_subjects=1
+import { AccessionsCards } from "../components/AccessionsCards.tsx";
+import type { AccessionsQueryFilters } from "../apiTypes/apiRequests.ts";
+import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/SubjectsAutocomplete.tsx";
+
 export default function Archive() {
   const { t, i18n } = useTranslation();
   const [queryFilters, setQueryFilters] = useState({

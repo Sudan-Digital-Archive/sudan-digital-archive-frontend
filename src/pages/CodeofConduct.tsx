@@ -9,8 +9,8 @@ import {
   ListItem,
   Link,
 } from "@chakra-ui/react";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
