@@ -27,10 +27,7 @@ import { ArchiveDatePicker } from "../components/DatePicker.tsx";
 import { appConfig } from "../constants.ts";
 import { AccessionsCards } from "../components/AccessionsCards.tsx";
 import type { AccessionsQueryFilters } from "../apiTypes/apiRequests.ts";
-import type {
-  ListAccessions,
-  AccessionWithMetadata,
-} from "../apiTypes/apiResponses.ts";
+import type { ListAccessions } from "../apiTypes/apiResponses.ts";
 import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/SubjectsAutocomplete.tsx";
 
 export default function Archive() {
@@ -225,14 +222,12 @@ export default function Archive() {
               <ModalFooter />
             </ModalContent>
           </Modal>
-          {isLoading && accessions?.items ? (
+          {isLoading || !accessions ? (
             <Spinner />
           ) : (
-            <AccessionsCards
-              accessions={accessions?.items as AccessionWithMetadata[]}
-            />
+            <AccessionsCards accessions={accessions.items} />
           )}
-          {accessions && accessions.items.length > 0 && !isLoading && (
+          {accessions && accessions?.items.length > 0 && !isLoading && (
             <HStack mt={3}>
               {pagination.currentPage != 0 &&
                 pagination.currentPage != pagination.totalPages && (
