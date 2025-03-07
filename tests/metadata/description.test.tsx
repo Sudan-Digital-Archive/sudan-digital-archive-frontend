@@ -1,6 +1,6 @@
 import { Description } from "../../src/components/metadata/description";
 import { describe, it, expect } from "vitest";
-import { addi18n, renderWithProviders } from "../test_helpers";
+import { addi18n, renderWithProviders } from "../testHelpers";
 import { screen } from "@testing-library/react";
 import React from "react";
 

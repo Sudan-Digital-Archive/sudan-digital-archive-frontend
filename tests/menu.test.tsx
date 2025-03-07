@@ -1,7 +1,7 @@
 import Menu from "../src/components/menu";
 import React from "react";
 import { describe, it, expect } from "vitest";
-import { addi18n, renderWithProviders } from "./test_helpers";
+import { addi18n, renderWithProviders } from "./testHelpers";
 import { screen } from "@testing-library/react";
 
 addi18n();

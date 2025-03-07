@@ -1,8 +1,9 @@
 export type AccessionsQueryFilters = {
-  date_from?: string;
-  date_to?: string;
+  date_from?: Date;
+  date_to?: Date;
   lang?: string;
-  page?: string;
+  page?: number;
+  per_page?: number;
   query_term?: string;
-  metadata_subjects?: string[]
+  metadata_subjects?: number[]
 };

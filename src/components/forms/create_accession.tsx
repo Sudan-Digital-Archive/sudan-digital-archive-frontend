@@ -48,6 +48,7 @@ export function CreateAccession() {
       try {
         new URL(value);
         return { valid: true, error: "" };
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         return { valid: false, error: t("create_accession_invalid_url") };
       }
@@ -62,6 +63,7 @@ export function CreateAccession() {
       try {
         new Date(value);
         return { valid: true, error: "" };
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         return { valid: false, error: t("create_accession_invalid_date") };
       }

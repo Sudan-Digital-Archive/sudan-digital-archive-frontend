@@ -6,6 +6,7 @@ import { appConfig } from "../../constants";
 import type { Subject, SubjectsResponse } from "../../apiTypes/apiResponses";
 import { SubjectTag } from "../SubjectTag";
 import type { SubjectOption } from "./types";
+
 interface SubjectsAutocompleteProps {
   onChange?: (values: readonly SubjectOption[]) => void;
 }
@@ -20,16 +21,13 @@ export const SubjectsAutocomplete = ({
   const toast = useToast();
   const [selectedOptions, setSelectedOptions] = useState<SubjectOption[]>([]);
 
-  // Determine the language for API requests
   const apiLang = i18n.language === "en" ? "english" : "arabic";
 
-  // Convert subjects to options format
   const subjectOptions: SubjectOption[] = subjects.map((subject) => ({
     value: subject.id,
     label: subject.subject,
   }));
 
-  // Fetch subjects from API
   const fetchSubjects = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -61,7 +59,6 @@ export const SubjectsAutocomplete = ({
     }
   }, [apiLang, toast, t]);
 
-  // Create a new subject
   const createNewSubject = async (subjectName: string) => {
     setIsCreatingNewSubject(true);
     try {
@@ -80,10 +77,7 @@ export const SubjectsAutocomplete = ({
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
       const newSubject = await response.json();
-
-      // Add the new subject to our list
       setSubjects((prev) => [...prev, newSubject]);
 
       toast({
@@ -108,22 +102,18 @@ export const SubjectsAutocomplete = ({
     }
   };
 
-  // Load subjects when component mounts or language changes
   useEffect(() => {
     fetchSubjects();
   }, [fetchSubjects, apiLang]);
 
-  // Handle selection change
   const handleChange = (newValue: readonly SubjectOption[]) => {
     setSelectedOptions(newValue as SubjectOption[]);
 
     if (onChange) {
-      // Extract just the values to match the expected output format
       onChange(newValue);
     }
   };
 
-  // Handle creating a new option
   const handleCreateOption = async (inputValue: string) => {
     const newSubject = await createNewSubject(inputValue);
 
@@ -140,8 +130,8 @@ export const SubjectsAutocomplete = ({
     }
   };
 
-  // Custom components for the select
   const customComponents = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     MultiValue: ({ removeProps, ...props }: any) => {
       return (
         <SubjectTag
@@ -193,7 +183,6 @@ export const SubjectsAutocomplete = ({
             flexWrap: "wrap",
             gap: "4px",
           }),
-          // Add styling for selected options in the dropdown
           option: (provided, { isSelected }) => ({
             ...provided,
 

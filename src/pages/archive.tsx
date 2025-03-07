@@ -31,13 +31,11 @@ import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/Subject
 
 export default function Archive() {
   const { t, i18n } = useTranslation();
-  const [queryFilters, setQueryFilters] = useState({
-    page: "0",
-    per_page: "50",
+  const [queryFilters, setQueryFilters] = useState<AccessionsQueryFilters>({
+    page: 0,
+    per_page: 50,
     lang: i18n.language === "en" ? "english" : "arabic",
     query_term: "",
-    date_from: "",
-    date_to: "",
     metadata_subjects: [],
   });
   const [accessions, setAccessions] = useState([]);
@@ -56,14 +54,14 @@ export default function Archive() {
     for (const [key, value] of Object.entries(queryFilters)) {
       if (Array.isArray(value)) {
         value.forEach((item) => (queryParams += `${key}=${item}&`));
-      } else if (value) {
+      } else {
         queryParams += `${key}=${value}&`;
       }
     }
     return new URLSearchParams(queryParams);
   }
 
-  const updateFilters = useCallback((updates) => {
+  const updateFilters = useCallback((updates: AccessionsQueryFilters) => {
     setQueryFilters((prev) => ({
       ...prev,
       ...updates,
@@ -240,7 +238,7 @@ export default function Archive() {
                     variant="link"
                     onClick={() =>
                       updateFilters({
-                        page: (pagination.currentPage - 1).toString(),
+                        page: pagination.currentPage - 1,
                       })
                     }
                   />
@@ -259,7 +257,7 @@ export default function Archive() {
                   variant="link"
                   onClick={() =>
                     updateFilters({
-                      page: (pagination.currentPage + 1).toString(),
+                      page: pagination.currentPage + 1,
                     })
                   }
                 />

@@ -92,14 +92,11 @@ export default function ViewAccession() {
                   </DrawerHeader>
                   <DrawerBody>
                     <Subject
-                      subject={
+                      subjects={
                         i18n.language === "en"
-                          ? accession.accession.subjects_en?.join(", ") ??
-                            t("metadata_missing_subject")
-                          : accession.accession.subjects_ar?.join(", ") ??
-                            t("metadata_missing_subject")
+                          ? accession.accession.subjects_en
+                          : accession.accession.subjects_ar
                       }
-                      fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
                     {((i18n.language === "en" &&
                       accession.accession.description_en) ||

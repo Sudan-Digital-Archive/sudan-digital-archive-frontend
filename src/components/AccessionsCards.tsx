@@ -29,7 +29,6 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
   return (
     <SimpleGrid spacing={10} columns={{ sm: 1, md: 2, lg: 5 }} mt={5}>
       {accessions.map((accession: AccessionWithMetadata, index: number) => {
-        // Select language-specific data
         const title =
           i18n.language === "en" ? accession.title_en : accession.title_ar;
 
