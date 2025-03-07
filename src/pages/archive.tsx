@@ -27,6 +27,8 @@ import { ArchiveDatePicker } from "../components/date_picker.tsx";
 import { appConfig } from "../constants.ts";
 import { AccessionsCards } from "../components/accessions_cards.tsx";
 import type { AccessionsQueryFilters } from "../types/api_requests.ts";
+import { SubjectsAutocomplete } from "../components/subjects_autocomplete.tsx";
+// TODO: Support query filters like metadata_subjects=3&metadata_subjects=1
 export default function Archive() {
   const { t, i18n } = useTranslation();
   const [queryFilters, setQueryFilters] = useState({
@@ -112,10 +114,11 @@ export default function Archive() {
           }
         );
         const data = await response.json();
-        setAccessions(data.items);
+        setAccessions(data[0]);
+        // TODO: Send back nicer api response
         setPagination({
-          currentPage: data.page,
-          totalPages: data.num_pages,
+          currentPage: filters.page,
+          totalPages: data[1],
         });
       } catch (error) {
         console.error(error);
@@ -192,6 +195,9 @@ export default function Archive() {
                 selected={dateTo}
                 onChange={(date) => handleDateChange(date, "date_to")}
               />
+            </Flex>
+            <Flex py={5}>
+              <SubjectsAutocomplete />
             </Flex>
           </Box>
           <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">

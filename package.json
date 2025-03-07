@@ -14,8 +14,10 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.10.2",
+    "@choc-ui/chakra-autocomplete": "5.8.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "chakra-react-select": "5.0.4",
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "framer-motion": "^11.11.8",

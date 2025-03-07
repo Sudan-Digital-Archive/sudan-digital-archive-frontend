@@ -1,18 +1,38 @@
-type AccessionListRecord = {
-  id: string;
-  dublin_metadata_date: string;
+export type AccessionWithMetadata = {
+  id: number;
+  crawl_status: string;
+  crawl_timestamp: string;
+  crawl_id: string;
+  org_id: string;
+  job_run_id: string;
   seed_url: string;
+  dublin_metadata_date: string;
+  title_en: string | null;
+  description_en: string | null;
+  subjects_en: string[] | null;
+  subjects_en_ids: number[] | null;
+  title_ar: string | null;
+  description_ar: string | null;
+  subjects_ar: string[] | null;
+  subjects_ar_ids: number[] | null;
+  has_english_metadata: boolean;
+  has_arabic_metadata: boolean;
 };
-type AccessionMetadata = {
-  id: string;
-  title: string;
-  subject: string;
-  description?: string;
-};
-export type AccessionList = [AccessionListRecord, AccessionMetadata | null][];
+
 
 export type AccessionOne = {
-  accession: { dublin_metadata_date: string; seed_url: string };
-  metadata_ar: AccessionMetadata;
-  metadata_en: AccessionMetadata;
+  accession: AccessionWithMetadata;
+  wacz_url: string;
+};
+
+export type Subject = {
+  id: number;
+  subject: string;
+};
+
+export type SubjectsResponse = {
+  items: Subject[];
+  num_pages: number;
+  page: number;
+  per_page: number;
 };

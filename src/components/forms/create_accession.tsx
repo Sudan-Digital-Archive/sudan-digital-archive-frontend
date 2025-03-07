@@ -9,25 +9,46 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Box
 } from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
 import { ArchiveDatePicker } from "../date_picker.tsx";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../../constants.ts";
-import { useState } from "react";
-
-interface DatePickerFieldProps {
-  name: string;
-  value: string | null;
-  onChange: (name: string, val: Date | null) => void;
-}
+import { useState, useEffect } from "react";
+import { SubjectsAutocomplete } from "../subjects_autocomplete.tsx";
 
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
+  
+  // Form state
+  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [subjects, setSubjects] = useState<(string | number)[]>([]);
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState<string>("");
   const [browserProfile, setBrowserProfile] = useState<string>(
     t("create_accession_crawl_type_default")
   );
+  
+  // Error states
+  const [urlError, setUrlError] = useState("");
+  const [titleError, setTitleError] = useState("");
+  const [dateError, setDateError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Form validity state
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Validate form whenever inputs change
+  useEffect(() => {
+    const urlValid = url !== "" && validateURL(url) === "";
+    const titleValid = title !== "";
+    const subjectsValid = subjects.length > 0;
+    const dateValid = date !== "" && validateDate(date) === "";
+    
+    setIsFormValid(urlValid && titleValid && subjectsValid && dateValid);
+  }, [url, title, subjects, date, browserProfile]);
 
   const getBrowserProfile = (profile: string) => {
     switch (profile) {
@@ -42,7 +63,6 @@ export function CreateAccession() {
     try {
       new URL(value);
       return "";
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       return t("create_accession_invalid_url");
     }
@@ -66,243 +86,216 @@ export function CreateAccession() {
     try {
       new Date(value);
       return "";
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       return t("create_accession_invalid_date");
     }
   }
 
-  const DatePickerField = ({ name, value, onChange }: DatePickerFieldProps) => {
-    return (
-      <ArchiveDatePicker
-        selected={(value && new Date(value)) || null}
-        onChange={(val) => {
-          onChange(name, val);
-        }}
-        showPlaceholder={true}
-      />
-    );
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setUrl(value);
+    // Remove validation on change - will validate on blur instead
   };
+
+  const handleUrlBlur = () => {
+    // Validate URL on blur
+    setUrlError(validateRequired(url, "url", validateURL));
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setTitle(value);
+    setTitleError(validateRequired(value, "title"));
+  };
+
+  const handleSubjectsChange = (values: (string | number)[]) => {
+    setSubjects(values);
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+  };
+
+  const handleDateChange = (name: string, val: Date | null) => {
+    if (val) {
+      const dateStr = val.toISOString();
+      setDate(dateStr);
+      setDateError(validateDate(dateStr));
+    } else {
+      setDate("");
+      setDateError(validateDate(""));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate all fields before submission
+    const urlValidation = validateRequired(url, "url", validateURL);
+    const titleValidation = validateRequired(title, "title");
+    const dateValidation = validateDate(date);
+    
+    setUrlError(urlValidation);
+    setTitleError(titleValidation);
+    setDateError(dateValidation);
+    
+    if (urlValidation || titleValidation || dateValidation || subjects.length === 0) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Convert subject IDs from strings to numbers if needed
+      const subjectIds = subjects.map((id) =>
+        typeof id === "string" ? parseInt(id, 10) : id
+      );
+
+      const response = await fetch(`${appConfig.apiURL}accessions`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          metadata_language: i18n.language === "en" ? "english" : "arabic",
+          url: url,
+          metadata_title: title,
+          metadata_subjects: subjectIds,
+          metadata_description: description ? description : null,
+          metadata_time: `${
+            new Date(date).toISOString().split("T")[0]
+          }T00:00:00`,
+          browser_profile: getBrowserProfile(browserProfile),
+        }),
+      });
+
+      const responseText = await response.text();
+
+      if (response.status === 201) {
+        toast({
+          title: t("create_accession_crawling_url_title"),
+          description: t("create_accession_success_description"),
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        // Reset form after successful submission
+        setUrl("");
+        setTitle("");
+        setSubjects([]);
+        setDescription("");
+        setDate("");
+        setBrowserProfile(t("create_accession_crawl_type_default"));
+      } else {
+        console.error(responseText);
+        toast({
+          title: t("create_accession_error_toast_title"),
+          description: `${t(
+            "create_accession_error_toast_description"
+          )} ${responseText}`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: t("create_accession_error_toast_title"),
+        description: t("create_accession_error_toast_description"),
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <Formik
-      initialValues={{
-        url: "",
-        title: "",
-        subject: "",
-        description: "",
-        date: "",
-      }}
-      onSubmit={async (values, actions) => {
-        try {
-          const response = await fetch(`${appConfig.apiURL}accessions`, {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({
-              metadata_language: i18n.language === "en" ? "english" : "arabic",
-              url: values.url,
-              metadata_title: values.title,
-              metadata_subject: values.subject,
-              metadata_description: values.description
-                ? values.description
-                : null,
-              metadata_time: `${
-                new Date(values.date).toISOString().split("T")[0]
-              }T00:00:00`,
-              browser_profile: getBrowserProfile(browserProfile),
-            }),
-          });
+    <form onSubmit={handleSubmit} noValidate>
+      <FormControl isInvalid={!!urlError} isRequired>
+        <FormLabel>{t("create_accession_url_field_label")}</FormLabel>
+        <Input
+          value={url}
+          onChange={handleUrlChange}
+          onBlur={handleUrlBlur}
+          placeholder={t("create_accession_url_field_placeholder")}
+        />
+        <FormErrorMessage>{urlError}</FormErrorMessage>
+      </FormControl>
+      
+      <FormControl isInvalid={!!titleError} isRequired>
+        <FormLabel mt={5}>
+          {t("create_accession_title_field_label")}
+        </FormLabel>
+        <Input value={title} onChange={handleTitleChange} />
+        <FormErrorMessage>{titleError}</FormErrorMessage>
+      </FormControl>
+      
+      <FormControl isRequired >
+        <FormLabel mt={5}>
+          {t("create_accession_subjects_field_label")}
+        </FormLabel>
+        <Box my={2}>
+          <SubjectsAutocomplete
+            onChange={handleSubjectsChange}
+            inForm={true} // Add this prop
+          />
+        </Box>
+      </FormControl>
 
-          const responseText = await response.text();
-
-          if (response.status === 201) {
-            toast({
-              title: t("create_accession_crawling_url_title"),
-              description: t("create_accession_success_description"),
-              status: "success",
-              duration: 9000,
-              isClosable: true,
-            });
-          } else {
-            console.error(responseText);
-            toast({
-              title: t("create_accession_error_toast_title"),
-              description: `${t(
-                "create_accession_error_toast_description"
-              )} ${responseText}`,
-              status: "error",
-              duration: 9000,
-              isClosable: true,
-            });
-          }
-        } catch (error) {
-          console.error(error);
-          toast({
-            title: t("create_accession_error_toast_title"),
-            description: t("create_accession_error_toast_description"),
-            status: "error",
-            duration: 9000,
-            isClosable: true,
-          });
-        } finally {
-          actions.setSubmitting(false);
-        }
-      }}
-    >
-      {(props) => (
-        <Form>
-          <Field
-            name="url"
-            validate={(val: string) =>
-              validateRequired(val, "url", validateURL)
-            }
-          >
-            {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ({ field, form }: any) => (
-                <FormControl
-                  isInvalid={form.errors.url && form.touched.url}
-                  isRequired
-                >
-                  <FormLabel>{t("create_accession_url_field_label")}</FormLabel>
-                  <Input
-                    {...field}
-                    placeholder={t("create_accession_url_field_placeholder")}
-                  />
-                  <FormErrorMessage>{form.errors.url}</FormErrorMessage>
-                </FormControl>
-              )
-            }
-          </Field>
-          <Field
-            name="title"
-            validate={(val: string) => validateRequired(val, "title")}
-          >
-            {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ({ field, form }: any) => (
-                <FormControl
-                  isInvalid={form.errors.title && form.touched.title}
-                  isRequired
-                >
-                  <FormLabel mt={2}>
-                    {t("create_accession_title_field_label")}
-                  </FormLabel>
-                  <Input {...field} />
-                  <FormErrorMessage>{form.errors.title}</FormErrorMessage>
-                </FormControl>
-              )
-            }
-          </Field>
-          <Field
-            name="subject"
-            validate={(val: string) => validateRequired(val, "subject")}
-          >
-            {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ({ field, form }: any) => (
-                <FormControl
-                  isInvalid={form.errors.subject && form.touched.subject}
-                  isRequired
-                >
-                  <FormLabel mt={2}>
-                    {t("create_accession_subject_field_label")}
-                  </FormLabel>
-                  <Textarea {...field} />
-                  <FormErrorMessage mb={2}>
-                    {form.errors.subject}
-                  </FormErrorMessage>
-                </FormControl>
-              )
-            }
-          </Field>
-          <Field name="description">
-            {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ({ field, form }: any) => (
-                <FormControl
-                  isInvalid={
-                    form.errors.description && form.touched.description
-                  }
-                >
-                  <FormLabel mt={2}>
-                    {t("create_accession_description_field_label")}
-                  </FormLabel>
-                  <Textarea {...field} />
-                  <FormErrorMessage mb={2}>
-                    {form.errors.description}
-                  </FormErrorMessage>
-                </FormControl>
-              )
-            }
-          </Field>
-          <Field name="date" validate={validateDate}>
-            {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ({ form }: any) => (
-                <FormControl
-                  isInvalid={form.errors.date && form.touched.date}
-                  isRequired
-                >
-                  <FormLabel mt={2}>
-                    {t("create_accession_date_field_label")}
-                  </FormLabel>
-                  <DatePickerField
-                    name="date"
-                    value={props.values.date}
-                    onChange={props.setFieldValue}
-                  />
-                  <FormErrorMessage mb={2}>{form.errors.date}</FormErrorMessage>
-                </FormControl>
-              )
-            }
-          </Field>
-          <Field name="browserProfile">
-            {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              ({ form }: any) => (
-                <FormControl
-                  isInvalid={
-                    form.errors.browserProfile && form.touched.browserProfile
-                  }
-                  isRequired
-                >
-                  <FormLabel mt={2}>
-                    {t("create_accession_crawl_type_label")}
-                  </FormLabel>
-                  <RadioGroup
-                    onChange={setBrowserProfile}
-                    value={browserProfile}
-                  >
-                    <Stack direction="row">
-                      <Radio value={t("create_accession_crawl_type_default")}>
-                        {t("create_accession_crawl_type_default")}
-                      </Radio>
-                      <Radio value={t("create_accession_crawl_type_facebook")}>
-                        {t("create_accession_crawl_type_facebook")}
-                      </Radio>
-                    </Stack>
-                  </RadioGroup>
-                  <FormErrorMessage mb={2}>
-                    {form.errors.browserProfile}
-                  </FormErrorMessage>
-                </FormControl>
-              )
-            }
-          </Field>
-          <Button
-            mt={4}
-            colorScheme="cyan"
-            isLoading={props.isSubmitting}
-            type="submit"
-            disabled={!(props.isValid && props.dirty)}
-          >
-            {t("create_accession_submit_field_label")}
-          </Button>
-        </Form>
-      )}
-    </Formik>
+      <FormControl>
+        <FormLabel mt={5}>
+          {t("create_accession_description_field_label")}
+        </FormLabel>
+        <Textarea 
+          value={description} 
+          onChange={handleDescriptionChange} 
+        />
+      </FormControl>
+      
+      <FormControl isInvalid={!!dateError} isRequired>
+        <FormLabel mt={5}>
+          {t("create_accession_date_field_label")}
+        </FormLabel>
+        <ArchiveDatePicker
+          selected={(date && new Date(date)) || null}
+          onChange={(val) => handleDateChange("date", val)}
+          showPlaceholder={true}
+        />
+        <FormErrorMessage mb={2}>{dateError}</FormErrorMessage>
+      </FormControl>
+      
+      <FormControl isRequired>
+        <FormLabel mt={5}>
+          {t("create_accession_crawl_type_label")}
+        </FormLabel>
+        <RadioGroup
+          onChange={setBrowserProfile}
+          value={browserProfile}
+        >
+          <Stack direction="row">
+            <Radio value={t("create_accession_crawl_type_default")}>
+              {t("create_accession_crawl_type_default")}
+            </Radio>
+            <Radio value={t("create_accession_crawl_type_facebook")}>
+              {t("create_accession_crawl_type_facebook")}
+            </Radio>
+          </Stack>
+        </RadioGroup>
+      </FormControl>
+      
+      <Button
+        mt={4}
+        colorScheme="cyan"
+        isLoading={isSubmitting}
+        type="submit"
+        disabled={!isFormValid}
+      >
+        {t("create_accession_submit_field_label")}
+      </Button>
+    </form>
   );
 }

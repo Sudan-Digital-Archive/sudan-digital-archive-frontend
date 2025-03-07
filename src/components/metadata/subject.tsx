@@ -1,26 +1,40 @@
-import { Heading, Badge } from "@chakra-ui/react";
+import { Text, Badge, Tag, Box } from "@chakra-ui/react";
 import { useTranslation } from "react-i18next";
-import { truncateString } from "../../utils/text";
+import { SubjectTag } from "../SubjectTag.tsx";
 
 interface SubjectProps {
-  subject: string;
-  fontSize?: string;
-  truncate?: boolean;
-  maxLength?: number;
+  subjects: string[] | null;
+  missingMessage?: boolean;
 }
 
-export function Subject({ 
-  subject, 
-  fontSize = "md",
-  truncate = false,
-  maxLength = 200 
-}: SubjectProps) {
-  const { t } = useTranslation();
-  const displayText = truncate ? truncateString(subject, maxLength) : subject;
-
-  return (
-    <Heading as="h6" size="xs" fontSize={fontSize}>
-      <Badge colorScheme="cyan">{t("metadata_subject_label")}</Badge> {displayText}
-    </Heading>
-  );
+export function Subject({ subjects }: SubjectProps) {
+  const { t, i18n } = useTranslation();
+  const fontSize = i18n.language === "en" ? "md" : "lg";
+  if (!subjects || subjects.length === 0) {
+    return (
+      <Box mb={3}>
+        <Text fontSize={fontSize}>
+          <Badge colorScheme="cyan">
+            {t("metadata_subjects_label", "Subjects")}
+          </Badge>{" "}
+          <Tag colorScheme="pink" size="md">
+            {t("metadata_missing_subject")}
+          </Tag>
+        </Text>
+      </Box>
+    );
+  } else {
+    return (
+      <Box my={1}>
+        <Text fontSize={fontSize}>
+          <Badge colorScheme="cyan">
+            {t("metadata_subjects_label", "Subjects")}:
+          </Badge>{" "}
+          {subjects.map((subject, idx) => (
+            <SubjectTag key={`subject-${idx}`} label={subject} />
+          ))}
+        </Text>
+      </Box>
+    );
+  }
 }
