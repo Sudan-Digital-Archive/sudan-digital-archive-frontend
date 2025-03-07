@@ -7,7 +7,7 @@ import { Subject, SubjectsResponse } from "../types/api_responses";
 import { SubjectTag } from "./SubjectTag";
 
 interface SubjectsAutocompleteProps {
-  onChange?: (values: SubjectOption[]) => void;
+  onChange?: (values: readonly SubjectOption[]) => void;
 }
 
 interface SubjectOption {
@@ -120,7 +120,7 @@ export const SubjectsAutocomplete = ({
   }, [fetchSubjects, apiLang]);
 
   // Handle selection change
-  const handleChange = (newValue: SubjectOption[]) => {
+  const handleChange = (newValue: readonly SubjectOption[]) => {
     setSelectedOptions(newValue as SubjectOption[]);
 
     if (onChange) {
@@ -135,13 +135,13 @@ export const SubjectsAutocomplete = ({
 
     if (newSubject) {
       const newOption = {
-        value: newSubject.subject,
+        value: newSubject.id,
         label: newSubject.subject,
       };
       setSelectedOptions((prev) => [...prev, newOption]);
 
       if (onChange) {
-        onChange([...selectedOptions.map((o) => o.value), newSubject.subject]);
+        onChange([...selectedOptions, newOption]);
       }
     }
   };

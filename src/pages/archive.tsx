@@ -60,7 +60,6 @@ export default function Archive() {
         queryParams += `${key}=${value}&`;
       }
     }
-    console.log(`query params are ${queryParams}`);
     return new URLSearchParams(queryParams);
   }
 
@@ -203,7 +202,6 @@ export default function Archive() {
             <Flex py={5}>
               <SubjectsAutocomplete
                 onChange={(subjects) => {
-                  console.log(`subjects in archive filters`);
                   updateFilters({
                     ["metadata_subjects"]: subjects.map(
                       (subject) => subject.value

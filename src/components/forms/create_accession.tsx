@@ -9,46 +9,73 @@ import {
   Radio,
   RadioGroup,
   Stack,
-  Box
+  Box,
 } from "@chakra-ui/react";
 import { ArchiveDatePicker } from "../date_picker.tsx";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../../constants.ts";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { SubjectsAutocomplete } from "../subjects_autocomplete.tsx";
 
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
-  
+
   // Form state
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
-  const [subjects, setSubjects] = useState<(string | number)[]>([]);
+  // TODO Use proper type
+  const [subjects, setSubjects] = useState<
+    readonly { label: string; value: number }[]
+  >([]);
   const [description, setDescription] = useState("");
   const [date, setDate] = useState<string>("");
   const [browserProfile, setBrowserProfile] = useState<string>(
     t("create_accession_crawl_type_default")
   );
-  
+
   // Error states
   const [urlError, setUrlError] = useState("");
   const [titleError, setTitleError] = useState("");
   const [dateError, setDateError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Form validity state
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const validateURL = useCallback(
+    (value: string) => {
+      try {
+        new URL(value);
+        return "";
+      } catch (_) {
+        return t("create_accession_invalid_url");
+      }
+    },
+    [t]
+  );
+  const validateDate = useCallback(
+    (value: string) => {
+      if (!value) {
+        return "Date is required";
+      }
+      try {
+        new Date(value);
+        return "";
+      } catch (_) {
+        return t("create_accession_invalid_date");
+      }
+    },
+    [t]
+  );
   // Validate form whenever inputs change
   useEffect(() => {
     const urlValid = url !== "" && validateURL(url) === "";
     const titleValid = title !== "";
     const subjectsValid = subjects.length > 0;
     const dateValid = date !== "" && validateDate(date) === "";
-    
+
     setIsFormValid(urlValid && titleValid && subjectsValid && dateValid);
-  }, [url, title, subjects, date, browserProfile]);
+  }, [url, title, subjects, date, browserProfile, validateURL, validateDate]);
 
   const getBrowserProfile = (profile: string) => {
     switch (profile) {
@@ -56,15 +83,6 @@ export function CreateAccession() {
         return "facebook";
       default:
         return null;
-    }
-  };
-
-  const validateURL = (value: string) => {
-    try {
-      new URL(value);
-      return "";
-    } catch (_) {
-      return t("create_accession_invalid_url");
     }
   };
 
@@ -78,18 +96,6 @@ export function CreateAccession() {
     }
     return customValidator ? customValidator(value) : "";
   };
-
-  function validateDate(value: string) {
-    if (!value) {
-      return "Date is required";
-    }
-    try {
-      new Date(value);
-      return "";
-    } catch (_) {
-      return t("create_accession_invalid_date");
-    }
-  }
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -108,15 +114,19 @@ export function CreateAccession() {
     setTitleError(validateRequired(value, "title"));
   };
 
-  const handleSubjectsChange = (values: (string | number)[]) => {
+  const handleSubjectsChange = (
+    values: readonly { label: string; value: number }[]
+  ) => {
     setSubjects(values);
   };
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setDescription(e.target.value);
   };
 
-  const handleDateChange = (name: string, val: Date | null) => {
+  const handleDateChange = (val: Date | null) => {
     if (val) {
       const dateStr = val.toISOString();
       setDate(dateStr);
@@ -129,27 +139,29 @@ export function CreateAccession() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate all fields before submission
     const urlValidation = validateRequired(url, "url", validateURL);
     const titleValidation = validateRequired(title, "title");
     const dateValidation = validateDate(date);
-    
     setUrlError(urlValidation);
     setTitleError(titleValidation);
     setDateError(dateValidation);
-    
-    if (urlValidation || titleValidation || dateValidation || subjects.length === 0) {
+
+    if (
+      urlValidation ||
+      titleValidation ||
+      dateValidation ||
+      subjects.length === 0
+    ) {
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
       // Convert subject IDs from strings to numbers if needed
-      const subjectIds = subjects.map((id) =>
-        typeof id === "string" ? parseInt(id, 10) : id
-      );
+      const subjectIds = subjects.map((subject) => subject.value);
 
       const response = await fetch(`${appConfig.apiURL}accessions`, {
         method: "POST",
@@ -225,24 +237,19 @@ export function CreateAccession() {
         />
         <FormErrorMessage>{urlError}</FormErrorMessage>
       </FormControl>
-      
+
       <FormControl isInvalid={!!titleError} isRequired>
-        <FormLabel mt={5}>
-          {t("create_accession_title_field_label")}
-        </FormLabel>
+        <FormLabel mt={5}>{t("create_accession_title_field_label")}</FormLabel>
         <Input value={title} onChange={handleTitleChange} />
         <FormErrorMessage>{titleError}</FormErrorMessage>
       </FormControl>
-      
-      <FormControl isRequired >
+
+      <FormControl isRequired>
         <FormLabel mt={5}>
           {t("create_accession_subjects_field_label")}
         </FormLabel>
         <Box my={2}>
-          <SubjectsAutocomplete
-            onChange={handleSubjectsChange}
-            inForm={true} // Add this prop
-          />
+          <SubjectsAutocomplete onChange={handleSubjectsChange} />
         </Box>
       </FormControl>
 
@@ -250,32 +257,22 @@ export function CreateAccession() {
         <FormLabel mt={5}>
           {t("create_accession_description_field_label")}
         </FormLabel>
-        <Textarea 
-          value={description} 
-          onChange={handleDescriptionChange} 
-        />
+        <Textarea value={description} onChange={handleDescriptionChange} />
       </FormControl>
-      
+
       <FormControl isInvalid={!!dateError} isRequired>
-        <FormLabel mt={5}>
-          {t("create_accession_date_field_label")}
-        </FormLabel>
+        <FormLabel mt={5}>{t("create_accession_date_field_label")}</FormLabel>
         <ArchiveDatePicker
           selected={(date && new Date(date)) || null}
-          onChange={(val) => handleDateChange("date", val)}
+          onChange={(val) => handleDateChange(val)}
           showPlaceholder={true}
         />
         <FormErrorMessage mb={2}>{dateError}</FormErrorMessage>
       </FormControl>
-      
+
       <FormControl isRequired>
-        <FormLabel mt={5}>
-          {t("create_accession_crawl_type_label")}
-        </FormLabel>
-        <RadioGroup
-          onChange={setBrowserProfile}
-          value={browserProfile}
-        >
+        <FormLabel mt={5}>{t("create_accession_crawl_type_label")}</FormLabel>
+        <RadioGroup onChange={setBrowserProfile} value={browserProfile}>
           <Stack direction="row">
             <Radio value={t("create_accession_crawl_type_default")}>
               {t("create_accession_crawl_type_default")}
@@ -286,7 +283,7 @@ export function CreateAccession() {
           </Stack>
         </RadioGroup>
       </FormControl>
-      
+
       <Button
         mt={4}
         colorScheme="cyan"
