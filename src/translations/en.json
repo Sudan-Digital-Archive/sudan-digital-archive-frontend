@@ -83,6 +83,10 @@
     "create_accession_crawl_type_label": "Crawl Type",
     "create_accession_crawl_type_default": "Default",
     "create_accession_crawl_type_facebook": "Facebook",
+    "create_accession_date_required": "Date is required",
+    "create_accession_title_required": "Title is required",
+    "create_accession_subjects_error": "At least one subject is required",
+    "create_accession_subjects_field_label": "Subjects",
     "code_of_conduct_title": "Code of Conduct",
     "code_of_conduct_toc": "Table of Contents ",
     "code_of_conduct_our_values_content_heading": "Our Values",
@@ -98,11 +102,18 @@
     "code_of_conduct_standards_inappropriate_behavior_para_six": "Our accountability process consists of five key steps, facilitated through mediation by designated collective members:",
     "metadata_title_label": "Title:",
     "metadata_subject_label": "Subject:",
+    "metadata_subjects_label": "Subjects",
     "metadata_description_label": "Description:",
     "metadata_original_url_label": "View original url",
     "metadata_date_label": "Date:",
     "metadata_missing_title": "Title translation not available",
     "metadata_missing_subject": "Subject translation not available",
-    "metadata_missing_description": "Description translation not available"
+    "metadata_missing_description": "Description translation not available",
+    "subjects_autocomplete_error_fetching_subjects": "Error fetching subjects",
+    "subjects_autocomplete_error_creating_subject": "Error creating subject",
+    "subjects_autocomplete_search_subjects": "Search subjects",
+    "subjects_autocomplete_no_subjects_found": "No subjects found",
+    "subjects_autocomplete_create": "Create",
+    "subjects_autocomplete_create_success": "Created new subject {{subject}}"
   }
 }

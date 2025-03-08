@@ -15,7 +15,7 @@ export function Subject({ subjects }: SubjectProps) {
       <Box mb={3}>
         <Text fontSize={fontSize}>
           <Badge colorScheme="cyan">
-            {t("metadata_subjects_label", "Subjects")}
+            {t("metadata_subjects_label")}
           </Badge>{" "}
           <Tag colorScheme="pink" size="md">
             {t("metadata_missing_subject")}
@@ -28,7 +28,7 @@ export function Subject({ subjects }: SubjectProps) {
       <Box my={1}>
         <Text fontSize={fontSize}>
           <Badge colorScheme="cyan">
-            {t("metadata_subjects_label", "Subjects")}:
+            {t("metadata_subjects_label")}:
           </Badge>{" "}
           {subjects.map((subject, idx) => (
             <SubjectTag key={`subject-${idx}`} label={subject} />

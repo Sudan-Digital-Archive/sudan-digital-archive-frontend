@@ -189,7 +189,6 @@ export function CreateAccession() {
     setIsSubmitting(true);
 
     try {
-      // Convert subject IDs from strings to numbers if needed
       const subjectIds = subjects.map((subject) => subject.value);
 
       const response = await fetch(`${appConfig.apiURL}accessions`, {

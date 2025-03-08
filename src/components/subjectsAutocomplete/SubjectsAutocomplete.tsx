@@ -51,7 +51,7 @@ export const SubjectsAutocomplete = ({
     } catch (error) {
       console.error("Error fetching subjects:", error);
       toast({
-        title: t("error_fetching_subjects"),
+        title: t("subjects_autocomplete_error_fetching_subjects"),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -83,7 +83,7 @@ export const SubjectsAutocomplete = ({
       setSubjects((prev) => [...prev, newSubject]);
 
       toast({
-        title: `Created new subject ${newSubject.subject}`,
+        title: t("subjects_autocomplete_create_success", { subject: newSubject.subject }),
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -93,7 +93,7 @@ export const SubjectsAutocomplete = ({
     } catch (error) {
       console.error("Error creating subject:", error);
       toast({
-        title: t("error_creating_subject"),
+        title: t("subjects_autocomplete_error_creating_subject"),
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -151,9 +151,9 @@ export const SubjectsAutocomplete = ({
         isMulti
         name="subjects"
         options={subjectOptions}
-        placeholder={t("search_subjects")}
-        noOptionsMessage={() => t("no_subjects_found")}
-        formatCreateLabel={(inputValue) => `${t("create")} "${inputValue}"`}
+        placeholder={t("subjects_autocomplete_search_subjects")}
+        noOptionsMessage={() => t("subjects_autocomplete_no_subjects_found")}
+        formatCreateLabel={(inputValue) => `${t("subjects_autocomplete_create")} "${inputValue}"`}
         menuPlacement={menuPlacement}
         isLoading={isLoading}
         isDisabled={isLoading || isCreatingNewSubject}
