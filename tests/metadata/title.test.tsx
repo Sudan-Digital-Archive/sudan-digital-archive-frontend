@@ -1,9 +1,8 @@
-import { Title } from "../../src/components/metadata/title";
+import { Title } from "../../src/components/metadata";
 import { describe, it, expect } from "vitest";
 import { addi18n, renderWithProviders } from "../testHelpers";
 import { screen } from "@testing-library/react";
 import React from "react";
-
 
 addi18n();
 describe("Title", () => {

@@ -1,4 +1,4 @@
-import { DateMetadata } from "../../src/components/metadata/date";
+import { DateMetadata } from "../../src/components/metadata";
 import { describe, it, expect } from "vitest";
 import { addi18n, renderWithProviders } from "../testHelpers";
 import { screen } from "@testing-library/react";
