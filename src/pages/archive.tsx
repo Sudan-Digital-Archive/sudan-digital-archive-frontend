@@ -199,6 +199,7 @@ export default function Archive() {
             </Flex>
             <Flex py={5}>
               <SubjectsAutocomplete
+                menuPlacement="top"
                 onChange={(subjects) => {
                   updateFilters({
                     ["metadata_subjects"]: subjects.map(

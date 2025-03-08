@@ -8,11 +8,13 @@ import { SubjectTag } from "../SubjectTag";
 import type { SubjectOption } from "./types";
 
 interface SubjectsAutocompleteProps {
+  menuPlacement?: "top" | "bottom";
   onChange?: (values: readonly SubjectOption[]) => void;
 }
 
 export const SubjectsAutocomplete = ({
   onChange,
+  menuPlacement = "bottom",
 }: SubjectsAutocompleteProps) => {
   const { t, i18n } = useTranslation();
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -152,6 +154,7 @@ export const SubjectsAutocomplete = ({
         placeholder={t("search_subjects")}
         noOptionsMessage={() => t("no_subjects_found")}
         formatCreateLabel={(inputValue) => `${t("create")} "${inputValue}"`}
+        menuPlacement={menuPlacement}
         isLoading={isLoading}
         isDisabled={isLoading || isCreatingNewSubject}
         value={selectedOptions}
