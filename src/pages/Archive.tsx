@@ -34,7 +34,7 @@ export default function Archive() {
   const { t, i18n } = useTranslation();
   const [queryFilters, setQueryFilters] = useState<AccessionsQueryFilters>({
     page: 0,
-    per_page: 50,
+    per_page: 10,
     lang: i18n.language === "en" ? "english" : "arabic",
     query_term: "",
     metadata_subjects: [],
