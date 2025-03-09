@@ -1,5 +1,5 @@
-export { DateMetadata } from "./Date";
-export { Description } from "./Description";
-export { Subject } from "./Subject";
-export { Title } from "./Title";
-export { OriginalURL } from "./OriginalURL";
+export { DateMetadata } from "./Date.tsx";
+export { Description } from "./Description.tsx";
+export { Subject } from "./Subject.tsx";
+export { Title } from "./Title.tsx";
+export { OriginalURL } from "./OriginalURL.tsx";
