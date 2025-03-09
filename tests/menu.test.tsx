@@ -1,4 +1,4 @@
-import Menu from "../src/components/menu";
+import Menu from "../src/components/Menu.tsx";
 import React from "react";
 import { describe, it, expect } from "vitest";
 import { addi18n, renderWithProviders } from "./testHelpers";

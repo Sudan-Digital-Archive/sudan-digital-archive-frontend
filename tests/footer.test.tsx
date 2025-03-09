@@ -1,4 +1,4 @@
-import Footer from "../src/components/footer";
+import Footer from "../src/components/Footer.tsx";
 import React from "react";
 import { describe, it, expect } from "vitest";
 import { addi18n, renderWithProviders } from "./testHelpers";
