@@ -1,7 +1,6 @@
-import { AccessionsCards } from "../src/components/AccessionsCards";
-import React from "react";
+import { AccessionsCards } from "./AccessionsCards";
 import { describe, it, expect } from "vitest";
-import { addi18n, renderWithProviders } from "./testHelpers";
+import { addi18n, renderWithProviders } from "../../testUtils/testHelpers.tsx";
 import { screen } from "@testing-library/react";
 
 const mockAccessions = [
@@ -56,7 +55,7 @@ describe("AccessionsCards", () => {
     expect(screen.getByText("Test Title")).toBeTruthy();
     expect(screen.getByText(/Test Subject/)).toBeTruthy();
     expect(screen.getByText("Test Description")).toBeTruthy();
-    expect(screen.getByText("Title translation not available")).toBeTruthy();
+    expect(screen.getByText("No title available")).toBeTruthy();
     expect(screen.getAllByText("View record")).toBeTruthy();
   });
 

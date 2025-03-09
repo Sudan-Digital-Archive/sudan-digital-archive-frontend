@@ -31,12 +31,10 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
       {accessions.map((accession: AccessionWithMetadata, index: number) => {
         const title =
           i18n.language === "en" ? accession.title_en : accession.title_ar;
-
         const description =
           i18n.language === "en"
             ? accession.description_en
             : accession.description_ar;
-
         const subjects =
           i18n.language === "en"
             ? accession.subjects_en
@@ -52,7 +50,7 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
           >
             <CardHeader>
               <Title
-                title={title ?? t("metadata_missing_title")}
+                title={title || t("metadata_missing_title")}
                 fontSize={i18n.language === "en" ? "md" : "lg"}
                 truncate
               />

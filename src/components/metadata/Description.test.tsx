@@ -1,8 +1,7 @@
-import { Description } from "../../src/components/metadata";
+import { Description } from "./Description.tsx";
 import { describe, it, expect } from "vitest";
-import { addi18n, renderWithProviders } from "../testHelpers";
+import { addi18n, renderWithProviders } from "../../../testUtils/testHelpers.tsx";
 import { screen } from "@testing-library/react";
-import React from "react";
 
 addi18n();
 describe("Description", () => {
