@@ -9,17 +9,17 @@ import {
 } from "@chakra-ui/react";
 import {
   DateMetadata,
-  Subject,
   Title,
   Description,
   OriginalURL,
-} from "../components/metadata";
+  Subject,
+} from "./metadata";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { AccessionList } from "../types/api_responses";
+import type { AccessionWithMetadata } from "../apiTypes/apiResponses";
 
 interface AccessionsCardsProps {
-  accessions: AccessionList;
+  accessions: AccessionWithMetadata[];
 }
 
 export function AccessionsCards({ accessions }: AccessionsCardsProps) {
@@ -28,8 +28,20 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
 
   return (
     <SimpleGrid spacing={10} columns={{ sm: 1, md: 2, lg: 5 }} mt={5}>
-      {accessions.map((record, index) => {
-        const [accession, metadata] = record;
+      {accessions.map((accession: AccessionWithMetadata, index: number) => {
+        const title =
+          i18n.language === "en" ? accession.title_en : accession.title_ar;
+
+        const description =
+          i18n.language === "en"
+            ? accession.description_en
+            : accession.description_ar;
+
+        const subjects =
+          i18n.language === "en"
+            ? accession.subjects_en
+            : accession.subjects_ar;
+
         return (
           <Card
             border="2px"
@@ -40,22 +52,15 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
           >
             <CardHeader>
               <Title
-                title={metadata?.title ?? t("metadata_missing_title")}
+                title={title ?? t("metadata_missing_title")}
                 fontSize={i18n.language === "en" ? "md" : "lg"}
                 truncate
               />
             </CardHeader>
             <CardBody>
-              <Subject
-                subject={metadata?.subject ?? t("metadata_missing_subject")}
-                fontSize={i18n.language === "en" ? "md" : "lg"}
-                truncate
-              />
-              {metadata?.description && (
+              {description && (
                 <Description
-                  description={
-                    metadata?.description ?? t("metadata_missing_description")
-                  }
+                  description={description}
                   fontSize={i18n.language === "en" ? "md" : "lg"}
                   truncate
                 />
@@ -66,6 +71,7 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
                   fontSize={i18n.language === "en" ? "md" : "lg"}
                 />
               </Box>
+              <Subject subjects={subjects} />
               <OriginalURL
                 url={accession.seed_url}
                 fontSize={i18n.language === "en" ? "md" : "lg"}

@@ -19,13 +19,14 @@ import {
   Description,
   OriginalURL,
 } from "../components/metadata/index.tsx";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../constants.ts";
-import type { AccessionOne } from "../types/api_responses.ts";
+import type { AccessionOne } from "../apiTypes/apiResponses.ts";
+
 export default function ViewAccession() {
   const { id } = useParams();
   const [replayerState, setReplayerState] = useState({ source: "", url: "" });
@@ -46,11 +47,7 @@ export default function ViewAccession() {
           source: data.wacz_url,
           url: data.accession.seed_url,
         });
-        setAccession({
-          accession: data.accession,
-          metadata_en: data.metadata_en,
-          metadata_ar: data.metadata_ar,
-        });
+        setAccession(data);
       } catch (error) {
         console.error(error);
       }
@@ -62,6 +59,7 @@ export default function ViewAccession() {
       setAccession(null);
     };
   }, [id]);
+
   return (
     <>
       <Menu />
@@ -84,9 +82,9 @@ export default function ViewAccession() {
                     <Title
                       title={
                         i18n.language === "en"
-                          ? accession.metadata_en?.title ??
+                          ? accession.accession.title_en ??
                             t("metadata_missing_title")
-                          : accession.metadata_ar?.title ??
+                          : accession.accession.title_ar ??
                             t("metadata_missing_title")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
@@ -94,25 +92,22 @@ export default function ViewAccession() {
                   </DrawerHeader>
                   <DrawerBody>
                     <Subject
-                      subject={
+                      subjects={
                         i18n.language === "en"
-                          ? accession.metadata_en?.subject ??
-                            t("metadata_missing_subject")
-                          : accession.metadata_ar?.subject ??
-                            t("metadata_missing_subject")
+                          ? accession.accession.subjects_en
+                          : accession.accession.subjects_ar
                       }
-                      fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
                     {((i18n.language === "en" &&
-                      accession.metadata_en?.description) ||
+                      accession.accession.description_en) ||
                       (i18n.language === "ar" &&
-                        accession.metadata_ar?.description)) && (
+                        accession.accession.description_ar)) && (
                       <Description
                         description={
                           i18n.language === "en"
-                            ? accession.metadata_en?.description ??
+                            ? accession.accession.description_en ??
                               t("metadata_missing_description")
-                            : accession.metadata_ar?.description ??
+                            : accession.accession.description_ar ??
                               t("metadata_missing_description")
                         }
                         fontSize={i18n.language === "en" ? "md" : "lg"}

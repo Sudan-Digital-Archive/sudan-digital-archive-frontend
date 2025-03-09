@@ -5,8 +5,8 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useTranslation } from "react-i18next";
 export default function WhyAnotherArchive() {
   const { t, i18n } = useTranslation();

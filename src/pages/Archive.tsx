@@ -19,25 +19,27 @@ import {
 } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
 import { CreateAccession } from "../components/forms/create_accession.tsx";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ArchiveDatePicker } from "../components/date_picker.tsx";
+import { ArchiveDatePicker } from "../components/DatePicker.tsx";
 import { appConfig } from "../constants.ts";
-import { AccessionsCards } from "../components/accessions_cards.tsx";
-import type { AccessionsQueryFilters } from "../types/api_requests.ts";
+import { AccessionsCards } from "../components/AccessionsCards.tsx";
+import type { AccessionsQueryFilters } from "../apiTypes/apiRequests.ts";
+import type { ListAccessions } from "../apiTypes/apiResponses.ts";
+import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/SubjectsAutocomplete.tsx";
+
 export default function Archive() {
   const { t, i18n } = useTranslation();
-  const [queryFilters, setQueryFilters] = useState({
-    page: "0",
-    per_page: "50",
+  const [queryFilters, setQueryFilters] = useState<AccessionsQueryFilters>({
+    page: 0,
+    per_page: 50,
     lang: i18n.language === "en" ? "english" : "arabic",
     query_term: "",
-    date_from: "",
-    date_to: "",
+    metadata_subjects: [],
   });
-  const [accessions, setAccessions] = useState([]);
+  const [accessions, setAccessions] = useState<ListAccessions | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({
@@ -49,13 +51,15 @@ export default function Archive() {
   const [queryTerm, setQueryTerm] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   function buildFilters(queryFilters: AccessionsQueryFilters) {
-    const nonNullFilters: AccessionsQueryFilters = {};
+    let queryParams = "";
     for (const [key, value] of Object.entries(queryFilters)) {
-      if (value) {
-        nonNullFilters[key as keyof AccessionsQueryFilters] = value;
+      if (Array.isArray(value)) {
+        value.forEach((item) => (queryParams += `${key}=${item}&`));
+      } else {
+        queryParams += `${key}=${value}&`;
       }
     }
-    return new URLSearchParams(nonNullFilters);
+    return new URLSearchParams(queryParams);
   }
 
   const updateFilters = useCallback((updates: AccessionsQueryFilters) => {
@@ -111,8 +115,8 @@ export default function Archive() {
             },
           }
         );
-        const data = await response.json();
-        setAccessions(data.items);
+        const data: ListAccessions = await response.json();
+        setAccessions(data);
         setPagination({
           currentPage: data.page,
           totalPages: data.num_pages,
@@ -130,7 +134,7 @@ export default function Archive() {
     setIsLoading(true);
     fetchAccessions(queryFilters);
     return () => {
-      setAccessions([]);
+      setAccessions(null);
       setIsLoading(false);
     };
   }, [fetchAccessions, queryFilters]);
@@ -193,6 +197,18 @@ export default function Archive() {
                 onChange={(date) => handleDateChange(date, "date_to")}
               />
             </Flex>
+            <Flex py={5}>
+              <SubjectsAutocomplete
+                menuPlacement="top"
+                onChange={(subjects) => {
+                  updateFilters({
+                    ["metadata_subjects"]: subjects.map(
+                      (subject) => subject.value
+                    ),
+                  });
+                }}
+              />
+            </Flex>
           </Box>
           <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">
             <ModalOverlay />
@@ -207,12 +223,12 @@ export default function Archive() {
               <ModalFooter />
             </ModalContent>
           </Modal>
-          {isLoading ? (
+          {isLoading || !accessions ? (
             <Spinner />
           ) : (
-            <AccessionsCards accessions={accessions} />
+            <AccessionsCards accessions={accessions.items} />
           )}
-          {accessions.length > 0 && !isLoading && (
+          {accessions && accessions?.items.length > 0 && !isLoading && (
             <HStack mt={3}>
               {pagination.currentPage != 0 &&
                 pagination.currentPage != pagination.totalPages && (
@@ -223,7 +239,7 @@ export default function Archive() {
                     variant="link"
                     onClick={() =>
                       updateFilters({
-                        page: (pagination.currentPage - 1).toString(),
+                        page: pagination.currentPage - 1,
                       })
                     }
                   />
@@ -242,14 +258,14 @@ export default function Archive() {
                   variant="link"
                   onClick={() =>
                     updateFilters({
-                      page: (pagination.currentPage + 1).toString(),
+                      page: pagination.currentPage + 1,
                     })
                   }
                 />
               )}
             </HStack>
           )}
-          {!isLoading && accessions.length === 0 && (
+          {!isLoading && accessions && accessions.items.length === 0 && (
             <Box mt={3} as="i">
               {t("archive_no_records_found")}
             </Box>

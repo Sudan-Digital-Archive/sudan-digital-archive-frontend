@@ -1,6 +1,6 @@
 import { Box, SlideFade, VStack, Heading, Text, Image } from "@chakra-ui/react";
-import Menu from "../components/menu.tsx";
-import Footer from "../components/footer.tsx";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 import { useTranslation } from "react-i18next";
 import atbara from "./hussein_merghani.jpg";
 import kandaka from "./merghani_salih_kandaka.jpg";
