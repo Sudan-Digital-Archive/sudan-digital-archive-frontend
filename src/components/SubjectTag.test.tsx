@@ -1,7 +1,6 @@
-import { SubjectTag } from "../src/components/SubjectTag";
-import React from "react";
+import { SubjectTag } from "./SubjectTag.tsx";
 import { describe, it, expect, vi } from "vitest";
-import { renderWithProviders } from "./testHelpers";
+import { renderWithProviders } from "../../testUtils/testHelpers.tsx";
 import { screen, fireEvent } from "@testing-library/react";
 
 describe("SubjectTag", () => {
@@ -25,7 +24,7 @@ describe("SubjectTag", () => {
     renderWithProviders(
       <SubjectTag label="Politics" hasCloseButton onClose={onCloseMock} />
     );
-    
+
     fireEvent.click(screen.getByRole("button"));
     expect(onCloseMock).toHaveBeenCalledTimes(1);
   });

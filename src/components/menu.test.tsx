@@ -1,7 +1,6 @@
-import Menu from "../src/components/Menu.tsx";
-import React from "react";
+import Menu from "./Menu.tsx";
 import { describe, it, expect } from "vitest";
-import { addi18n, renderWithProviders } from "./testHelpers";
+import { addi18n, renderWithProviders } from "../../testUtils/testHelpers.tsx";
 import { screen } from "@testing-library/react";
 
 addi18n();
