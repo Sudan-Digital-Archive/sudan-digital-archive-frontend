@@ -94,9 +94,6 @@
     "metadata_description_label": "الوصف:",
     "metadata_original_url_label": "عرض الرابط الأصلي",
     "metadata_date_label": "التاريخ:",
-    "metadata_missing_title": "الترجمة غير متوفرة للعنوان",
-    "metadata_missing_subject": "الترجمة غير متوفرة للموضوع",
-    "metadata_missing_description": "الترجمة غير متوفرة للوصف",
     "subjects_autocomplete_error_fetching_subjects": "خطأ في جلب المواضيع",
     "subjects_autocomplete_error_creating_subject": "خطأ في إنشاء موضوع",
     "subjects_autocomplete_search_subjects": "بحث عن مواضيع",
@@ -114,6 +111,7 @@
     "create_accession_date_required": "التاريخ مطلوب",
     "create_accession_title_required": "العنوان مطلوب",
     "create_accession_subjects_error": "مطلوب موضوع واحد على الأقل",
-    "create_accession_subjects_field_label": "المواضيع"
+    "create_accession_subjects_field_label": "المواضيع",
+    "metadata_missing_title": "لا يوجد عنوان متاح"
   }
 }

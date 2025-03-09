@@ -1,4 +1,4 @@
-import { DateMetadata } from "./Date.tsx"
+import { DateMetadata } from "./DateMetadata.tsx"
 import { describe, it, expect } from "vitest";
 import { addi18n, renderWithProviders } from  "../../../testUtils/testHelpers.tsx";
 import { screen } from "@testing-library/react";

@@ -55,7 +55,7 @@ describe("AccessionsCards", () => {
     expect(screen.getByText("Test Title")).toBeTruthy();
     expect(screen.getByText(/Test Subject/)).toBeTruthy();
     expect(screen.getByText("Test Description")).toBeTruthy();
-    expect(screen.getByText("Title translation not available")).toBeTruthy();
+    expect(screen.getByText("No title available")).toBeTruthy();
     expect(screen.getAllByText("View record")).toBeTruthy();
   });
 

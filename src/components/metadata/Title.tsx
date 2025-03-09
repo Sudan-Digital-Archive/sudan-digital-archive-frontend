@@ -9,14 +9,14 @@ interface TitleProps {
   maxLength?: number;
 }
 
-export function Title({ 
-  title, 
-  fontSize = "md", 
+export function Title({
+  title,
+  fontSize = "md",
   truncate = false,
-  maxLength = 200 
+  maxLength = 200,
 }: TitleProps) {
   const { t } = useTranslation();
-  const displayText = truncate ? truncateString(title, maxLength) : title;
+  const displayText = truncate ? truncateString(title || "", maxLength) : title;
 
   return (
     <Heading as="h5" size="sm" fontSize={fontSize}>

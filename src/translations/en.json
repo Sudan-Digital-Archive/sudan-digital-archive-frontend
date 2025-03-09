@@ -106,14 +106,12 @@
     "metadata_description_label": "Description:",
     "metadata_original_url_label": "View original url",
     "metadata_date_label": "Date:",
-    "metadata_missing_title": "Title translation not available",
-    "metadata_missing_subject": "Subject translation not available",
-    "metadata_missing_description": "Description translation not available",
     "subjects_autocomplete_error_fetching_subjects": "Error fetching subjects",
     "subjects_autocomplete_error_creating_subject": "Error creating subject",
     "subjects_autocomplete_search_subjects": "Search subjects",
     "subjects_autocomplete_no_subjects_found": "No subjects found",
     "subjects_autocomplete_create": "Create",
-    "subjects_autocomplete_create_success": "Created new subject {{subject}}"
+    "subjects_autocomplete_create_success": "Created new subject {{subject}}",
+    "metadata_missing_title": "No title available"
   }
 }

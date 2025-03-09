@@ -82,10 +82,8 @@ export default function ViewAccession() {
                     <Title
                       title={
                         i18n.language === "en"
-                          ? accession.accession.title_en ??
-                            t("metadata_missing_title")
-                          : accession.accession.title_ar ??
-                            t("metadata_missing_title")
+                          ? accession.accession.title_en || t("metadata_missing_title")
+                          : accession.accession.title_ar || t("metadata_missing_title")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
@@ -105,10 +103,8 @@ export default function ViewAccession() {
                       <Description
                         description={
                           i18n.language === "en"
-                            ? accession.accession.description_en ??
-                              t("metadata_missing_description")
-                            : accession.accession.description_ar ??
-                              t("metadata_missing_description")
+                            ? accession.accession.description_en
+                            : accession.accession.description_ar
                         }
                         fontSize={i18n.language === "en" ? "md" : "lg"}
                       />
