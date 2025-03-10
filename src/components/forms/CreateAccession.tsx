@@ -107,7 +107,7 @@ export function CreateAccession() {
     }
   };
 
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setUrl(value);
   };
@@ -121,7 +121,7 @@ export function CreateAccession() {
     }
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setTitle(value);
   };
