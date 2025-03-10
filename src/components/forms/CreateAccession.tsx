@@ -16,16 +16,15 @@ import { useTranslation } from "react-i18next";
 import { appConfig } from "../../constants.ts";
 import { useState, useEffect, useCallback } from "react";
 import { SubjectsAutocomplete } from "../subjectsAutocomplete/SubjectsAutocomplete.tsx";
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
+
 import type { SubjectOption } from "../subjectsAutocomplete/types.ts";
 export function CreateAccession() {
   const { t, i18n } = useTranslation();
   const toast = useToast();
 
-  // Form state
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
-  // TODO Use proper type
   const [subjects, setSubjects] = useState<readonly SubjectOption[]>([]);
   const [description, setDescription] = useState("");
   const [date, setDate] = useState<Date | null>(null);
@@ -33,7 +32,6 @@ export function CreateAccession() {
     t("create_accession_crawl_type_default")
   );
 
-  // Error states
   const [urlError, setUrlError] = useState("");
   const [titleError, setTitleError] = useState("");
   const [dateError, setDateError] = useState("");
@@ -41,14 +39,13 @@ export function CreateAccession() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Form validity state
   const [isFormValid, setIsFormValid] = useState(false);
   const validateURL = useCallback(
     (value: string) => {
       try {
         new URL(value);
         return { valid: true, error: "" };
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         return { valid: false, error: t("create_accession_invalid_url") };
       }
@@ -63,7 +60,7 @@ export function CreateAccession() {
       try {
         new Date(value);
         return { valid: true, error: "" };
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         return { valid: false, error: t("create_accession_invalid_date") };
       }
@@ -95,7 +92,6 @@ export function CreateAccession() {
     validateTitle,
     validateURL,
   ]);
-  // Validate form whenever inputs change
   useEffect(() => {
     const isFormValid = validateForm();
 
@@ -143,9 +139,7 @@ export function CreateAccession() {
     setSubjects(values);
   };
 
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
 
@@ -161,7 +155,6 @@ export function CreateAccession() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // TODO: This duplicates the blur check, refactor to simplify
     const urlCheck = validateURL(url);
     if (!urlCheck.valid) {
       setUrlError(urlCheck.error);
@@ -211,7 +204,6 @@ export function CreateAccession() {
       });
 
       const responseText = await response.text();
-
       if (response.status === 201) {
         toast({
           title: t("create_accession_crawling_url_title"),
@@ -259,7 +251,13 @@ export function CreateAccession() {
         <Input
           value={url}
           onChange={handleUrlChange}
-          onBlur={handleUrlBlur}
+          // prevents annoying url validation when you close modal after submission
+          // since url is always focused after submission
+          onBlur={() =>
+            setTimeout(() => {
+              handleUrlBlur();
+            }, 300)
+          }
           placeholder={t("create_accession_url_field_placeholder")}
         />
         <FormErrorMessage>{urlError}</FormErrorMessage>
@@ -315,7 +313,6 @@ export function CreateAccession() {
           </Stack>
         </RadioGroup>
       </FormControl>
-
       <Button
         mt={4}
         colorScheme="cyan"

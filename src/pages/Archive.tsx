@@ -18,7 +18,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
-import { CreateAccession } from "../components/forms/create_accession.tsx";
+import { CreateAccession } from "../components/forms/CreateAccession.tsx";
 import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
 import { useCallback, useEffect, useState } from "react";
@@ -34,7 +34,7 @@ export default function Archive() {
   const { t, i18n } = useTranslation();
   const [queryFilters, setQueryFilters] = useState<AccessionsQueryFilters>({
     page: 0,
-    per_page: 10,
+    per_page: 50,
     lang: i18n.language === "en" ? "english" : "arabic",
     query_term: "",
     metadata_subjects: [],
