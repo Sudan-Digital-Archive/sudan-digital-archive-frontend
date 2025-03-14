@@ -112,6 +112,9 @@
     "create_accession_title_required": "العنوان مطلوب",
     "create_accession_subjects_error": "مطلوب موضوع واحد على الأقل",
     "create_accession_subjects_field_label": "المواضيع",
-    "metadata_missing_title": "لا يوجد عنوان متاح"
+    "metadata_missing_title": "لا يوجد عنوان متاح",
+    "get_in_touch": "ابقى على تواصل",
+    "email_copied": "تم نسخ البريد الإلكتروني!",
+    "nav_contact": "اتصل بنا"
   }
 }

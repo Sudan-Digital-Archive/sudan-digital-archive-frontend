@@ -14,16 +14,15 @@ export default function Home() {
           as="section"
           display="flex"
           alignItems="center"
+          justifyContent="center"
+          textAlign="center"
           maxW="2xl"
           mx="auto"
+          pt={10}
+          pb={5}
           px={4}
         >
-          <VStack
-            spacing={8}
-            alignItems="center"
-            justifyContent="center"
-            textAlign="center"
-          >
+          <VStack spacing={8}>
             <Box>
               <Text
                 className="gradientText"
@@ -64,7 +63,6 @@ export default function Home() {
                   {t("landing_sentence_two_part_eight_highlight")}
                 </Box>
                 {t("landing_sentence_two_part_nine")}
-
               </Heading>
             </Box>
           </VStack>

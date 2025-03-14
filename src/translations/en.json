@@ -112,6 +112,9 @@
     "subjects_autocomplete_no_subjects_found": "No subjects found",
     "subjects_autocomplete_create": "Create",
     "subjects_autocomplete_create_success": "Created new subject {{subject}}",
-    "metadata_missing_title": "No title available"
+    "metadata_missing_title": "No title available",
+    "get_in_touch": "Get in Touch",
+    "email_copied": "Email copied!",
+    "nav_contact": "Contact Us"
   }
 }

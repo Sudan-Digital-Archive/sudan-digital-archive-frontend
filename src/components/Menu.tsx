@@ -79,6 +79,16 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
             </MenuItem>
           </MenuList>
         </Menu>
+        <Menu>
+          <MenuButton
+            as={Button}
+            size="sm"
+            variant="ghost"
+            onClick={() => navigate("/contact-us")}
+          >
+            {t("nav_contact")}
+          </MenuButton>
+        </Menu>
         <Box>
           <Button
             colorScheme="pink"

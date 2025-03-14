@@ -14,6 +14,7 @@ import ChakraThemeRTLProvider from "./components/ChakraThemeRTLProvider.tsx";
 import { ColorModeScript } from "@chakra-ui/react";
 import { registerLocale } from "react-datepicker";
 import { ar } from "date-fns/locale";
+import ContactUs from "./pages/ContactUs.tsx";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/archive/:id",
     element: <ViewAccession />,
+  },
+  {
+    path: "/contact-us",
+    element: <ContactUs />,
   },
   {
     path: "*",
