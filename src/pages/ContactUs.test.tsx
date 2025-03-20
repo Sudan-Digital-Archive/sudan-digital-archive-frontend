@@ -2,7 +2,6 @@ import { screen } from "@testing-library/react";
 import ContactUs from "./ContactUs";
 import { addi18n, renderWithProviders } from "../../testUtils/testHelpers";
 import { describe, it, expect } from "vitest";
-
 addi18n();
 
 describe("ContactUs Component", () => {
