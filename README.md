@@ -20,13 +20,10 @@ This site makes heavy use of
 to embed web archives in the browser. This is cool but it was quite fiddly
 to make it work in React. Things to note:
 
-- It uses two scripts, both of which are in the `public/replay` directory.
-- The documentation suggests dynamically loading these; I got more reliable results
-  by `curl`ing the output of the js deliver content and writing them to file.
+- It uses two scripts, one which is in the `public/replay` directory.
+  The other is injected into `index.html`.
 - The replay web component handles service worker stuff out of the box. You
   DO NOT need to add this into the app; the web component does it for you.
-- The web component does need access to a `ui.js` file, which is served in a
-  `<script>` tag from `index.html`.
 - This replay web component does not play well with React router. This cost me hours
   of dev time to debug. Apart from requests to `/replay/sw.js` and `/replay/ui.js`,
   React router must not intercept any requests to `/replay/*`. The replay web

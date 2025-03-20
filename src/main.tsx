@@ -47,7 +47,7 @@ const router = createBrowserRouter([
     path: "*",
     element: <Home />,
   },
-]);
+], { basename: "/" });
 registerLocale("ar", ar);
 // replay routes we DO want react router to render - they need to
 // serve files from our static site
