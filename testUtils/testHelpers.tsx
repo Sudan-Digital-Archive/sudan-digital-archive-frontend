@@ -8,6 +8,8 @@ import arTranslations from "../src/translations/ar.json";
 import enTranslations from "../src/translations/en.json";
 import { registerLocale } from "react-datepicker";
 import { ar } from "date-fns/locale";
+import { ChakraProvider } from "@chakra-ui/react";
+import { vi } from "vitest";
 
 export const resetLanguage = () => {
   i18n.changeLanguage("en");
@@ -26,6 +28,19 @@ export const addi18n = () => {
       },
     });
     resetLanguage();
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
   });
 };
 
@@ -45,7 +60,9 @@ export const renderWithProviders = (
 
   return render(
     <BrowserRouter>
-      <I18nextProvider i18n={i18n}>{component}</I18nextProvider>
+      <ChakraProvider>
+        <I18nextProvider i18n={i18n}>{component}</I18nextProvider>
+      </ChakraProvider>
     </BrowserRouter>
   );
 };

@@ -7,6 +7,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  useBreakpointValue,
+  Stack,
 } from "@chakra-ui/react";
 import { ChevronDown } from "react-feather";
 import { useNavigate } from "react-router-dom";
@@ -41,8 +43,14 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
   };
 
   const MenuBar = () => {
+    const isMobile = useBreakpointValue({ base: true, md: false });
     return (
-      <HStack spacing={4} alignItems="center" aria-label="navigation-menu">
+      <Stack
+        direction={isMobile ? "column" : "row"}
+        spacing={2}
+        alignItems="center"
+        aria-label="navigation-menu"
+      >
         <Menu>
           <MenuButton
             as={Button}
@@ -98,7 +106,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
             {i18n.language === "en" ? "عربي" : "English"}
           </Button>
         </Box>
-      </HStack>
+      </Stack>
     );
   };
 
