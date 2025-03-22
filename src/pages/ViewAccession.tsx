@@ -64,7 +64,7 @@ export default function ViewAccession() {
     <>
       <Menu />
       <SlideFade in>
-        <VStack display="flex">
+        <VStack display="flex" flexDirection="column" h="100vh">
           {!accession || !replayerState.source || !replayerState.url ? (
             <Spinner />
           ) : (
@@ -82,8 +82,10 @@ export default function ViewAccession() {
                     <Title
                       title={
                         i18n.language === "en"
-                          ? accession.accession.title_en || t("metadata_missing_title")
-                          : accession.accession.title_ar || t("metadata_missing_title")
+                          ? accession.accession.title_en ||
+                            t("metadata_missing_title")
+                          : accession.accession.title_ar ||
+                            t("metadata_missing_title")
                       }
                       fontSize={i18n.language === "en" ? "md" : "lg"}
                     />
@@ -122,20 +124,15 @@ export default function ViewAccession() {
                   </DrawerBody>
                 </DrawerContent>
               </Drawer>
-              <Box
-                border="2px"
-                borderColor="pink"
-                borderStyle="inset"
-                h="70vh"
-                w="80vw"
-              >
+              <Box flex="1" w="100vw">
                 <replay-web-page
+                  embed="replay-with-info"
                   replayBase="/replay/"
                   source={replayerState.source}
                   url={replayerState.url}
                 ></replay-web-page>
               </Box>
-              <Button colorScheme="pink" onClick={onOpen} mt={5}>
+              <Button colorScheme="pink" onClick={onOpen} mt={3}>
                 {t("view_accession_see_metadata")}
               </Button>
             </>
