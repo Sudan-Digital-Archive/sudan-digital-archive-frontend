@@ -9,6 +9,7 @@ interface ReplayWebPageProps
   replayBase: string;
   source: string;
   url: string;
+  embed?: "default" | "full" | "replayonly" | "replay-with-info";
 }
 declare global {
   namespace JSX {
