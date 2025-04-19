@@ -11,7 +11,7 @@ import {
 import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
 import { useTranslation } from "react-i18next";
-import { Link as ReactRouterLink } from "react-router";
+import { NavLink} from "react-router";
 export default function WhoAreWe() {
   const { t, i18n } = useTranslation();
 
@@ -60,7 +60,7 @@ export default function WhoAreWe() {
                   {t("who_are_we_point_two_description_one")}
                   <Link
                     color="cyan"
-                    as={ReactRouterLink}
+                    as={NavLink}
                     to="/code-of-conduct"
                     variant="underline"
                   >
