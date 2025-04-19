@@ -22,32 +22,32 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/mission",
+    path: "mission",
     element: <Mission />,
   },
   {
-    path: "/who-are-we",
+    path: "who-are-we",
     element: <WhoAreWe />,
   },
-  { path: "/why-another-archive", element: <WhyAnotherArchive /> },
-  { path: "/code-of-conduct", element: <CodeOfConduct /> },
+  { path: "why-another-archive", element: <WhyAnotherArchive /> },
+  { path: "code-of-conduct", element: <CodeOfConduct /> },
   {
-    path: "/archive",
+    path: "archive",
     element: <Archive />,
   },
   {
-    path: "/archive/:id",
+    path: "archive/:id",
     element: <ViewAccession />,
   },
   {
-    path: "/contact-us",
+    path: "contact-us",
     element: <ContactUs />,
   },
   {
     path: "*",
     element: <Home />,
   },
-], {  });
+]);
 registerLocale("ar", ar);
 // replay routes we DO want react router to render - they need to
 // serve files from our static site
