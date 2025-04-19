@@ -4,7 +4,6 @@ import {
   VStack,
   Heading,
   Text,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
@@ -12,7 +11,6 @@ import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const { t, i18n } = useTranslation();
-  const isMobile = useBreakpointValue({ base: true, md: false });
 
   return (
     <>
@@ -26,7 +24,7 @@ export default function Home() {
           textAlign="center"
           maxW="2xl"
           mx="auto"
-          pt={isMobile ? 0 : 10}
+          pt={10}
           pb={5}
           px={4}
         >

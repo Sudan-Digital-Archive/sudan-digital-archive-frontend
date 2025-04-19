@@ -13,7 +13,7 @@ import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import EnCoCTranslations from "../translations/code_of_conduct_en.json";
 import ArCoCTranslations from "../translations/code_of_conduct_ar.json";
 

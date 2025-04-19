@@ -34,6 +34,7 @@ export default function Mission() {
                 objectFit="cover"
                 src={kandaka}
                 alt={t("mission_image_one_alt")}
+                fallback={<Box boxSize="lg" />}
               />
               <Text as="i">{t("mission_image_one_caption")}</Text>
               <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
@@ -59,6 +60,7 @@ export default function Mission() {
                 objectFit="cover"
                 src={atbara}
                 alt={t("mission_image_two_alt")}
+                fallback={<Box boxSize="lg" />}
               />
               <Text as="i">{t("mission_image_two_caption")}</Text>
 

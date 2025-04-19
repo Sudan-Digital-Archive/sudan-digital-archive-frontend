@@ -19,7 +19,7 @@ import {
   Description,
   OriginalURL,
 } from "../components/metadata/index.tsx";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../constants.ts";

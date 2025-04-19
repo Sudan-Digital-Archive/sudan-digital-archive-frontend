@@ -11,7 +11,7 @@ import {
 import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
 import { useTranslation } from "react-i18next";
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Link as ReactRouterLink } from "react-router";
 export default function WhoAreWe() {
   const { t, i18n } = useTranslation();
 

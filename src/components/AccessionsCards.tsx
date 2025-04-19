@@ -14,9 +14,9 @@ import {
   OriginalURL,
   Subject,
 } from "./metadata";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { AccessionWithMetadata } from "../apiTypes/apiResponses";
+import { NavLink } from "react-router";
 
 interface AccessionsCardsProps {
   accessions: AccessionWithMetadata[];
@@ -24,7 +24,6 @@ interface AccessionsCardsProps {
 
 export function AccessionsCards({ accessions }: AccessionsCardsProps) {
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
 
   return (
     <SimpleGrid spacing={10} columns={{ sm: 1, md: 2, lg: 3 }} my={5} mx={5}>
@@ -76,13 +75,14 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
               />
             </CardBody>
             <CardFooter>
-              <Button
-                colorScheme="purple"
-                fontSize={i18n.language === "en" ? "0.8em" : "1em"}
-                onClick={() => navigate(`/archive/${accession.id}`)}
-              >
-                {t("archive_view_record_button")}
-              </Button>
+              <NavLink to={`/archive/${accession.id}`}>
+                <Button
+                  colorScheme="purple"
+                  fontSize={i18n.language === "en" ? "0.8em" : "1em"}
+                >
+                  {t("archive_view_record_button")}
+                </Button>
+              </NavLink>
             </CardFooter>
           </Card>
         );

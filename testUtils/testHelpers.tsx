@@ -1,6 +1,6 @@
 import { beforeAll } from "vitest";
 import { render } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router";
 import { I18nextProvider } from "react-i18next";
 import i18n from "i18next";
 import React from "react";
