@@ -60,7 +60,7 @@
     "archive_pagination_page": "Page ",
     "archive_pagination_page_out_of": " out of ",
     "archive_no_records_found": "No records matched your search!",
-    "view_accession_see_metadata": "See metadata",
+    "view_accession_see_metadata": "Show record details",
     "create_accession_invalid_title": "Title is required",
     "create_accession_invalid_subject": "Subject is required",
     "create_accession_invalid_description": "Description is required",

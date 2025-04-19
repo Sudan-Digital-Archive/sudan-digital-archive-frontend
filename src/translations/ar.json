@@ -56,7 +56,7 @@
     "archive_pagination_page": "الصفحة ",
     "archive_pagination_page_out_of": " من ",
     "archive_no_records_found": "لم يتم العثور على سجلات تطابق بحثك!",
-    "view_accession_see_metadata": "عرض البيانات الوصفية",
+    "view_accession_see_metadata": "عرض تفاصيل السجل",
     "create_accession_invalid_title": "العنوان مطلوب",
     "create_accession_invalid_subject": "الموضوع مطلوب",
     "create_accession_invalid_description": "الوصف مطلوب",
