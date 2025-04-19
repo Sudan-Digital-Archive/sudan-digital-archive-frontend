@@ -6,7 +6,6 @@ import {
   useToast,
   Text,
   VStack,
-  useBreakpointValue,
 } from "@chakra-ui/react";
 import { CopyIcon } from "@chakra-ui/icons";
 import Menu from "../components/Menu.tsx";
@@ -18,12 +17,7 @@ export default function ContactUs() {
   const email = "info@sudandigitalarchive.com";
   const { onCopy } = useClipboard(email);
   const toast = useToast();
-  const isMobile = useBreakpointValue(
-    { base: true, md: false },
-    {
-      fallback: "md",
-    }
-  );
+
 
   const handleCopy = () => {
     onCopy();
@@ -45,7 +39,7 @@ export default function ContactUs() {
         justifyContent="center"
         maxW="2xl"
         mx="auto"
-        pt={isMobile ? 0 : 10}
+        pt={10}
       >
         <VStack spacing={8}>
           <Heading

@@ -8,7 +8,8 @@ import WhoAreWe from "./pages/WhoAreWe.tsx";
 import WhyAnotherArchive from "./pages/WhyAnotherArchive.tsx";
 import "./il18n.ts";
 import "./css/styles.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router";
+
 import Home from "./pages/Home.tsx";
 import ChakraThemeRTLProvider from "./components/ChakraThemeRTLProvider.tsx";
 import { ColorModeScript } from "@chakra-ui/react";
@@ -16,38 +17,7 @@ import { registerLocale } from "react-datepicker";
 import { ar } from "date-fns/locale";
 import ContactUs from "./pages/ContactUs.tsx";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "mission",
-    element: <Mission />,
-  },
-  {
-    path: "who-are-we",
-    element: <WhoAreWe />,
-  },
-  { path: "why-another-archive", element: <WhyAnotherArchive /> },
-  { path: "code-of-conduct", element: <CodeOfConduct /> },
-  {
-    path: "archive",
-    element: <Archive />,
-  },
-  {
-    path: "archive/:id",
-    element: <ViewAccession />,
-  },
-  {
-    path: "contact-us",
-    element: <ContactUs />,
-  },
-  {
-    path: "*",
-    element: <Home />,
-  },
-]);
+
 registerLocale("ar", ar);
 // replay routes we DO want react router to render - they need to
 // serve files from our static site
@@ -64,7 +34,19 @@ if (isNonReplayRoute(window.location.pathname)) {
     <StrictMode>
       <ColorModeScript initialColorMode="dark" />
       <ChakraThemeRTLProvider>
-        <RouterProvider router={router} />
+      <BrowserRouter>
+      <Routes>
+      <Route index element={<Home />} />
+      <Route path="mission" element={<Mission />} />
+      <Route path="who-are-we" element={<WhoAreWe />} />
+      <Route path="why-another-archive" element={<WhyAnotherArchive />} />
+      <Route path="code-of-conduct" element={<CodeOfConduct />} />
+      <Route path="archive" element={<Archive />} />
+      <Route path="contact-us" element={<ContactUs />} />
+      <Route path="*" element={<Home />} />
+      <Route path="archive/:id" element={<ViewAccession />} />
+    </Routes>
+      </BrowserRouter>
       </ChakraThemeRTLProvider>
     </StrictMode>
   );
