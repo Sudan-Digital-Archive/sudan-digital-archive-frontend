@@ -13,7 +13,8 @@ import { ChevronDown, Menu as MenuIcon } from "react-feather";
 import { NavLink } from "react-router";
 import { Home } from "react-feather";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
+import { useWindowSize } from "../hooks/useWindowSize.ts";
+
 interface NavbarProps {
   // useful if you want to prevent layout shifts
   // e.g. refresh data before everything goes right to left
@@ -41,16 +42,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
   };
 
   const MenuBar = () => {
-    const [width, setWidth] = useState<number>(window.innerWidth);
-    function handleWindowSizeChange() {
-      setWidth(window.innerWidth);
-    }
-    useEffect(() => {
-      window.addEventListener("resize", handleWindowSizeChange);
-      return () => {
-        window.removeEventListener("resize", handleWindowSizeChange);
-      };
-    }, []);
+    const width = useWindowSize();
     const isMobile = width <= 768;
     return (
       <>

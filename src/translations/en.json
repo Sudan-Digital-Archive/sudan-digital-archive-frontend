@@ -115,6 +115,9 @@
     "metadata_missing_title": "No title available",
     "get_in_touch": "Get in Touch",
     "email_copied": "Email copied!",
-    "nav_contact": "Contact Us"
+    "nav_contact": "Contact Us",
+    "what_is_sda": "What is the Sudan Digital Archive?",
+    "copy_record": "Copy URL to Record",
+    "link_copied": "Link copied!"
   }
 }

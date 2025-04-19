@@ -1,21 +1,13 @@
 import { Box, HStack, Link, Highlight, Text, Stack } from "@chakra-ui/react";
 import { GitHub } from "react-feather";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
+import { useWindowSize } from "../hooks/useWindowSize.ts";
+
 const Footer = () => {
   const { t, i18n } = useTranslation();
-  //TODO: Put in custom hook
-  const [width, setWidth] = useState<number>(window.innerWidth);
-  function handleWindowSizeChange() {
-    setWidth(window.innerWidth);
-  }
-  useEffect(() => {
-    window.addEventListener("resize", handleWindowSizeChange);
-    return () => {
-      window.removeEventListener("resize", handleWindowSizeChange);
-    };
-  }, []);
+  const width = useWindowSize();
   const isMobile = width <= 768;
+
   return (
     <Box p={6}>
       <Box maxW="6xl" mx="auto" fontSize="xs">

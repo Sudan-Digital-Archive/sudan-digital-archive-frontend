@@ -115,6 +115,9 @@
     "metadata_missing_title": "لا يوجد عنوان متاح",
     "get_in_touch": "ابقى على تواصل",
     "email_copied": "تم نسخ البريد الإلكتروني!",
-    "nav_contact": "اتصل بنا"
+    "nav_contact": "اتصل بنا",
+    "what_is_sda": "ما هو الأرشيف الرقمي السوداني؟",
+    "copy_record": "نسخ عنوان URL للسجل",
+    "link_copied": "تم نسخ الرابط!"
   }
 }
