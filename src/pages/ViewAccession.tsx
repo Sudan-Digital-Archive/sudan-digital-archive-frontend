@@ -19,8 +19,6 @@ import {
   Description,
   OriginalURL,
 } from "../components/metadata/index.tsx";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -62,13 +60,15 @@ export default function ViewAccession() {
 
   return (
     <>
-      <Menu />
       <SlideFade in>
         <VStack display="flex" flexDirection="column" h="100vh">
           {!accession || !replayerState.source || !replayerState.url ? (
             <Spinner />
           ) : (
             <>
+              <Button colorScheme="pink" onClick={onOpen} m={2}>
+                {t("view_accession_see_metadata")}
+              </Button>
               <Drawer
                 placement="right"
                 onClose={onClose}
@@ -124,7 +124,7 @@ export default function ViewAccession() {
                   </DrawerBody>
                 </DrawerContent>
               </Drawer>
-              <Box flex="1" w="100vw">
+              <Box flex="1" w="100vw" bg="white">
                 <replay-web-page
                   embed="replay-with-info"
                   replayBase="/replay/"
@@ -132,14 +132,10 @@ export default function ViewAccession() {
                   url={replayerState.url}
                 ></replay-web-page>
               </Box>
-              <Button colorScheme="pink" onClick={onOpen} mt={3}>
-                {t("view_accession_see_metadata")}
-              </Button>
             </>
           )}
         </VStack>
       </SlideFade>
-      <Footer />
     </>
   );
 }
