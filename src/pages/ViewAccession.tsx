@@ -186,7 +186,7 @@ export default function ViewAccession() {
               <Box flex="1" w="100vw" bg="white">
                 <Box h="4px" bg="gray" />
                 <replay-web-page
-                  embed="replay-with-info"
+                  embed="replayonly"
                   replayBase="/replay/"
                   source={replayerState.source}
                   url={replayerState.url}
