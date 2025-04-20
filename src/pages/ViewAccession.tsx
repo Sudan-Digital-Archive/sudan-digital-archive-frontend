@@ -23,9 +23,58 @@ import {
   DrawerCloseButton,
   DrawerOverlay,
   DrawerContent,
+  Text,
   HStack,
   useDisclosure,
+  Heading,
+  Divider,
 } from "@chakra-ui/react";
+import { useParsedDate } from "../hooks/useParsedDate.ts";
+
+interface AccessionInfoProps {
+  timestamp: string;
+  id: string | undefined;
+  lang: string;
+  onOpen: () => void;
+  isMobile: boolean;
+}
+
+function AccessionInfo({
+  id,
+  lang,
+  onOpen,
+  timestamp,
+  isMobile,
+}: Readonly<AccessionInfoProps>) {
+  const { t } = useTranslation();
+  const { parseDate } = useParsedDate();
+
+  return (
+    <>
+      <Box color="white" p={2} borderRadius="md">
+        <Heading size="sm">{t("sda_record")}</Heading>
+        <Text fontSize="xs">
+          {t("view_accession_captured")} {parseDate(timestamp)}
+        </Text>
+        
+      </Box>
+      {isMobile ? (
+        <Divider
+          orientation="horizontal"
+          borderColor="white"
+        />
+      ) : (
+        <Divider
+          orientation="vertical"
+          borderColor="white"
+          height="80px"
+          p={2}
+        />
+      )}
+      <AccessionButtons onOpen={onOpen} id={id} lang={lang} />
+    </>
+  );
+}
 
 export default function ViewAccession() {
   const { id } = useParams();
@@ -83,12 +132,24 @@ export default function ViewAccession() {
           ) : (
             <>
               {isMobile ? (
-                <VStack m={4} spacing={4} alignItems="center">
-                  <AccessionButtons onOpen={onOpen} id={id} lang={lang} />
+                <VStack m={2} spacing={2} alignItems="center" >
+                  <AccessionInfo
+                    timestamp={accession.accession.crawl_timestamp}
+                    id={id}
+                    lang={lang}
+                    onOpen={onOpen}
+                    isMobile={true}
+                  />
                 </VStack>
               ) : (
-                <HStack m={4} spacing={4}>
-                  <AccessionButtons onOpen={onOpen} id={id} lang={lang} />
+                <HStack m={2} spacing={2} alignItems="center">
+                  <AccessionInfo
+                    timestamp={accession.accession.crawl_timestamp}
+                    id={id}
+                    lang={lang}
+                    onOpen={onOpen}
+                    isMobile={false}
+                  />
                 </HStack>
               )}
               <Drawer
@@ -147,7 +208,7 @@ export default function ViewAccession() {
                 </DrawerContent>
               </Drawer>
               <Box flex="1" w="100vw" bg="white">
-                <Box h="4px" bg="gray" />
+                <Box h="4px" bg="teal.500" />
                 <replay-web-page
                   embed="replayonly"
                   replayBase="/replay/"

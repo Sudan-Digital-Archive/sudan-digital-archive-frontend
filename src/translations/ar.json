@@ -116,8 +116,10 @@
     "get_in_touch": "ابقى على تواصل",
     "email_copied": "تم نسخ البريد الإلكتروني!",
     "nav_contact": "اتصل بنا",
-    "what_is_sda": "ما هو الأرشيف الرقمي السوداني؟",
+    "what_is_sda": "شاهد الأرشيف",
     "copy_record": "نسخ عنوان URL للسجل",
-    "link_copied": "تم نسخ الرابط!"
+    "link_copied": "تم نسخ الرابط!",
+    "sda_record": "هذا سجل للأرشيف الرقمي السوداني",
+    "view_accession_captured": "تم التقاط"
   }
 }
