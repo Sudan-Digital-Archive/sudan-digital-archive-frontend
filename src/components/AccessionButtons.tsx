@@ -1,10 +1,5 @@
-import {
-  Button,
-  useClipboard,
-  useToast,
-} from "@chakra-ui/react";
-import { CopyIcon } from "@chakra-ui/icons";
-import { ExternalLink, Plus } from "react-feather";
+import { Button, useClipboard, useToast, Stack } from "@chakra-ui/react";
+import { CopyIcon, ExternalLinkIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 import { NavLink } from "react-router";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../constants.ts";
@@ -37,19 +32,29 @@ export default function AccessionButtons({
   };
 
   return (
-    <>
-      <Button colorScheme="pink" onClick={onOpen} rightIcon={<Plus />}>
+    <Stack spacing={2}>
+      <Button
+        onClick={onOpen}
+        rightIcon={<InfoOutlineIcon />}
+        size="xs"
+        variant="outline"
+      >
         {t("view_accession_see_metadata")}
       </Button>
 
-      <Button colorScheme="pink" onClick={handleCopy} rightIcon={<CopyIcon />}>
+      <Button
+        variant="outline"
+        onClick={handleCopy}
+        rightIcon={<CopyIcon />}
+        size="xs"
+      >
         {t("copy_record")}
       </Button>
-      <NavLink to="/mission" target="_blank">
-        <Button colorScheme="pink" rightIcon={<ExternalLink />}>
+      <NavLink to="/archive" target="_blank">
+        <Button variant="outline" rightIcon={<ExternalLinkIcon />} size="xs">
           {t("what_is_sda")}
         </Button>
       </NavLink>
-    </>
+    </Stack>
   );
 }

@@ -60,7 +60,7 @@
     "archive_pagination_page": "Page ",
     "archive_pagination_page_out_of": " out of ",
     "archive_no_records_found": "No records matched your search!",
-    "view_accession_see_metadata": "Show record details",
+    "view_accession_see_metadata": "Show details",
     "create_accession_invalid_title": "Title is required",
     "create_accession_invalid_subject": "Subject is required",
     "create_accession_invalid_description": "Description is required",
@@ -116,8 +116,10 @@
     "get_in_touch": "Get in Touch",
     "email_copied": "Email copied!",
     "nav_contact": "Contact Us",
-    "what_is_sda": "What is the Sudan Digital Archive?",
-    "copy_record": "Copy URL to record",
-    "link_copied": "Link copied!"
+    "what_is_sda": "See archive",
+    "copy_record": "Copy URL",
+    "link_copied": "Link copied!",
+    "sda_record": "This is a Sudan Digital Archive record",
+    "view_accession_captured": "Captured"
   }
 }
