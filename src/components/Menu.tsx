@@ -80,6 +80,9 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                 >
                   {i18n.language === "en" ? "عربي" : "English"}
                 </MenuItem>
+                <MenuItem>
+                  <NavLink to="/login">Login</NavLink>
+                </MenuItem>
               </MenuList>
             </Menu>
           </>
@@ -127,6 +130,13 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
               <NavLink to="/contact-us">
                 <MenuButton as={Button} size="sm" variant="ghost">
                   {t("nav_contact")}
+                </MenuButton>
+              </NavLink>
+            </Menu>
+            <Menu>
+              <NavLink to="/login">
+                <MenuButton as={Button} size="sm" variant="ghost">
+                  Login
                 </MenuButton>
               </NavLink>
             </Menu>

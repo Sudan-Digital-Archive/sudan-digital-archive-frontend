@@ -16,7 +16,8 @@ import { ColorModeScript } from "@chakra-ui/react";
 import { registerLocale } from "react-datepicker";
 import { ar } from "date-fns/locale";
 import ContactUs from "./pages/ContactUs.tsx";
-
+import Login from "./pages/Login.tsx"
+import JWTAuth from "./pages/JWTAuth.tsx";
 
 registerLocale("ar", ar);
 // replay routes we DO want react router to render - they need to
@@ -45,6 +46,8 @@ if (isNonReplayRoute(window.location.pathname)) {
       <Route path="contact-us" element={<ContactUs />} />
       <Route path="*" element={<Home />} />
       <Route path="archive/:id" element={<ViewAccession />} />
+      <Route path="login" element={<Login />} />
+      <Route path="jwt-auth" element={<JWTAuth />} />
     </Routes>
       </BrowserRouter>
       </ChakraThemeRTLProvider>
