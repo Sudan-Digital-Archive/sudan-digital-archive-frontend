@@ -29,6 +29,7 @@ import { AccessionsCards } from "../components/AccessionsCards.tsx";
 import type { AccessionsQueryFilters } from "../apiTypes/apiRequests.ts";
 import type { ListAccessions } from "../apiTypes/apiResponses.ts";
 import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/SubjectsAutocomplete.tsx";
+import { useUser } from "../hooks/useUser.ts";
 
 export default function Archive() {
   const { t, i18n } = useTranslation();
@@ -50,6 +51,8 @@ export default function Archive() {
   const [dateTo, setDateTo] = useState<null | Date>(null);
   const [queryTerm, setQueryTerm] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+    const { isLoggedIn } = useUser();
+  
   function buildFilters(queryFilters: AccessionsQueryFilters) {
     let queryParams = "";
     for (const [key, value] of Object.entries(queryFilters)) {
@@ -218,7 +221,7 @@ export default function Archive() {
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <CreateAccession />
+                {isLoggedIn ? <CreateAccession /> : null}
               </ModalBody>
               <ModalFooter />
             </ModalContent>

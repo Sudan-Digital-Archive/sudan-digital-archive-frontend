@@ -183,7 +183,6 @@ export function CreateAccession() {
 
     try {
       const subjectIds = subjects.map((subject) => subject.value);
-
       const response = await fetch(`${appConfig.apiURL}accessions`, {
         method: "POST",
         headers: {
