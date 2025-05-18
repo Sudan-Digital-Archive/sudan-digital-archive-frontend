@@ -21,7 +21,7 @@ import type { ChangeEvent, FormEvent } from "react";
 
 import type { SubjectOption } from "../subjectsAutocomplete/types.ts";
 
-interface CreateAccessionProps {
+interface CreateUpdateAccessionProps {
   accessionId?: string;
   defaultValues?: {
     metadata_title: string;
@@ -32,10 +32,10 @@ interface CreateAccessionProps {
     url: string;
   };
 }
-export function CreateAccession({
+export function CreateUpdateAccession({
   accessionId,
   defaultValues,
-}: CreateAccessionProps) {
+}: CreateUpdateAccessionProps) {
   const { t, i18n } = useTranslation();
   const toast = useToast();
 

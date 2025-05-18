@@ -18,7 +18,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
-import { CreateAccession } from "../components/forms/CreateAccession.tsx";
+import { CreateUpdateAccession } from "../components/forms/CreateUpdateAccession.tsx";
 import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
 import { useCallback, useEffect, useState } from "react";
@@ -227,7 +227,7 @@ export default function Archive() {
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                {isLoggedIn ? <CreateAccession /> : null}
+                {isLoggedIn ? <CreateUpdateAccession /> : null}
               </ModalBody>
               <ModalFooter />
             </ModalContent>
