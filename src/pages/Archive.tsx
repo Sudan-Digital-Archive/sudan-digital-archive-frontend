@@ -51,7 +51,7 @@ export default function Archive() {
   const [dateTo, setDateTo] = useState<null | Date>(null);
   const [queryTerm, setQueryTerm] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-    const { isLoggedIn } = useUser();
+  const { isLoggedIn } = useUser();
   
   function buildFilters(queryFilters: AccessionsQueryFilters) {
     let queryParams = "";
@@ -110,8 +110,10 @@ export default function Archive() {
   const fetchAccessions = useCallback(
     async (filters: AccessionsQueryFilters) => {
       try {
+        const endpoint = isLoggedIn ? `${appConfig.apiURL}accessions/private` : `${appConfig.apiURL}accessions`;
+        const url = `${endpoint}?${buildFilters({...filters, is_private: isLoggedIn})}`;
         const response = await fetch(
-          `${appConfig.apiURL}accessions?${buildFilters(filters)}`,
+          url,
           {
             headers: {
               Accept: "application/json",
@@ -130,7 +132,7 @@ export default function Archive() {
         setIsLoading(false);
       }
     },
-    []
+    [isLoggedIn]
   );
 
   useEffect(() => {
@@ -141,6 +143,10 @@ export default function Archive() {
       setIsLoading(false);
     };
   }, [fetchAccessions, queryFilters]);
+
+  const handleAccessionsRefresh = () => {
+    fetchAccessions(queryFilters);
+  };
 
   return (
     <>
@@ -229,7 +235,7 @@ export default function Archive() {
           {isLoading || !accessions ? (
             <Spinner />
           ) : (
-            <AccessionsCards accessions={accessions.items} />
+            <AccessionsCards accessions={accessions.items} onRefresh={handleAccessionsRefresh} isLoggedIn={isLoggedIn} />
           )}
           {accessions && accessions?.items.length > 0 && !isLoading && (
             <HStack mt={3}>

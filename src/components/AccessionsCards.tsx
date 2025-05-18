@@ -17,12 +17,15 @@ import {
 import { useTranslation } from "react-i18next";
 import type { AccessionWithMetadata } from "../apiTypes/apiResponses";
 import { NavLink } from "react-router";
+import { DeleteAccession } from "./forms/DeleteAccession";
 
 interface AccessionsCardsProps {
   accessions: AccessionWithMetadata[];
+  onRefresh: () => void;
+  isLoggedIn: boolean;
 }
 
-export function AccessionsCards({ accessions }: AccessionsCardsProps) {
+export function AccessionsCards({ accessions, isLoggedIn, onRefresh }: AccessionsCardsProps) {
   const { t, i18n } = useTranslation();
 
   return (
@@ -74,8 +77,8 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
                 fontSize={i18n.language === "en" ? "md" : "lg"}
               />
             </CardBody>
-            <CardFooter>
-              <NavLink to={`/archive/${accession.id}`}>
+            <CardFooter justifyContent="space-between">
+              <NavLink to={`/archive/${accession.id}?isPrivate=${accession.is_private}`}>
                 <Button
                   colorScheme="purple"
                   fontSize={i18n.language === "en" ? "0.8em" : "1em"}
@@ -83,6 +86,18 @@ export function AccessionsCards({ accessions }: AccessionsCardsProps) {
                   {t("archive_view_record_button")}
                 </Button>
               </NavLink>
+              {isLoggedIn && (
+                <DeleteAccession
+                  accessionId={accession.id}
+                  isOpen={false}
+                  onClose={() => {
+                    onRefresh();
+                  }}
+                  onSuccess={() => {
+                    onRefresh();
+                  }}
+                />
+              )}
             </CardFooter>
           </Card>
         );

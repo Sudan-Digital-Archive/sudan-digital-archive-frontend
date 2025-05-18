@@ -10,6 +10,7 @@ import {
   RadioGroup,
   Stack,
   Box,
+  Switch,
 } from "@chakra-ui/react";
 import { ArchiveDatePicker } from "../DatePicker.tsx";
 import { useTranslation } from "react-i18next";
@@ -19,17 +20,39 @@ import { SubjectsAutocomplete } from "../subjectsAutocomplete/SubjectsAutocomple
 import type { ChangeEvent, FormEvent } from "react";
 
 import type { SubjectOption } from "../subjectsAutocomplete/types.ts";
-export function CreateAccession() {
+
+interface CreateAccessionProps {
+  accessionId?: string;
+  defaultValues?: {
+    metadata_title: string;
+    metadata_description?: string;
+    metadata_time: string;
+    metadata_subjects: number[];
+    is_private: boolean;
+    url: string;
+  };
+}
+export function CreateAccession({
+  accessionId,
+  defaultValues,
+}: CreateAccessionProps) {
   const { t, i18n } = useTranslation();
   const toast = useToast();
 
-  const [url, setUrl] = useState("");
-  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState(defaultValues?.url || "");
+  const [title, setTitle] = useState(defaultValues?.metadata_title || "");
   const [subjects, setSubjects] = useState<readonly SubjectOption[]>([]);
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
+  const [description, setDescription] = useState(
+    defaultValues?.metadata_description || ""
+  );
+  const [date, setDate] = useState<Date | null>(
+    defaultValues?.metadata_time ? new Date(defaultValues.metadata_time) : null
+  );
   const [browserProfile, setBrowserProfile] = useState<string>(
     t("create_accession_crawl_type_default")
+  );
+  const [isPrivate, setIsPrivate] = useState(
+    defaultValues?.is_private || false
   );
 
   const [urlError, setUrlError] = useState("");
@@ -183,27 +206,34 @@ export function CreateAccession() {
 
     try {
       const subjectIds = subjects.map((subject) => subject.value);
-      const response = await fetch(`${appConfig.apiURL}accessions`, {
-        method: "POST",
+      const payload = {
+        metadata_language: i18n.language === "en" ? "english" : "arabic",
+        url: url,
+        metadata_title: title,
+        metadata_subjects: subjectIds,
+        metadata_description: description ? description : null,
+        metadata_time: `${
+          new Date(date as Date).toISOString().split("T")[0]
+        }T00:00:00`,
+        browser_profile: accessionId ? null: getBrowserProfile(browserProfile),
+        is_private: accessionId? isPrivate: null,
+      };
+      const method = accessionId ? "PUT" : "POST";
+      const urlPath = accessionId
+        ? `${appConfig.apiURL}accessions/${accessionId}`
+        : `${appConfig.apiURL}accessions`;
+
+      const response = await fetch(urlPath, {
+        method: method,
         headers: {
           Accept: "application/json",
           "content-type": "application/json",
         },
-        body: JSON.stringify({
-          metadata_language: i18n.language === "en" ? "english" : "arabic",
-          url: url,
-          metadata_title: title,
-          metadata_subjects: subjectIds,
-          metadata_description: description ? description : null,
-          metadata_time: `${
-            new Date(date as Date).toISOString().split("T")[0]
-          }T00:00:00`,
-          browser_profile: getBrowserProfile(browserProfile),
-        }),
+        body: JSON.stringify(payload),
       });
 
       const responseText = await response.text();
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         toast({
           title: t("create_accession_crawling_url_title"),
           description: t("create_accession_success_description"),
@@ -217,6 +247,7 @@ export function CreateAccession() {
         setDescription("");
         setDate(null);
         setBrowserProfile(t("create_accession_crawl_type_default"));
+        setIsPrivate(false);
       } else {
         console.error(responseText);
         toast({
@@ -312,6 +343,18 @@ export function CreateAccession() {
           </Stack>
         </RadioGroup>
       </FormControl>
+
+      <FormControl display="flex" alignItems="center" mt={5}>
+        <FormLabel htmlFor="is-private-switch" mb="0">
+          {t("create_accession_private_label")}
+        </FormLabel>
+        <Switch
+          id="is-private-switch"
+          isChecked={isPrivate}
+          onChange={(e) => setIsPrivate(e.target.checked)}
+        />
+      </FormControl>
+
       <Button
         mt={4}
         colorScheme="cyan"

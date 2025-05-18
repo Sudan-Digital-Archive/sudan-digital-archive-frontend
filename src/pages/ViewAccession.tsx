@@ -28,8 +28,13 @@ import {
   useDisclosure,
   Heading,
   Divider,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 import { useParsedDate } from "../hooks/useParsedDate.ts";
+import { useUser } from "../hooks/useUser.ts"
 
 interface AccessionInfoProps {
   timestamp: string;
@@ -56,13 +61,9 @@ function AccessionInfo({
         <Text fontSize="xs">
           {t("view_accession_captured")} {parseDate(timestamp)}
         </Text>
-        
       </Box>
       {isMobile ? (
-        <Divider
-          orientation="horizontal"
-          borderColor="white"
-        />
+        <Divider orientation="horizontal" borderColor="white" />
       ) : (
         <Divider
           orientation="vertical"
@@ -86,6 +87,8 @@ export default function ViewAccession() {
   const isMobile = width <= 768;
   const [searchParams] = useSearchParams();
   const lang = searchParams.get("lang") || "en";
+  const isPrivate = searchParams.get("isPrivate") === "true";
+  const { isLoggedIn } = useUser();
 
   useEffect(() => {
     i18n.changeLanguage(lang);
@@ -94,7 +97,10 @@ export default function ViewAccession() {
   useEffect(() => {
     const fetchAccession = async () => {
       try {
-        const response = await fetch(`${appConfig.apiURL}accessions/${id}`, {
+        const endpoint = isPrivate
+          ? `${appConfig.apiURL}accessions/private/${id}`
+          : `${appConfig.apiURL}accessions/${id}`;
+        const response = await fetch(endpoint, {
           headers: {
             Accept: "application/json",
           },
@@ -115,7 +121,17 @@ export default function ViewAccession() {
       setReplayerState({ source: "", url: "" });
       setAccession(null);
     };
-  }, [id]);
+  }, [id, isPrivate]);
+
+  if (isPrivate && !isLoggedIn) {
+    return (
+      <Alert status="warning">
+        <AlertIcon />
+        <AlertTitle>{t("login_required")}</AlertTitle>
+        <AlertDescription>{t("login_required_description")}</AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
     <>
@@ -132,7 +148,7 @@ export default function ViewAccession() {
           ) : (
             <>
               {isMobile ? (
-                <VStack m={2} spacing={2} alignItems="center" >
+                <VStack m={2} spacing={2} alignItems="center">
                   <AccessionInfo
                     timestamp={accession.accession.crawl_timestamp}
                     id={id}
