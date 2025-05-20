@@ -34,7 +34,7 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { useParsedDate } from "../hooks/useParsedDate.ts";
-import { useUser } from "../hooks/useUser.ts"
+import { useUser } from "../hooks/useUser.ts";
 
 interface AccessionInfoProps {
   timestamp: string;
@@ -101,6 +101,7 @@ export default function ViewAccession() {
           ? `${appConfig.apiURL}accessions/private/${id}`
           : `${appConfig.apiURL}accessions/${id}`;
         const response = await fetch(endpoint, {
+          credentials: "include",
           headers: {
             Accept: "application/json",
           },

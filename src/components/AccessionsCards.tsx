@@ -18,15 +18,23 @@ import { useTranslation } from "react-i18next";
 import type { AccessionWithMetadata } from "../apiTypes/apiResponses";
 import { NavLink } from "react-router";
 import { DeleteAccession } from "./forms/DeleteAccession";
+import { useUser } from "../hooks/useUser.ts";
+import React from "react";
 
 interface AccessionsCardsProps {
   accessions: AccessionWithMetadata[];
   onRefresh: () => void;
-  isLoggedIn: boolean;
 }
 
-export function AccessionsCards({ accessions, isLoggedIn, onRefresh }: AccessionsCardsProps) {
+export function AccessionsCards({ accessions, onRefresh }: AccessionsCardsProps) {
   const { t, i18n } = useTranslation();
+  const { isLoggedIn } = useUser();
+  console.log(`logged in card ${isLoggedIn}`);
+
+  const [deleteAccessionId, setDeleteAccessionId] = React.useState<string | null>(null);
+  const isDeleteModalOpen = (accessionId: string) => deleteAccessionId === accessionId;
+  const onDeleteOpen = (accessionId: string) => setDeleteAccessionId(accessionId);
+  const onDeleteClose = () => setDeleteAccessionId(null);
 
   return (
     <SimpleGrid spacing={10} columns={{ sm: 1, md: 2, lg: 3 }} my={5} mx={5}>
@@ -89,14 +97,18 @@ export function AccessionsCards({ accessions, isLoggedIn, onRefresh }: Accession
               {isLoggedIn && (
                 <DeleteAccession
                   accessionId={accession.id}
-                  isOpen={false}
-                  onClose={() => {
-                    onRefresh();
-                  }}
+                  isOpen={isDeleteModalOpen(accession.id)}
+                  onClose={onDeleteClose}
                   onSuccess={() => {
                     onRefresh();
+                    onDeleteClose();
                   }}
                 />
+              )}
+              {isLoggedIn && !isDeleteModalOpen(accession.id) && (
+                <Button colorScheme="red" onClick={() => onDeleteOpen(accession.id)}>
+                  {t("delete")}
+                </Button>
               )}
             </CardFooter>
           </Card>

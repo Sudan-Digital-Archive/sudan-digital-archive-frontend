@@ -25,8 +25,8 @@ export default function JWTAuth() {
   const { setIsLoggedIn } = useUser();
 
   useEffect(() => {
-    const sessionId = searchParams.get("sessionID");
-    const userId = searchParams.get("userID");
+    const sessionId = searchParams.get("sessionId");
+    const userId = searchParams.get("userId");
     if (sessionId && userId) {
       const authorizeUser = async () => {
         setIsLoading(true);
@@ -38,7 +38,7 @@ export default function JWTAuth() {
               "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify({ sessionId, userId }),
+            body: JSON.stringify({ "session_id": sessionId, "user_id": userId }),
           });
 
           if (response.status === 200) {
