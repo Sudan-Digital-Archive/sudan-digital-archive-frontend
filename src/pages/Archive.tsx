@@ -174,14 +174,16 @@ export default function Archive() {
       />
       <SlideFade in>
         <VStack alignItems="center" justifyContent="center">
-          <Button
-            colorScheme="pink"
-            rightIcon={<FilePlus />}
-            variant="solid"
-            onClick={onOpen}
-          >
-            {t("archive_add_record")}
-          </Button>
+          {isLoggedIn ? (
+            <Button
+              colorScheme="pink"
+              rightIcon={<FilePlus />}
+              variant="solid"
+              onClick={onOpen}
+            >
+              {t("archive_add_record")}
+            </Button>
+          ) : null}
           <Box w="100%" p={10}>
             <Input
               value={queryTerm}
