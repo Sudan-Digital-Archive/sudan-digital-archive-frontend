@@ -6,4 +6,5 @@ export type AccessionsQueryFilters = {
   per_page?: number;
   query_term?: string;
   metadata_subjects?: number[]
+  is_private?: boolean
 };

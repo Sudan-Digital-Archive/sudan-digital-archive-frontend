@@ -1,5 +1,5 @@
 export type AccessionWithMetadata = {
-  id: number;
+  id: string;
   crawl_status: string;
   crawl_timestamp: string;
   crawl_id: string;
@@ -17,6 +17,7 @@ export type AccessionWithMetadata = {
   subjects_ar_ids: number[] | null;
   has_english_metadata: boolean;
   has_arabic_metadata: boolean;
+  is_private?: boolean;
 };
 
 export type ListAccessions = {

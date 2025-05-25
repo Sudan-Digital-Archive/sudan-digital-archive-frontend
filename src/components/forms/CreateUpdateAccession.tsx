@@ -10,6 +10,7 @@ import {
   RadioGroup,
   Stack,
   Box,
+  Switch,
 } from "@chakra-ui/react";
 import { ArchiveDatePicker } from "../DatePicker.tsx";
 import { useTranslation } from "react-i18next";
@@ -17,20 +18,53 @@ import { appConfig } from "../../constants.ts";
 import { useState, useEffect, useCallback } from "react";
 import { SubjectsAutocomplete } from "../subjectsAutocomplete/SubjectsAutocomplete.tsx";
 import type { ChangeEvent, FormEvent } from "react";
-
+import type { AccessionWithMetadata } from "../../apiTypes/apiResponses.ts";
 import type { SubjectOption } from "../subjectsAutocomplete/types.ts";
-export function CreateAccession() {
+
+interface CreateUpdateAccessionProps {
+  accessionToUpdate?: AccessionWithMetadata;
+  onSuccess?: () => void;
+}
+
+export function CreateUpdateAccession({
+  accessionToUpdate,
+  onSuccess,
+}: CreateUpdateAccessionProps) {
   const { t, i18n } = useTranslation();
   const toast = useToast();
+  const isEditMode = !!accessionToUpdate;
 
-  const [url, setUrl] = useState("");
-  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState(accessionToUpdate?.seed_url || "");
+  const [title, setTitle] = useState(
+    (i18n.language === "en" ? accessionToUpdate?.title_en : accessionToUpdate?.title_ar) || ""
+  );
   const [subjects, setSubjects] = useState<readonly SubjectOption[]>([]);
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState<Date | null>(null);
+  const [description, setDescription] = useState(
+    (i18n.language === "en" ? accessionToUpdate?.description_en : accessionToUpdate?.description_ar) || ""
+  );
+  const [date, setDate] = useState<Date | null>(
+    accessionToUpdate?.dublin_metadata_date ? new Date(accessionToUpdate.dublin_metadata_date) : null
+  );
   const [browserProfile, setBrowserProfile] = useState<string>(
     t("create_accession_crawl_type_default")
   );
+  const [isPrivate, setIsPrivate] = useState(accessionToUpdate?.is_private || false);
+
+  // Initialize subjects if editing an existing record
+  useEffect(() => {
+    if (accessionToUpdate) {
+      const subjectIds = i18n.language === "en" ? accessionToUpdate.subjects_en_ids : accessionToUpdate.subjects_ar_ids;
+      const subjectLabels = i18n.language === "en" ? accessionToUpdate.subjects_en : accessionToUpdate.subjects_ar;
+      
+      if (subjectIds && subjectLabels && subjectIds.length === subjectLabels.length) {
+        const initialSubjects: SubjectOption[] = subjectIds.map((id, index) => ({
+          value: id,
+          label: subjectLabels[index] || "",
+        }));
+        setSubjects(initialSubjects);
+      }
+    }
+  }, [accessionToUpdate, i18n.language]);
 
   const [urlError, setUrlError] = useState("");
   const [titleError, setTitleError] = useState("");
@@ -183,48 +217,70 @@ export function CreateAccession() {
 
     try {
       const subjectIds = subjects.map((subject) => subject.value);
+      const payload = {
+        metadata_language: i18n.language === "en" ? "english" : "arabic",
+        url: url,
+        metadata_title: title,
+        metadata_subjects: subjectIds,
+        metadata_description: description || null,
+        metadata_time: `${
+          new Date(date as Date).toISOString().split("T")[0]
+        }T00:00:00`,
+        // TODO: Change me - add browser profile into the backend so it's in the accession w metadata
+        browser_profile: isEditMode ? null : getBrowserProfile(browserProfile),
+        is_private: isPrivate,
+      };
 
-      const response = await fetch(`${appConfig.apiURL}accessions`, {
-        method: "POST",
+      const method = isEditMode ? "PUT" : "POST";
+      const urlPath = isEditMode
+        ? `${appConfig.apiURL}accessions/${accessionToUpdate?.id}`
+        : `${appConfig.apiURL}accessions`;
+
+      const response = await fetch(urlPath, {
+        method,
+        credentials: "include",
         headers: {
           Accept: "application/json",
-          "content-type": "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          metadata_language: i18n.language === "en" ? "english" : "arabic",
-          url: url,
-          metadata_title: title,
-          metadata_subjects: subjectIds,
-          metadata_description: description ? description : null,
-          metadata_time: `${
-            new Date(date as Date).toISOString().split("T")[0]
-          }T00:00:00`,
-          browser_profile: getBrowserProfile(browserProfile),
-        }),
+        body: JSON.stringify(payload),
       });
 
-      const responseText = await response.text();
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         toast({
-          title: t("create_accession_crawling_url_title"),
-          description: t("create_accession_success_description"),
+          title: isEditMode 
+            ? t("update_accession_success_title")
+            : t("create_accession_crawling_url_title"),
+          description: isEditMode
+            ? t("update_accession_success_description")
+            : t("create_accession_success_description"),
           status: "success",
           duration: 9000,
           isClosable: true,
         });
-        setUrl("");
-        setTitle("");
-        setSubjects([]);
-        setDescription("");
-        setDate(null);
-        setBrowserProfile(t("create_accession_crawl_type_default"));
+
+        if (isEditMode && onSuccess) {
+          onSuccess();
+        } else {
+          // Clear form for create mode
+          setUrl("");
+          setTitle("");
+          setSubjects([]);
+          setDescription("");
+          setDate(null);
+          setBrowserProfile(t("create_accession_crawl_type_default"));
+          setIsPrivate(false);
+        }
       } else {
-        console.error(responseText);
+        const errorText = await response.text();
+        console.error(errorText);
         toast({
-          title: t("create_accession_error_toast_title"),
-          description: `${t(
-            "create_accession_error_toast_description"
-          )} ${responseText}`,
+          title: isEditMode
+            ? t("update_accession_error_title")
+            : t("create_accession_error_toast_title"),
+          description: `${isEditMode
+            ? t("update_accession_error_description")
+            : t("create_accession_error_toast_description")} ${errorText}`,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -233,8 +289,12 @@ export function CreateAccession() {
     } catch (error) {
       console.error(error);
       toast({
-        title: t("create_accession_error_toast_title"),
-        description: t("create_accession_error_toast_description"),
+        title: isEditMode
+          ? t("update_accession_error_title")
+          : t("create_accession_error_toast_title"),
+        description: isEditMode
+          ? t("update_accession_error_description")
+          : t("create_accession_error_toast_description"),
         status: "error",
         duration: 9000,
         isClosable: true,
@@ -259,6 +319,7 @@ export function CreateAccession() {
             }, 300)
           }
           placeholder={t("create_accession_url_field_placeholder")}
+          isDisabled={isEditMode}
         />
         <FormErrorMessage>{urlError}</FormErrorMessage>
       </FormControl>
@@ -278,7 +339,17 @@ export function CreateAccession() {
           {t("create_accession_subjects_field_label")}
         </FormLabel>
         <Box my={2}>
-          <SubjectsAutocomplete onChange={handleSubjectsChange} />
+          <SubjectsAutocomplete 
+            onChange={handleSubjectsChange}
+            defaultValues={
+              accessionToUpdate
+                ? {
+                    values: (i18n.language === "en" ? accessionToUpdate.subjects_en_ids : accessionToUpdate.subjects_ar_ids) || [],
+                    labels: (i18n.language === "en" ? accessionToUpdate.subjects_en : accessionToUpdate.subjects_ar) || [],
+                  }
+                : undefined
+            }
+          />
         </Box>
         <FormErrorMessage>{subjectsError}</FormErrorMessage>
       </FormControl>
@@ -300,19 +371,33 @@ export function CreateAccession() {
         <FormErrorMessage mb={2}>{dateError}</FormErrorMessage>
       </FormControl>
 
-      <FormControl isRequired>
-        <FormLabel mt={5}>{t("create_accession_crawl_type_label")}</FormLabel>
-        <RadioGroup onChange={setBrowserProfile} value={browserProfile}>
-          <Stack direction="row">
-            <Radio value={t("create_accession_crawl_type_default")}>
-              {t("create_accession_crawl_type_default")}
-            </Radio>
-            <Radio value={t("create_accession_crawl_type_facebook")}>
-              {t("create_accession_crawl_type_facebook")}
-            </Radio>
-          </Stack>
-        </RadioGroup>
+      {!isEditMode && (
+        <FormControl isRequired>
+          <FormLabel mt={5}>{t("create_accession_crawl_type_label")}</FormLabel>
+          <RadioGroup onChange={setBrowserProfile} value={browserProfile}>
+            <Stack direction="row">
+              <Radio value={t("create_accession_crawl_type_default")}>
+                {t("create_accession_crawl_type_default")}
+              </Radio>
+              <Radio value={t("create_accession_crawl_type_facebook")}>
+                {t("create_accession_crawl_type_facebook")}
+              </Radio>
+            </Stack>
+          </RadioGroup>
+        </FormControl>
+      )}
+
+      <FormControl display="flex" alignItems="center" mt={5}>
+        <FormLabel htmlFor="is-private-switch" mb="0">
+          {t("create_accession_private_label")}
+        </FormLabel>
+        <Switch
+          id="is-private-switch"
+          isChecked={isPrivate}
+          onChange={(e) => setIsPrivate(e.target.checked)}
+        />
       </FormControl>
+
       <Button
         mt={4}
         colorScheme="cyan"
@@ -320,7 +405,7 @@ export function CreateAccession() {
         type="submit"
         disabled={!isFormValid}
       >
-        {t("create_accession_submit_field_label")}
+        {isEditMode ? t("edit_accession_submit_button") : t("create_accession_submit_field_label")}
       </Button>
     </form>
   );

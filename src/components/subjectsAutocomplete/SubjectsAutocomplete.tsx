@@ -1,27 +1,43 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, useToast } from "@chakra-ui/react";
-import { CreatableSelect } from "chakra-react-select";
+import { Box, useToast, IconButton, HStack } from "@chakra-ui/react";
+import { CreatableSelect, type OptionProps } from "chakra-react-select";
+import { DeleteIcon } from "@chakra-ui/icons";
 import { appConfig } from "../../constants";
 import type { Subject, SubjectsResponse } from "../../apiTypes/apiResponses";
 import { SubjectTag } from "../SubjectTag";
 import type { SubjectOption } from "./types";
+import { useUser } from "../../hooks/useUser";
 
 interface SubjectsAutocompleteProps {
   menuPlacement?: "top" | "bottom";
   onChange?: (values: readonly SubjectOption[]) => void;
+  defaultValues?: {
+    values: number[];
+    labels: string[];
+  };
 }
 
 export const SubjectsAutocomplete = ({
   onChange,
   menuPlacement = "bottom",
+  defaultValues,
 }: SubjectsAutocompleteProps) => {
   const { t, i18n } = useTranslation();
+  const { isLoggedIn } = useUser();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreatingNewSubject, setIsCreatingNewSubject] = useState(false);
+  const [isDeletingSubject, setIsDeletingSubject] = useState(false);
   const toast = useToast();
-  const [selectedOptions, setSelectedOptions] = useState<SubjectOption[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<SubjectOption[]>(
+    defaultValues
+      ? defaultValues.values.map((value, index) => ({
+          value,
+          label: defaultValues.labels[index],
+        }))
+      : []
+  );
 
   const apiLang = i18n.language === "en" ? "english" : "arabic";
 
@@ -65,6 +81,7 @@ export const SubjectsAutocomplete = ({
     setIsCreatingNewSubject(true);
     try {
       const response = await fetch(`${appConfig.apiURL}metadata-subjects`, {
+        credentials: "include",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +100,9 @@ export const SubjectsAutocomplete = ({
       setSubjects((prev) => [...prev, newSubject]);
 
       toast({
-        title: t("subjects_autocomplete_create_success", { subject: newSubject.subject }),
+        title: t("subjects_autocomplete_create_success", {
+          subject: newSubject.subject,
+        }),
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -101,6 +120,54 @@ export const SubjectsAutocomplete = ({
       return null;
     } finally {
       setIsCreatingNewSubject(false);
+    }
+  };
+
+  const deleteSubject = async (subjectId: number) => {
+    setIsDeletingSubject(true);
+    try {
+      const response = await fetch(
+        `${appConfig.apiURL}metadata-subjects/${subjectId}`,
+        {
+          credentials: "include",
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            lang: apiLang,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      setSubjects((prev) => prev.filter((s) => s.id !== subjectId));
+      setSelectedOptions((prev) => prev.filter((o) => o.value !== subjectId));
+
+      toast({
+        title: t("subjects_autocomplete_delete_success"),
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      if (onChange) {
+        onChange(selectedOptions.filter((o) => o.value !== subjectId));
+      }
+    } catch (error) {
+      console.error("Error deleting subject:", error);
+      toast({
+        title: t("subjects_autocomplete_error_deleting_subject"),
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsDeletingSubject(false);
     }
   };
 
@@ -134,13 +201,43 @@ export const SubjectsAutocomplete = ({
 
   const customComponents = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    MultiValue: ({ removeProps, ...props }: any) => {
+    MultiValue: ({ removeProps, ...props }: any) => (
+      <SubjectTag
+        label={props.data.label}
+        hasCloseButton={true}
+        onClose={removeProps.onClick}
+      />
+    ),
+    Option: (props: OptionProps<SubjectOption>) => {
       return (
-        <SubjectTag
-          label={props.data.label}
-          hasCloseButton={true}
-          onClose={removeProps.onClick}
-        />
+        <HStack
+          {...props.innerProps}
+          px={4}
+          py={2}
+          bg={props.isFocused ? "gray.100" : "transparent"}
+          _dark={{
+            bg: props.isFocused ? "gray.700" : "transparent",
+          }}
+          justify="space-between"
+          width="100%"
+          cursor="pointer"
+        >
+          <Box>{props.data.label}</Box>
+          {isLoggedIn && (
+            <IconButton
+              aria-label={t("delete")}
+              icon={<DeleteIcon />}
+              size="sm"
+              colorScheme="red"
+              variant="ghost"
+              isLoading={isDeletingSubject}
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteSubject(props.data.value);
+              }}
+            />
+          )}
+        </HStack>
       );
     },
   };
@@ -153,10 +250,12 @@ export const SubjectsAutocomplete = ({
         options={subjectOptions}
         placeholder={t("subjects_autocomplete_search_subjects")}
         noOptionsMessage={() => t("subjects_autocomplete_no_subjects_found")}
-        formatCreateLabel={(inputValue) => `${t("subjects_autocomplete_create")} "${inputValue}"`}
+        formatCreateLabel={(inputValue) =>
+          `${t("subjects_autocomplete_create")} "${inputValue}"`
+        }
         menuPlacement={menuPlacement}
         isLoading={isLoading}
-        isDisabled={isLoading || isCreatingNewSubject}
+        isDisabled={isLoading || isCreatingNewSubject || isDeletingSubject}
         value={selectedOptions}
         onChange={handleChange}
         onCreateOption={handleCreateOption}
@@ -188,7 +287,6 @@ export const SubjectsAutocomplete = ({
           }),
           option: (provided, { isSelected }) => ({
             ...provided,
-
             color: isSelected ? "grey.300" : provided.color,
             _dark: {
               backgroundColor: isSelected

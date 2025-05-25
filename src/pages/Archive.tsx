@@ -18,7 +18,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
-import { CreateAccession } from "../components/forms/CreateAccession.tsx";
+import { CreateUpdateAccession } from "../components/forms/CreateUpdateAccession.tsx";
 import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
 import { useCallback, useEffect, useState } from "react";
@@ -29,6 +29,7 @@ import { AccessionsCards } from "../components/AccessionsCards.tsx";
 import type { AccessionsQueryFilters } from "../apiTypes/apiRequests.ts";
 import type { ListAccessions } from "../apiTypes/apiResponses.ts";
 import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/SubjectsAutocomplete.tsx";
+import { useUser } from "../hooks/useUser.ts";
 
 export default function Archive() {
   const { t, i18n } = useTranslation();
@@ -50,6 +51,7 @@ export default function Archive() {
   const [dateTo, setDateTo] = useState<null | Date>(null);
   const [queryTerm, setQueryTerm] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
+  const { isLoggedIn } = useUser();
   function buildFilters(queryFilters: AccessionsQueryFilters) {
     let queryParams = "";
     for (const [key, value] of Object.entries(queryFilters)) {
@@ -107,14 +109,19 @@ export default function Archive() {
   const fetchAccessions = useCallback(
     async (filters: AccessionsQueryFilters) => {
       try {
-        const response = await fetch(
-          `${appConfig.apiURL}accessions?${buildFilters(filters)}`,
-          {
-            headers: {
-              Accept: "application/json",
-            },
-          }
-        );
+        const endpoint = isLoggedIn
+          ? `${appConfig.apiURL}accessions/private`
+          : `${appConfig.apiURL}accessions`;
+        const url = `${endpoint}?${buildFilters({
+          ...filters,
+          is_private: isLoggedIn,
+        })}`;
+        const response = await fetch(url, {
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+          },
+        });
         const data: ListAccessions = await response.json();
         setAccessions(data);
         setPagination({
@@ -127,7 +134,7 @@ export default function Archive() {
         setIsLoading(false);
       }
     },
-    []
+    [isLoggedIn]
   );
 
   useEffect(() => {
@@ -138,6 +145,10 @@ export default function Archive() {
       setIsLoading(false);
     };
   }, [fetchAccessions, queryFilters]);
+
+  const handleAccessionsRefresh = () => {
+    fetchAccessions(queryFilters);
+  };
 
   return (
     <>
@@ -163,14 +174,16 @@ export default function Archive() {
       />
       <SlideFade in>
         <VStack alignItems="center" justifyContent="center">
-          <Button
-            colorScheme="pink"
-            rightIcon={<FilePlus />}
-            variant="solid"
-            onClick={onOpen}
-          >
-            {t("archive_add_record")}
-          </Button>
+          {isLoggedIn ? (
+            <Button
+              colorScheme="pink"
+              rightIcon={<FilePlus />}
+              variant="solid"
+              onClick={onOpen}
+            >
+              {t("archive_add_record")}
+            </Button>
+          ) : null}
           <Box w="100%" p={10}>
             <Input
               value={queryTerm}
@@ -218,7 +231,7 @@ export default function Archive() {
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <CreateAccession />
+                {isLoggedIn ? <CreateUpdateAccession /> : null}
               </ModalBody>
               <ModalFooter />
             </ModalContent>
@@ -226,7 +239,10 @@ export default function Archive() {
           {isLoading || !accessions ? (
             <Spinner />
           ) : (
-            <AccessionsCards accessions={accessions.items} />
+            <AccessionsCards
+              accessions={accessions.items}
+              onRefresh={handleAccessionsRefresh}
+            />
           )}
           {accessions && accessions?.items.length > 0 && !isLoading && (
             <HStack mt={3}>

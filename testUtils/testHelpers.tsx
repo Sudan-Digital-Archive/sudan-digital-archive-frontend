@@ -10,6 +10,7 @@ import { registerLocale } from "react-datepicker";
 import { ar } from "date-fns/locale";
 import { ChakraProvider } from "@chakra-ui/react";
 import { vi } from "vitest";
+import { UserProvider } from "../src/context/UserContext";
 
 export const resetLanguage = () => {
   i18n.changeLanguage("en");
@@ -61,7 +62,11 @@ export const renderWithProviders = (
   return render(
     <BrowserRouter>
       <ChakraProvider>
-        <I18nextProvider i18n={i18n}>{component}</I18nextProvider>
+        <I18nextProvider i18n={i18n}>
+          <UserProvider>
+            {component}
+          </UserProvider>
+        </I18nextProvider>
       </ChakraProvider>
     </BrowserRouter>
   );
