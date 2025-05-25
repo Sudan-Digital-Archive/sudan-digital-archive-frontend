@@ -140,6 +140,7 @@
     "update_accession_success_description": "The record has been updated.",
     "update_accession_error_title": "Error updating record",
     "update_accession_error_description": "An error occurred while updating the record.",
+    "edit_accession": "Edit Accession",
     "edit_accession_submit_button": "Update Record",
     "create_accession_private_label": "Private",
     "delete_accession_alert_header": "Delete Accession",
@@ -148,6 +149,8 @@
     "delete_accession_success_toast_title": "Accession deleted",
     "delete_accession_success_toast_description": "The accession has been successfully deleted.",
     "delete_accession_error_toast_title": "Error deleting accession",
-    "delete_accession_error_toast_description": "An error occurred while deleting the accession."
+    "delete_accession_error_toast_description": "An error occurred while deleting the accession.",
+    "login_required": "Login Required",
+    "login_required_description": "You must be logged in to view this record."
   }
 }

@@ -35,6 +35,8 @@ import {
 } from "@chakra-ui/react";
 import { useParsedDate } from "../hooks/useParsedDate.ts";
 import { useUser } from "../hooks/useUser.ts";
+import Menu from "../components/Menu.tsx";
+import Footer from "../components/Footer.tsx";
 
 interface AccessionInfoProps {
   timestamp: string;
@@ -126,11 +128,27 @@ export default function ViewAccession() {
 
   if (isPrivate && !isLoggedIn) {
     return (
-      <Alert status="warning">
-        <AlertIcon />
-        <AlertTitle>{t("login_required")}</AlertTitle>
-        <AlertDescription>{t("login_required_description")}</AlertDescription>
-      </Alert>
+      <>
+        <Menu />
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="30vh"
+          width="100%"
+        >
+          <Box width={{ base: "90%", md: "50%" }} margin="auto">
+            <Alert status="warning">
+              <AlertIcon />
+              <AlertTitle>{t("login_required")}</AlertTitle>
+              <AlertDescription>
+                {t("login_required_description")}
+              </AlertDescription>
+            </Alert>
+          </Box>
+        </Box>
+        <Footer />
+      </>
     );
   }
 

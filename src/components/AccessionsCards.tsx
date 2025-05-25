@@ -124,17 +124,19 @@ export function AccessionsCards({
                   <Button
                     colorScheme="purple"
                     fontSize={i18n.language === "en" ? "0.8em" : "1em"}
+                    variant="solid"
                   >
                     {t("archive_view_record_button")}
                   </Button>
                 </NavLink>
                 {isLoggedIn && (
-                  <Box mr={3}>
+                  <Box>
                     <Button
                       colorScheme="blue"
                       fontSize={i18n.language === "en" ? "0.8em" : "1em"}
                       onClick={() => handleEditClick(accession)}
-                      mr={2}
+                      mx={2}
+                      variant="solid"
                     >
                       {t("accession_card_edit_button")}
                     </Button>
@@ -152,6 +154,7 @@ export function AccessionsCards({
                         colorScheme="red"
                         onClick={() => onDeleteOpen(accession.id)}
                         fontSize={i18n.language === "en" ? "0.8em" : "1em"}
+                        variant="solid"
                       >
                         {t("accession_card_delete_button")}
                       </Button>
