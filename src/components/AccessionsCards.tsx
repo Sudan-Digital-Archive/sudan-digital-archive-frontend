@@ -34,15 +34,27 @@ interface AccessionsCardsProps {
   onRefresh: () => void;
 }
 
-export function AccessionsCards({ accessions, onRefresh }: AccessionsCardsProps) {
+export function AccessionsCards({
+  accessions,
+  onRefresh,
+}: AccessionsCardsProps) {
   const { t, i18n } = useTranslation();
   const { isLoggedIn } = useUser();
-  const [deleteAccessionId, setDeleteAccessionId] = React.useState<string | null>(null);
-  const [editAccession, setEditAccession] = React.useState<AccessionWithMetadata | null>(null);
-  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
-  
-  const isDeleteModalOpen = (accessionId: string) => deleteAccessionId === accessionId;
-  const onDeleteOpen = (accessionId: string) => setDeleteAccessionId(accessionId);
+  const [deleteAccessionId, setDeleteAccessionId] = React.useState<
+    string | null
+  >(null);
+  const [editAccession, setEditAccession] =
+    React.useState<AccessionWithMetadata | null>(null);
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
+
+  const isDeleteModalOpen = (accessionId: string) =>
+    deleteAccessionId === accessionId;
+  const onDeleteOpen = (accessionId: string) =>
+    setDeleteAccessionId(accessionId);
   const onDeleteClose = () => setDeleteAccessionId(null);
 
   const handleEditClick = (accession: AccessionWithMetadata) => {
@@ -106,7 +118,9 @@ export function AccessionsCards({ accessions, onRefresh }: AccessionsCardsProps)
                 />
               </CardBody>
               <CardFooter justifyContent="space-between">
-                <NavLink to={`/archive/${accession.id}?isPrivate=${accession.is_private}`}>
+                <NavLink
+                  to={`/archive/${accession.id}?isPrivate=${accession.is_private}`}
+                >
                   <Button
                     colorScheme="purple"
                     fontSize={i18n.language === "en" ? "0.8em" : "1em"}
@@ -115,13 +129,14 @@ export function AccessionsCards({ accessions, onRefresh }: AccessionsCardsProps)
                   </Button>
                 </NavLink>
                 {isLoggedIn && (
-                  <Box>
+                  <Box mr={3}>
                     <Button
                       colorScheme="blue"
+                      fontSize={i18n.language === "en" ? "0.8em" : "1em"}
                       onClick={() => handleEditClick(accession)}
                       mr={2}
                     >
-                      {t("edit")}
+                      {t("accession_card_edit_button")}
                     </Button>
                     <DeleteAccession
                       accessionId={accession.id}
@@ -133,8 +148,12 @@ export function AccessionsCards({ accessions, onRefresh }: AccessionsCardsProps)
                       }}
                     />
                     {!isDeleteModalOpen(accession.id) && (
-                      <Button colorScheme="red" onClick={() => onDeleteOpen(accession.id)}>
-                        {t("delete")}
+                      <Button
+                        colorScheme="red"
+                        onClick={() => onDeleteOpen(accession.id)}
+                        fontSize={i18n.language === "en" ? "0.8em" : "1em"}
+                      >
+                        {t("accession_card_delete_button")}
                       </Button>
                     )}
                   </Box>

@@ -85,13 +85,13 @@ export function Login() {
       <Box width="100%" maxWidth="500px" padding="4">
         <form onSubmit={handleSubmit} noValidate>
           <FormControl isInvalid={!!emailError}>
-            <FormLabel>Email address</FormLabel>
+            <FormLabel>{t("login_email_address")}</FormLabel>
             <Input
               type="email"
               value={email}
               onChange={handleEmailChange}
               onBlur={handleEmailBlur}
-              placeholder="Enter your email"
+              placeholder={t("login_enter_email")}
             />
             <FormErrorMessage>{emailError}</FormErrorMessage>
           </FormControl>
@@ -104,13 +104,13 @@ export function Login() {
             width="100%"
             disabled={isSubmitting}
           >
-            Request login link
+            {t("login_request_link")}
           </Button>
 
           {isSuccess && (
             <Center mt={4} color="green.500">
               <CheckCircleIcon mr={2} />
-              <Text>Login email sent!</Text>
+              <Text>{t("login_email_sent")}</Text>
             </Center>
           )}
 

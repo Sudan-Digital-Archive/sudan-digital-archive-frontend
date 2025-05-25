@@ -81,7 +81,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                   {i18n.language === "en" ? "عربي" : "English"}
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/login">Login</NavLink>
+                  <NavLink to="/login">{t("nav_login")}</NavLink>
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -136,7 +136,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
             <Menu>
               <NavLink to="/login">
                 <MenuButton as={Button} size="sm" variant="ghost">
-                  Login
+                  {t("nav_login")}
                 </MenuButton>
               </NavLink>
             </Menu>

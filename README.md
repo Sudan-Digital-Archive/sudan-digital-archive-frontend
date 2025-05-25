@@ -1,12 +1,6 @@
 # To Dos
 
-- User context based off logged in or not
-- Create behaviour is based off logged in or not
-- Delete button with modal based off logged in or not
-- Edit button based off logged in or not
-- List with private based off logged in or not
-- If record is private in list view then click should show private record
-
+- Tidy up UX once all working
 # Overview
 
 This is the frontend for the Sudan Digital Archive project.

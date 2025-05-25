@@ -98,7 +98,7 @@ export const DeleteAccession: React.FC<DeleteAccessionProps> = ({
               ml={3}
               isLoading={isDeleting}
             >
-              {t("delete")}
+              {t("delete_accession_confirm_button")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

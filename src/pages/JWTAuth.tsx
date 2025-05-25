@@ -16,6 +16,7 @@ import { appConfig } from "../constants.ts";
 import Menu from "../components/Menu.tsx";
 import Footer from "../components/Footer.tsx";
 import { useUser } from "../hooks/useUser";
+import { useTranslation } from "react-i18next";
 
 export default function JWTAuth() {
   const [searchParams] = useSearchParams();
@@ -23,6 +24,7 @@ export default function JWTAuth() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { setIsLoggedIn } = useUser();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const sessionId = searchParams.get("sessionId");
@@ -46,11 +48,11 @@ export default function JWTAuth() {
             navigate("/archive");
           } else {
             const errorText = await response.text();
-            setError(errorText || "Unable to log you in. The magic link is not valid or has expired.");
+            setError(errorText || t("jwt_auth_invalid_link"));
           }
         } catch (error) {
           console.error("Authorization error:", error);
-          setError("An error occurred while trying to log you in. Please try again.");
+          setError(t("jwt_auth_login_error"));
         } finally {
           setIsLoading(false);
         }
@@ -58,10 +60,10 @@ export default function JWTAuth() {
 
       authorizeUser();
     } else {
-      setError("Invalid login link. Missing required information.");
+      setError(t("jwt_auth_missing_info"));
       setIsLoading(false);
     }
-  }, [navigate, searchParams, setIsLoggedIn]);
+  }, [navigate, searchParams, setIsLoggedIn, t]);
 
   return (
     <>
@@ -72,7 +74,7 @@ export default function JWTAuth() {
             <Center>
               <VStack>
                 <Spinner size="xl" />
-                <Text mt={4}>Logging you in...</Text>
+                <Text mt={4}>{t("jwt_auth_logging_in")}</Text>
               </VStack>
             </Center>
           ) : error ? (
@@ -89,7 +91,7 @@ export default function JWTAuth() {
             >
               <AlertIcon boxSize="40px" mr={0} />
               <AlertTitle mt={4} mb={1} fontSize="lg">
-                Authentication Failed
+                {t("jwt_auth_auth_failed")}
               </AlertTitle>
               <AlertDescription maxWidth="sm">
                 {error}
@@ -100,7 +102,7 @@ export default function JWTAuth() {
                 colorScheme="cyan"
                 mt={4}
               >
-                Back to Login
+                {t("jwt_auth_back_to_login")}
               </Button>
             </Alert>
           ) : null}
