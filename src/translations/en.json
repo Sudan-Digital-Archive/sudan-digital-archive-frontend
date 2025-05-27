@@ -151,6 +151,7 @@
     "delete_accession_error_toast_title": "Error deleting accession",
     "delete_accession_error_toast_description": "An error occurred while deleting the accession.",
     "login_required": "Login Required",
-    "login_required_description": "You must be logged in to view this record."
+    "login_required_description": "You must be logged in to view this record.",
+    "archive_filter_private_records": "Private records only:"
   }
 }

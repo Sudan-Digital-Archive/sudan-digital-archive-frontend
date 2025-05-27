@@ -151,6 +151,7 @@
     "delete_accession_error_toast_description": "حدث خطأ أثناء حذف السجل.",
     "edit_accession": "تعديل السجل",
     "login_required": "تسجيل الدخول مطلوب",
-    "login_required_description": "يجب عليك تسجيل الدخول لعرض هذا السجل."
+    "login_required_description": "يجب عليك تسجيل الدخول لعرض هذا السجل.",
+    "archive_filter_private_records": "السجلات الخاصة فقط:"
   }
 }
