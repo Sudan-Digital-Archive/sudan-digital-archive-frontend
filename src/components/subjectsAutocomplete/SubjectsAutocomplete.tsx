@@ -201,11 +201,9 @@ export const SubjectsAutocomplete = ({
 
   const customComponents = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    MultiValue: ({ removeProps, ...props }: any) => (
+    MultiValue: ({ ...props }: any) => (
       <SubjectTag
         label={props.data.label}
-        hasCloseButton={true}
-        onClose={removeProps.onClick}
       />
     ),
     Option: (props: OptionProps<SubjectOption>) => {
@@ -275,9 +273,6 @@ export const SubjectsAutocomplete = ({
             bg: "transparent",
             px: 2,
             cursor: "pointer",
-          }),
-          multiValue: () => ({
-            // Remove default styling since we're using our own component
           }),
           valueContainer: (provided) => ({
             ...provided,
