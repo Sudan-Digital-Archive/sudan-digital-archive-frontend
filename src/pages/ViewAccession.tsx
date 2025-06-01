@@ -55,7 +55,6 @@ function AccessionInfo({
 }: Readonly<AccessionInfoProps>) {
   const { t } = useTranslation();
   const { parseDate } = useParsedDate();
-
   return (
     <>
       <Box color="white" p={2} borderRadius="md">

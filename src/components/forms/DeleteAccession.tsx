@@ -90,7 +90,7 @@ export const DeleteAccession: React.FC<DeleteAccessionProps> = ({
 
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
-              {t("cancel")}
+              {t("delete_accession_cancel_button")}
             </Button>
             <Button
               colorScheme="red"

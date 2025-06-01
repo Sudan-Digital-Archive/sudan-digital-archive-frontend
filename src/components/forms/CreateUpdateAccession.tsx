@@ -36,31 +36,51 @@ export function CreateUpdateAccession({
 
   const [url, setUrl] = useState(accessionToUpdate?.seed_url || "");
   const [title, setTitle] = useState(
-    (i18n.language === "en" ? accessionToUpdate?.title_en : accessionToUpdate?.title_ar) || ""
+    (i18n.language === "en"
+      ? accessionToUpdate?.title_en
+      : accessionToUpdate?.title_ar) || ""
   );
   const [subjects, setSubjects] = useState<readonly SubjectOption[]>([]);
   const [description, setDescription] = useState(
-    (i18n.language === "en" ? accessionToUpdate?.description_en : accessionToUpdate?.description_ar) || ""
+    (i18n.language === "en"
+      ? accessionToUpdate?.description_en
+      : accessionToUpdate?.description_ar) || ""
   );
   const [date, setDate] = useState<Date | null>(
-    accessionToUpdate?.dublin_metadata_date ? new Date(accessionToUpdate.dublin_metadata_date) : null
+    accessionToUpdate?.dublin_metadata_date
+      ? new Date(accessionToUpdate.dublin_metadata_date)
+      : null
   );
   const [browserProfile, setBrowserProfile] = useState<string>(
     t("create_accession_crawl_type_default")
   );
-  const [isPrivate, setIsPrivate] = useState(accessionToUpdate?.is_private || false);
+  const [isPrivate, setIsPrivate] = useState(
+    accessionToUpdate?.is_private || false
+  );
 
   // Initialize subjects if editing an existing record
   useEffect(() => {
     if (accessionToUpdate) {
-      const subjectIds = i18n.language === "en" ? accessionToUpdate.subjects_en_ids : accessionToUpdate.subjects_ar_ids;
-      const subjectLabels = i18n.language === "en" ? accessionToUpdate.subjects_en : accessionToUpdate.subjects_ar;
-      
-      if (subjectIds && subjectLabels && subjectIds.length === subjectLabels.length) {
-        const initialSubjects: SubjectOption[] = subjectIds.map((id, index) => ({
-          value: id,
-          label: subjectLabels[index] || "",
-        }));
+      const subjectIds =
+        i18n.language === "en"
+          ? accessionToUpdate.subjects_en_ids
+          : accessionToUpdate.subjects_ar_ids;
+      const subjectLabels =
+        i18n.language === "en"
+          ? accessionToUpdate.subjects_en
+          : accessionToUpdate.subjects_ar;
+
+      if (
+        subjectIds &&
+        subjectLabels &&
+        subjectIds.length === subjectLabels.length
+      ) {
+        const initialSubjects: SubjectOption[] = subjectIds.map(
+          (id, index) => ({
+            value: id,
+            label: subjectLabels[index] || "",
+          })
+        );
         setSubjects(initialSubjects);
       }
     }
@@ -187,6 +207,23 @@ export function CreateUpdateAccession({
     }
   };
 
+  const handleLanguageChange = () => {
+    const newLanguage = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(newLanguage);
+    switch (newLanguage) {
+      case "en":
+        document.documentElement.lang = "en";
+        document.documentElement.dir = "ltr";
+        break;
+      case "ar":
+        document.documentElement.lang = "ar";
+        document.documentElement.dir = "rtl";
+        break;
+      default:
+        throw `Language ${newLanguage} is not supported`;
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const urlCheck = validateURL(url);
@@ -248,7 +285,7 @@ export function CreateUpdateAccession({
 
       if (response.status === 201 || response.status === 200) {
         toast({
-          title: isEditMode 
+          title: isEditMode
             ? t("update_accession_success_title")
             : t("create_accession_crawling_url_title"),
           description: isEditMode
@@ -278,9 +315,11 @@ export function CreateUpdateAccession({
           title: isEditMode
             ? t("update_accession_error_title")
             : t("create_accession_error_toast_title"),
-          description: `${isEditMode
-            ? t("update_accession_error_description")
-            : t("create_accession_error_toast_description")} ${errorText}`,
+          description: `${
+            isEditMode
+              ? t("update_accession_error_description")
+              : t("create_accession_error_toast_description")
+          } ${errorText}`,
           status: "error",
           duration: 9000,
           isClosable: true,
@@ -306,6 +345,22 @@ export function CreateUpdateAccession({
 
   return (
     <form onSubmit={handleSubmit} noValidate>
+      {isEditMode && (
+        <FormControl display="flex" alignItems="center" mb={2}>
+          <FormLabel htmlFor="language-switch" mr={2} display="flex" alignItems="center">
+            {t("change_language_label", {
+              targetLanguage: i18n.language === "en" ? t("arabic") : t("english"),
+            })}
+          </FormLabel>
+          <Switch
+            id="language-switch"
+            isChecked={i18n.language === "ar"}
+            onChange={handleLanguageChange}
+            alignSelf="top"
+            transform="translateY(-3px)"
+          />
+        </FormControl>
+      )}
       <FormControl isInvalid={!!urlError} isRequired>
         <FormLabel>{t("create_accession_url_field_label")}</FormLabel>
         <Input
@@ -339,13 +394,19 @@ export function CreateUpdateAccession({
           {t("create_accession_subjects_field_label")}
         </FormLabel>
         <Box my={2}>
-          <SubjectsAutocomplete 
+          <SubjectsAutocomplete
             onChange={handleSubjectsChange}
             defaultValues={
               accessionToUpdate
                 ? {
-                    values: (i18n.language === "en" ? accessionToUpdate.subjects_en_ids : accessionToUpdate.subjects_ar_ids) || [],
-                    labels: (i18n.language === "en" ? accessionToUpdate.subjects_en : accessionToUpdate.subjects_ar) || [],
+                    values:
+                      (i18n.language === "en"
+                        ? accessionToUpdate.subjects_en_ids
+                        : accessionToUpdate.subjects_ar_ids) || [],
+                    labels:
+                      (i18n.language === "en"
+                        ? accessionToUpdate.subjects_en
+                        : accessionToUpdate.subjects_ar) || [],
                   }
                 : undefined
             }
@@ -405,7 +466,9 @@ export function CreateUpdateAccession({
         type="submit"
         disabled={!isFormValid}
       >
-        {isEditMode ? t("edit_accession_submit_button") : t("create_accession_submit_field_label")}
+        {isEditMode
+          ? t("edit_accession_submit_button")
+          : t("create_accession_submit_field_label")}
       </Button>
     </form>
   );

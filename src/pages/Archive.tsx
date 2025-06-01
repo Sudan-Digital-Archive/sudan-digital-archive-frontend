@@ -16,6 +16,7 @@ import {
   Flex,
   HStack,
   VStack,
+  Switch,
 } from "@chakra-ui/react";
 import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
 import { CreateUpdateAccession } from "../components/forms/CreateUpdateAccession.tsx";
@@ -39,6 +40,7 @@ export default function Archive() {
     lang: i18n.language === "en" ? "english" : "arabic",
     query_term: "",
     metadata_subjects: [],
+    is_private: false,
   });
   const [accessions, setAccessions] = useState<ListAccessions | null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -114,7 +116,6 @@ export default function Archive() {
           : `${appConfig.apiURL}accessions`;
         const url = `${endpoint}?${buildFilters({
           ...filters,
-          is_private: isLoggedIn,
         })}`;
         const response = await fetch(url, {
           credentials: "include",
@@ -209,6 +210,21 @@ export default function Archive() {
                 selected={dateTo}
                 onChange={(date) => handleDateChange(date, "date_to")}
               />
+              {isLoggedIn && (
+                <>
+                  <Tag size="lg" colorScheme="cyan">
+                    {t("archive_filter_private_records")}
+                  </Tag>
+                  <Switch
+                  my={2}
+                    mx={2}
+                    size="lg"
+                    onChange={(e) => {
+                      updateFilters({ is_private: e.target.checked });
+                    }}
+                  />
+                </>
+              )}
             </Flex>
             <Flex py={5}>
               <SubjectsAutocomplete
@@ -223,6 +239,7 @@ export default function Archive() {
               />
             </Flex>
           </Box>
+
           <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">
             <ModalOverlay />
             <ModalContent>

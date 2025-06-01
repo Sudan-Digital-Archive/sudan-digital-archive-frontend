@@ -119,7 +119,7 @@ export function AccessionsCards({
               </CardBody>
               <CardFooter justifyContent="space-between">
                 <NavLink
-                  to={`/archive/${accession.id}?isPrivate=${accession.is_private}`}
+                  to={`/archive/${accession.id}?isPrivate=${accession.is_private}&lang=${i18n.language}`}
                 >
                   <Button
                     colorScheme="purple"
