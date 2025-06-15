@@ -92,7 +92,7 @@ export default function ViewAccession() {
   const lang = searchParams.get("lang") || "en";
   const isPrivate = searchParams.get("isPrivate") === "true";
   const { isLoggedIn } = useUser();
-  const metadataHeaderDisclosure = useDisclosure();
+  const metadataHeaderDisclosure = useDisclosure({ defaultIsOpen: true });
   useEffect(() => {
     i18n.changeLanguage(lang);
   }, [lang, i18n]);
@@ -252,10 +252,15 @@ export default function ViewAccession() {
                   </DrawerContent>
                 </Drawer>
               </Collapse>
-                                            <Button onClick={metadataHeaderDisclosure.onToggle} variant="outline">
-                                              {metadataHeaderDisclosure.isOpen && "Hide Metadata"}
-                                              {!metadataHeaderDisclosure.isOpen && "Show Metadata"}
-                                            </Button>
+              <Button
+                onClick={metadataHeaderDisclosure.onToggle}
+                variant="outline"
+              >
+                {metadataHeaderDisclosure.isOpen &&
+                  t("view_accession_hide_metadata")}
+                {!metadataHeaderDisclosure.isOpen &&
+                  t("view_accession_show_metadata")}
+              </Button>
 
               <Box flex="1" w="100vw" bg="white">
                 <Box h="4px" bg="teal.500" />
