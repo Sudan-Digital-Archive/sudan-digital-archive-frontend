@@ -26,12 +26,14 @@ import {
   Text,
   HStack,
   useDisclosure,
+  Button,
   Heading,
   Divider,
   Alert,
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Collapse,
 } from "@chakra-ui/react";
 import { useParsedDate } from "../hooks/useParsedDate.ts";
 import { useUser } from "../hooks/useUser.ts";
@@ -90,7 +92,7 @@ export default function ViewAccession() {
   const lang = searchParams.get("lang") || "en";
   const isPrivate = searchParams.get("isPrivate") === "true";
   const { isLoggedIn } = useUser();
-
+  const metadataHeaderDisclosure = useDisclosure();
   useEffect(() => {
     i18n.changeLanguage(lang);
   }, [lang, i18n]);
@@ -165,82 +167,96 @@ export default function ViewAccession() {
             <Spinner />
           ) : (
             <>
-              {isMobile ? (
-                <VStack m={2} spacing={2} alignItems="center">
-                  <AccessionInfo
-                    timestamp={accession.accession.crawl_timestamp}
-                    id={id}
-                    lang={lang}
-                    onOpen={onOpen}
-                    isMobile={true}
-                  />
-                </VStack>
-              ) : (
-                <HStack m={2} spacing={2} alignItems="center">
-                  <AccessionInfo
-                    timestamp={accession.accession.crawl_timestamp}
-                    id={id}
-                    lang={lang}
-                    onOpen={onOpen}
-                    isMobile={false}
-                  />
-                </HStack>
-              )}
-              <Drawer
-                placement="right"
-                onClose={onClose}
-                isOpen={isOpen}
-                size="lg"
-              >
-                <DrawerOverlay />
-                <DrawerContent>
-                  <DrawerCloseButton />
-                  <DrawerHeader borderBottomWidth="1px">
-                    <Title
-                      title={
-                        i18n.language === "en"
-                          ? accession.accession.title_en ||
-                            t("metadata_missing_title")
-                          : accession.accession.title_ar ||
-                            t("metadata_missing_title")
-                      }
-                      fontSize={i18n.language === "en" ? "md" : "lg"}
+              <Collapse in={metadataHeaderDisclosure.isOpen} animateOpacity>
+                {isMobile ? (
+                  <VStack
+                    m={2}
+                    spacing={2}
+                    alignItems="center"
+                    display="flex"
+                    flexDirection="column"
+                  >
+                    <AccessionInfo
+                      timestamp={accession.accession.crawl_timestamp}
+                      id={id}
+                      lang={lang}
+                      onOpen={onOpen}
+                      isMobile={true}
                     />
-                  </DrawerHeader>
-                  <DrawerBody>
-                    <Subject
-                      subjects={
-                        i18n.language === "en"
-                          ? accession.accession.subjects_en
-                          : accession.accession.subjects_ar
-                      }
+                  </VStack>
+                ) : (
+                  <HStack m={2} spacing={2} alignItems="center" display="flex">
+                    <AccessionInfo
+                      timestamp={accession.accession.crawl_timestamp}
+                      id={id}
+                      lang={lang}
+                      onOpen={onOpen}
+                      isMobile={false}
                     />
-                    {((i18n.language === "en" &&
-                      accession.accession.description_en) ||
-                      (i18n.language === "ar" &&
-                        accession.accession.description_ar)) && (
-                      <Description
-                        description={
+                  </HStack>
+                )}
+
+                <Drawer
+                  placement="right"
+                  onClose={onClose}
+                  isOpen={isOpen}
+                  size="lg"
+                >
+                  <DrawerOverlay />
+                  <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader borderBottomWidth="1px">
+                      <Title
+                        title={
                           i18n.language === "en"
-                            ? accession.accession.description_en
-                            : accession.accession.description_ar
+                            ? accession.accession.title_en ||
+                              t("metadata_missing_title")
+                            : accession.accession.title_ar ||
+                              t("metadata_missing_title")
                         }
                         fontSize={i18n.language === "en" ? "md" : "lg"}
                       />
-                    )}
-                    <Box>
-                      <DateMetadata
-                        date={accession.accession.dublin_metadata_date}
+                    </DrawerHeader>
+                    <DrawerBody>
+                      <Subject
+                        subjects={
+                          i18n.language === "en"
+                            ? accession.accession.subjects_en
+                            : accession.accession.subjects_ar
+                        }
+                      />
+                      {((i18n.language === "en" &&
+                        accession.accession.description_en) ||
+                        (i18n.language === "ar" &&
+                          accession.accession.description_ar)) && (
+                        <Description
+                          description={
+                            i18n.language === "en"
+                              ? accession.accession.description_en
+                              : accession.accession.description_ar
+                          }
+                          fontSize={i18n.language === "en" ? "md" : "lg"}
+                        />
+                      )}
+                      <Box>
+                        <DateMetadata
+                          date={accession.accession.dublin_metadata_date}
+                          fontSize={i18n.language === "en" ? "md" : "lg"}
+                        />
+                      </Box>
+                      <OriginalURL
+                        url={accession.accession.seed_url}
                         fontSize={i18n.language === "en" ? "md" : "lg"}
                       />
-                    </Box>
-                    <OriginalURL
-                      url={accession.accession.seed_url}
-                      fontSize={i18n.language === "en" ? "md" : "lg"}
-                    />
-                  </DrawerBody>
-                </DrawerContent>
-              </Drawer>
+                    </DrawerBody>
+                  </DrawerContent>
+                </Drawer>
+              </Collapse>
+                                            <Button onClick={metadataHeaderDisclosure.onToggle} variant="outline">
+                                              {metadataHeaderDisclosure.isOpen && "Hide Metadata"}
+                                              {!metadataHeaderDisclosure.isOpen && "Show Metadata"}
+                                            </Button>
+
               <Box flex="1" w="100vw" bg="white">
                 <Box h="4px" bg="teal.500" />
                 <replay-web-page
