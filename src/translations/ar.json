@@ -156,6 +156,8 @@
     "delete_accession_cancel_button": "إلغاء",
     "change_language_label": "تغيير اللغة إلى {{targetLanguage}}",
     "arabic": "العربية",
-    "english": "الإنجليزية"
+    "english": "الإنجليزية",
+    "view_accession_hide_metadata": "إخفاء التفاصيل",
+    "view_accession_show_metadata": "عرض التفاصيل"
   }
 }
