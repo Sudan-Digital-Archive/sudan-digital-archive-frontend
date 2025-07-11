@@ -158,6 +158,19 @@
     "arabic": "Arabic",
     "english": "English",
     "view_accession_hide_metadata": "Hide metadata",
-    "view_accession_show_metadata": "Show metadata"
+    "view_accession_show_metadata": "Show metadata",
+    "nav_tech_stack": "Technical Stack",
+    "tech_stack_title": "Technical Stack",
+    "tech_stack_why_build": "Why build a new archive instead of using ",
+    "tech_stack_why_build_2": "? No existing solution met our requirements, so we built a new one. We required an archiving platform that could:",
+    "tech_stack_point_1_part_1": "Archive dynamic social media content from platforms like Twitter and Facebook. Unfortunately, ",
+    "tech_stack_point_1_part_2": " is no longer effective for these platforms due to their dynamic nature and authentication requirements. However, a great deal of historically and culturally significant content on Sudan exists on these social media platforms.",
+    "tech_stack_point_2_part_1": "Capable of securely archiving both public and private materials. Some content, like news articles or songs, should be public, while sensitive material such as content about human rights abuses must remain private for safety and legal reasons. Our initial work with ",
+    "tech_stack_point_2_part_2": " showed that it only supports private content and is not optimized for social media archiving.",
+    "tech_stack_point_3_part_1": "To address social media archiving, we adopted ",
+    "tech_stack_point_3_part_2": ". While powerful, it lacked features we needed, such as robust search and tagging in both Arabic and English, and support for Dublin Core metadata standards for high-quality annotation.",
+    "tech_stack_final_part_1": "To meet all these needs and more, we designed our own archiving platform. We are committed to continuous improvement and open sourcing our code to foster trust, security, and community collaboration. You can view all our repositories ",
+    "tech_stack_final_link": "here",
+    "tech_stack_final_part_2": "."
   }
 }

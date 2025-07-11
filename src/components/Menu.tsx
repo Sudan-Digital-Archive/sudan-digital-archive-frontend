@@ -70,6 +70,9 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                   </NavLink>
                 </MenuItem>
                 <MenuItem>
+                  <NavLink to="/tech-stack">{t("nav_tech_stack")}</NavLink>
+                </MenuItem>
+                <MenuItem>
                   <NavLink to="/code-of-conduct">{t("nav_coc")}</NavLink>
                 </MenuItem>
                 <MenuItem>
@@ -120,6 +123,9 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                   <NavLink to="/why-another-archive">
                     {t("nav_why_another_archive")}
                   </NavLink>
+                </MenuItem>
+                <MenuItem>
+                  <NavLink to="/tech-stack">{t("nav_tech_stack")}</NavLink>
                 </MenuItem>
                 <MenuItem>
                   <NavLink to="/code-of-conduct">{t("nav_coc")}</NavLink>
