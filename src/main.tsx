@@ -6,6 +6,7 @@ import Mission from "./pages/Mission.tsx";
 import ViewAccession from "./pages/ViewAccession.tsx";
 import WhoAreWe from "./pages/WhoAreWe.tsx";
 import WhyAnotherArchive from "./pages/WhyAnotherArchive.tsx";
+import TechnicalStack from "./pages/TechnicalStack.tsx";
 import "./il18n.ts";
 import "./css/styles.css";
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -43,6 +44,7 @@ if (isNonReplayRoute(window.location.pathname)) {
               <Route path="mission" element={<Mission />} />
               <Route path="who-are-we" element={<WhoAreWe />} />
               <Route path="why-another-archive" element={<WhyAnotherArchive />} />
+              <Route path="tech-stack" element={<TechnicalStack />} />
               <Route path="code-of-conduct" element={<CodeOfConduct />} />
               <Route path="archive" element={<Archive />} />
               <Route path="contact-us" element={<ContactUs />} />
