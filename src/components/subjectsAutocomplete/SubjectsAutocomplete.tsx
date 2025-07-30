@@ -199,11 +199,6 @@ export const SubjectsAutocomplete = ({
   };
 
   const customComponents = {
-    // MultiValue: ({ ...props }: any) => (
-    //   <SubjectTag
-    //     label={props.data.label}
-    //   />
-    // ),
     Option: (props: OptionProps<SubjectOption>) => {
       return (
         <HStack
