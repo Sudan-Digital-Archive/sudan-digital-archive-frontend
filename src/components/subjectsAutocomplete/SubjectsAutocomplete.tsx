@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, useToast, IconButton, HStack } from "@chakra-ui/react";
-import { CreatableSelect, type OptionProps } from "chakra-react-select";
+import { CreatableSelect, Select, type OptionProps } from "chakra-react-select";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { appConfig } from "../../constants";
 import type { Subject, SubjectsResponse } from "../../apiTypes/apiResponses";
-import { SubjectTag } from "../SubjectTag";
 import type { SubjectOption } from "./types";
 import { useUser } from "../../hooks/useUser";
 
@@ -200,12 +199,6 @@ export const SubjectsAutocomplete = ({
   };
 
   const customComponents = {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    MultiValue: ({ ...props }: any) => (
-      <SubjectTag
-        label={props.data.label}
-      />
-    ),
     Option: (props: OptionProps<SubjectOption>) => {
       return (
         <HStack
@@ -242,60 +235,115 @@ export const SubjectsAutocomplete = ({
 
   return (
     <Box width="100%" position="relative">
-      <CreatableSelect
-        isMulti
-        name="subjects"
-        options={subjectOptions}
-        placeholder={t("subjects_autocomplete_search_subjects")}
-        noOptionsMessage={() => t("subjects_autocomplete_no_subjects_found")}
-        formatCreateLabel={(inputValue) =>
-          `${t("subjects_autocomplete_create")} "${inputValue}"`
-        }
-        menuPlacement={menuPlacement}
-        isLoading={isLoading}
-        isDisabled={isLoading || isCreatingNewSubject || isDeletingSubject}
-        value={selectedOptions}
-        onChange={handleChange}
-        onCreateOption={handleCreateOption}
-        chakraStyles={{
-          loadingIndicator: (provided) => ({
-            ...provided,
-            marginRight: 2,
-          }),
-          dropdownIndicator: (provided) => ({
-            ...provided,
-            bg: "transparent",
-            px: 2,
-            cursor: "pointer",
-          }),
-          clearIndicator: (provided) => ({
-            ...provided,
-            bg: "transparent",
-            px: 2,
-            cursor: "pointer",
-          }),
-          valueContainer: (provided) => ({
-            ...provided,
-            padding: "8px",
-            flexWrap: "wrap",
-            gap: "4px",
-          }),
-          option: (provided, { isSelected }) => ({
-            ...provided,
-            color: isSelected ? "grey.300" : provided.color,
-            _dark: {
-              backgroundColor: isSelected
-                ? "cyan.700"
-                : provided.backgroundColor,
-            },
-          }),
-        }}
-        components={customComponents}
-        closeMenuOnSelect={false}
-        size="md"
-        hideSelectedOptions={false}
-        controlShouldRenderValue={true}
-      />
+      {isLoggedIn ? (
+        <CreatableSelect
+          isMulti
+          tagColorScheme="cyan"
+          name="subjects"
+          options={subjectOptions}
+          placeholder={t("subjects_autocomplete_search_subjects")}
+          noOptionsMessage={() => t("subjects_autocomplete_no_subjects_found")}
+          formatCreateLabel={(inputValue) =>
+            `${t("subjects_autocomplete_create")} "${inputValue}"`
+          }
+          menuPlacement={menuPlacement}
+          isLoading={isLoading}
+          isDisabled={isLoading || isCreatingNewSubject || isDeletingSubject}
+          value={selectedOptions}
+          onChange={handleChange}
+          onCreateOption={handleCreateOption}
+          chakraStyles={{
+            loadingIndicator: (provided) => ({
+              ...provided,
+              marginRight: 2,
+            }),
+            dropdownIndicator: (provided) => ({
+              ...provided,
+              bg: "transparent",
+              px: 2,
+              cursor: "pointer",
+            }),
+            clearIndicator: (provided) => ({
+              ...provided,
+              bg: "transparent",
+              px: 2,
+              cursor: "pointer",
+            }),
+            valueContainer: (provided) => ({
+              ...provided,
+              padding: "8px",
+              flexWrap: "wrap",
+              gap: "4px",
+            }),
+            option: (provided, { isSelected }) => ({
+              ...provided,
+              color: isSelected ? "grey.300" : provided.color,
+              _dark: {
+                backgroundColor: isSelected
+                  ? "cyan.700"
+                  : provided.backgroundColor,
+              },
+            }),
+          }}
+          components={customComponents}
+          closeMenuOnSelect={false}
+          size="md"
+          hideSelectedOptions={false}
+          controlShouldRenderValue={true}
+        />
+      ) : (
+        <Select
+          isMulti
+          tagColorScheme="cyan"
+          name="subjects"
+          options={subjectOptions}
+          placeholder={t("subjects_autocomplete_search_subjects")}
+          noOptionsMessage={() => t("subjects_autocomplete_no_subjects_found")}
+          menuPlacement={menuPlacement}
+          isLoading={isLoading}
+          isDisabled={isLoading || isCreatingNewSubject || isDeletingSubject}
+          value={selectedOptions}
+          onChange={handleChange}
+          chakraStyles={{
+            loadingIndicator: (provided) => ({
+              ...provided,
+              marginRight: 2,
+            }),
+            dropdownIndicator: (provided) => ({
+              ...provided,
+              bg: "transparent",
+              px: 2,
+              cursor: "pointer",
+            }),
+            clearIndicator: (provided) => ({
+              ...provided,
+              bg: "transparent",
+              px: 2,
+              cursor: "pointer",
+            }),
+            valueContainer: (provided) => ({
+              ...provided,
+              padding: "8px",
+              flexWrap: "wrap",
+              gap: "4px",
+            }),
+            option: (provided, { isSelected }) => ({
+              ...provided,
+              color: isSelected ? "grey.300" : provided.color,
+              _dark: {
+                backgroundColor: isSelected
+                  ? "cyan.700"
+                  : provided.backgroundColor,
+              },
+            }),
+          }}
+          components={customComponents}
+          closeMenuOnSelect={false}
+          size="md"
+          hideSelectedOptions={false}
+          controlShouldRenderValue={true}
+        />
+      )}
     </Box>
   );
 };
