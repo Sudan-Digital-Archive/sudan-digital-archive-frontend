@@ -131,8 +131,6 @@ export function CreateUpdateAccession({
     [t]
   );
 
-  const [formResetCounter, setFormResetCounter] = useState(0);
-
   const validateForm = useCallback(() => {
     const urlValid = validateURL(url).valid;
     const titleValid = validateTitle(title).valid;
@@ -152,7 +150,7 @@ export function CreateUpdateAccession({
     const isFormValid = validateForm();
 
     setIsFormValid(isFormValid);
-  }, [validateForm, formResetCounter]);
+  }, [validateForm]);
 
   const getBrowserProfile = (profile: string) => {
     switch (profile) {
@@ -309,7 +307,6 @@ export function CreateUpdateAccession({
           setDate(null);
           setBrowserProfile(t("create_accession_crawl_type_default"));
           setIsPrivate(false);
-          setFormResetCounter((prev) => prev + 1);
         }
       } else {
         const errorText = await response.text();
