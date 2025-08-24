@@ -272,7 +272,6 @@ export function CreateUpdateAccession({
       const urlPath = isEditMode
         ? `${appConfig.apiURL}accessions/${accessionToUpdate?.id}`
         : `${appConfig.apiURL}accessions`;
-
       const response = await fetch(urlPath, {
         method,
         credentials: "include",
@@ -299,7 +298,6 @@ export function CreateUpdateAccession({
         if (isEditMode && onSuccess) {
           onSuccess();
         } else {
-          // Clear form for create mode
           setUrl("");
           setTitle("");
           setSubjects([]);
@@ -396,6 +394,7 @@ export function CreateUpdateAccession({
         <Box my={2}>
           <SubjectsAutocomplete
             onChange={handleSubjectsChange}
+            value={subjects}
             defaultValues={
               accessionToUpdate
                 ? {
