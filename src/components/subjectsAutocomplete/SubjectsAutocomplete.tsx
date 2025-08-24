@@ -15,12 +15,14 @@ interface SubjectsAutocompleteProps {
     values: number[];
     labels: string[];
   };
+  value?: readonly SubjectOption[]; 
 }
 
 export const SubjectsAutocomplete = ({
   onChange,
   menuPlacement = "bottom",
   defaultValues,
+  value,
 }: SubjectsAutocompleteProps) => {
   const { t, i18n } = useTranslation();
   const { isLoggedIn } = useUser();
@@ -173,6 +175,12 @@ export const SubjectsAutocomplete = ({
   useEffect(() => {
     fetchSubjects();
   }, [fetchSubjects, apiLang]);
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedOptions(value as SubjectOption[]);
+    }
+  }, [value]);
 
   const handleChange = (newValue: readonly SubjectOption[]) => {
     setSelectedOptions(newValue as SubjectOption[]);
