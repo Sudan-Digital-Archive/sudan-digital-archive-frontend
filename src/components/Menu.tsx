@@ -14,6 +14,7 @@ import { NavLink } from "react-router";
 import { Home } from "react-feather";
 import { useTranslation } from "react-i18next";
 import { useWindowSize } from "../hooks/useWindowSize.ts";
+import { useUser } from "../hooks/useUser.ts";
 
 interface NavbarProps {
   // useful if you want to prevent layout shifts
@@ -44,6 +45,8 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
   const MenuBar = () => {
     const width = useWindowSize();
     const isMobile = width <= 768;
+    const { isLoggedIn } = useUser();
+
     return (
       <>
         {isMobile ? (
@@ -83,9 +86,11 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                 >
                   {i18n.language === "en" ? "عربي" : "English"}
                 </MenuItem>
-                <MenuItem>
-                  <NavLink to="/login">{t("nav_login")}</NavLink>
-                </MenuItem>
+                {!isLoggedIn && (
+                  <MenuItem>
+                    <NavLink to="/login">{t("nav_login")}</NavLink>
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           </>
@@ -139,13 +144,15 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                 </MenuButton>
               </NavLink>
             </Menu>
-            <Menu>
-              <NavLink to="/login">
-                <MenuButton as={Button} size="sm" variant="ghost">
-                  {t("nav_login")}
-                </MenuButton>
-              </NavLink>
-            </Menu>
+            {!isLoggedIn && (
+              <Menu>
+                <NavLink to="/login">
+                  <MenuButton as={Button} size="sm" variant="ghost">
+                    {t("nav_login")}
+                  </MenuButton>
+                </NavLink>
+              </Menu>
+            )}
             <Box>
               <Button
                 colorScheme="pink"
