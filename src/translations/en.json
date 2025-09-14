@@ -171,6 +171,8 @@
     "tech_stack_point_3_part_2": ". While powerful, it lacked features we needed, such as robust search and tagging in both Arabic and English, and support for Dublin Core metadata standards for high-quality annotation.",
     "tech_stack_final_part_1": "To meet all these needs and more, we designed our own archiving platform. We are committed to continuous improvement and open sourcing our code to foster trust, security, and community collaboration. You can view all our repositories ",
     "tech_stack_final_link": "here",
-    "tech_stack_final_part_2": "."
+    "tech_stack_final_part_2": ".",
+    "inclusive": "Inclusive",
+    "exclusive": "Exclusive"
   }
 }
