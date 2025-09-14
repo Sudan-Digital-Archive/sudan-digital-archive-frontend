@@ -40,6 +40,7 @@ export default function Archive() {
     lang: i18n.language === "en" ? "english" : "arabic",
     query_term: "",
     metadata_subjects: [],
+    metadata_subjects_inclusive_filter: true,
     is_private: false,
   });
   const [accessions, setAccessions] = useState<ListAccessions | null>(null);
@@ -216,7 +217,7 @@ export default function Archive() {
                     {t("archive_filter_private_records")}
                   </Tag>
                   <Switch
-                  my={2}
+                    my={2}
                     mx={2}
                     size="lg"
                     onChange={(e) => {
@@ -231,12 +232,33 @@ export default function Archive() {
                 menuPlacement="top"
                 onChange={(subjects) => {
                   updateFilters({
-                    ["metadata_subjects"]: subjects.map(
-                      (subject) => subject.value
-                    ),
+                    metadata_subjects: subjects.map((subject) => subject.value),
                   });
                 }}
               />
+              {Array.isArray(queryFilters.metadata_subjects) &&
+                queryFilters.metadata_subjects.length > 0 && (
+                  <>
+                    <Tag size="lg" colorScheme="blue" ml={4}>
+                      {queryFilters.metadata_subjects_inclusive_filter
+                        ? t("exclusive")
+                        : t("inclusive")}
+                    </Tag>
+                    <Switch
+                      my={2}
+                      mx={2}
+                      size="lg"
+                      isChecked={
+                        queryFilters.metadata_subjects_inclusive_filter
+                      }
+                      onChange={(e) => {
+                        updateFilters({
+                          metadata_subjects_inclusive_filter: e.target.checked,
+                        });
+                      }}
+                    />
+                  </>
+                )}
             </Flex>
           </Box>
 
