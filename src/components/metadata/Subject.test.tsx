@@ -1,35 +1,38 @@
-import { Subject } from "./Subject.tsx";
-import { describe, it, expect } from "vitest";
-import { addi18n, renderWithProviders } from "../../../testUtils/testHelpers.tsx";
-import { screen } from "@testing-library/react";
+import { Subject } from './Subject.tsx'
+import { describe, it, expect } from 'vitest'
+import {
+  addi18n,
+  renderWithProviders,
+} from '../../../testUtils/testHelpers.tsx'
+import { screen } from '@testing-library/react'
 
-addi18n();
-describe("Subject", () => {
-  const testSubjects = ["Test Subject", "Another Subject"];
+addi18n()
+describe('Subject', () => {
+  const testSubjects = ['Test Subject', 'Another Subject']
 
-  it("should render properly in English", () => {
+  it('should render properly in English', () => {
     renderWithProviders(<Subject subjects={testSubjects} />, {
-      language: "en",
-    });
-    expect(screen.getByText("Subjects:")).toBeTruthy();
+      language: 'en',
+    })
+    expect(screen.getByText('Subjects:')).toBeTruthy()
     testSubjects.forEach((subject) => {
-      expect(screen.getByText(subject)).toBeTruthy();
-    });
-  });
+      expect(screen.getByText(subject)).toBeTruthy()
+    })
+  })
 
-  it("should render properly in Arabic", () => {
+  it('should render properly in Arabic', () => {
     renderWithProviders(<Subject subjects={testSubjects} />, {
-      language: "ar",
-    });
-    expect(screen.getByText("المواضيع:")).toBeTruthy();
+      language: 'ar',
+    })
+    expect(screen.getByText('المواضيع:')).toBeTruthy()
     testSubjects.forEach((subject) => {
-      expect(screen.getByText(subject)).toBeTruthy();
-    });
-    expect(document.documentElement.dir).toBe("rtl");
-  });
+      expect(screen.getByText(subject)).toBeTruthy()
+    })
+    expect(document.documentElement.dir).toBe('rtl')
+  })
 
-  it("should display missing message when no subjects provided", () => {
-    renderWithProviders(<Subject subjects={null} />, { language: "en" });
-    expect(screen.getByTestId("subject-container")).toBeTruthy();
-  });
-});
+  it('should display missing message when no subjects provided', () => {
+    renderWithProviders(<Subject subjects={null} />, { language: 'en' })
+    expect(screen.getByTestId('subject-container')).toBeTruthy()
+  })
+})

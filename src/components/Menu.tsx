@@ -8,44 +8,44 @@ import {
   MenuItem,
   Stack,
   IconButton,
-} from "@chakra-ui/react";
-import { ChevronDown, Menu as MenuIcon } from "react-feather";
-import { NavLink } from "react-router";
-import { Home } from "react-feather";
-import { useTranslation } from "react-i18next";
-import { useWindowSize } from "../hooks/useWindowSize.ts";
-import { useUser } from "../hooks/useUser.ts";
+} from '@chakra-ui/react'
+import { ChevronDown, Menu as MenuIcon } from 'react-feather'
+import { NavLink } from 'react-router'
+import { Home } from 'react-feather'
+import { useTranslation } from 'react-i18next'
+import { useWindowSize } from '../hooks/useWindowSize.ts'
+import { useUser } from '../hooks/useUser.ts'
 
 interface NavbarProps {
   // useful if you want to prevent layout shifts
   // e.g. refresh data before everything goes right to left
-  changeLanguageOverride?: () => void;
+  changeLanguageOverride?: () => void
 }
 
 const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
-  const { i18n, t } = useTranslation();
+  const { i18n, t } = useTranslation()
 
   const handleLanguageChange = () => {
-    const newLanguage = i18n.language === "en" ? "ar" : "en";
-    i18n.changeLanguage(newLanguage);
+    const newLanguage = i18n.language === 'en' ? 'ar' : 'en'
+    i18n.changeLanguage(newLanguage)
     switch (newLanguage) {
-      case "en":
-        document.documentElement.lang = "en";
-        document.documentElement.dir = "ltr";
-        break;
-      case "ar":
-        document.documentElement.lang = "ar";
-        document.documentElement.dir = "rtl";
-        break;
+      case 'en':
+        document.documentElement.lang = 'en'
+        document.documentElement.dir = 'ltr'
+        break
+      case 'ar':
+        document.documentElement.lang = 'ar'
+        document.documentElement.dir = 'rtl'
+        break
       default:
-        throw `Language ${newLanguage} is not supported`;
+        throw `Language ${newLanguage} is not supported`
     }
-  };
+  }
 
   const MenuBar = () => {
-    const width = useWindowSize();
-    const isMobile = width <= 768;
-    const { isLoggedIn } = useUser();
+    const width = useWindowSize()
+    const isMobile = width <= 768
+    const { isLoggedIn } = useUser()
 
     return (
       <>
@@ -59,36 +59,36 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
               />
               <MenuList>
                 <MenuItem>
-                  <NavLink to="/archive">{t("nav_the_archive")}</NavLink>
+                  <NavLink to="/archive">{t('nav_the_archive')}</NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/who-are-we">{t("nav_who_are_we")}</NavLink>
+                  <NavLink to="/who-are-we">{t('nav_who_are_we')}</NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/mission">{t("nav_mission")}</NavLink>
+                  <NavLink to="/mission">{t('nav_mission')}</NavLink>
                 </MenuItem>
                 <MenuItem>
                   <NavLink to="/why-another-archive">
-                    {t("nav_why_another_archive")}
+                    {t('nav_why_another_archive')}
                   </NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/tech-stack">{t("nav_tech_stack")}</NavLink>
+                  <NavLink to="/tech-stack">{t('nav_tech_stack')}</NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/code-of-conduct">{t("nav_coc")}</NavLink>
+                  <NavLink to="/code-of-conduct">{t('nav_coc')}</NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/contact-us">{t("nav_contact")}</NavLink>
+                  <NavLink to="/contact-us">{t('nav_contact')}</NavLink>
                 </MenuItem>
                 <MenuItem
                   onClick={changeLanguageOverride || handleLanguageChange}
                 >
-                  {i18n.language === "en" ? "عربي" : "English"}
+                  {i18n.language === 'en' ? 'عربي' : 'English'}
                 </MenuItem>
                 {!isLoggedIn && (
                   <MenuItem>
-                    <NavLink to="/login">{t("nav_login")}</NavLink>
+                    <NavLink to="/login">{t('nav_login')}</NavLink>
                   </MenuItem>
                 )}
               </MenuList>
@@ -104,7 +104,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
             <Menu>
               <NavLink to="/archive">
                 <MenuButton as={Button} size="sm" variant="ghost">
-                  {t("nav_the_archive")}
+                  {t('nav_the_archive')}
                 </MenuButton>
               </NavLink>
             </Menu>
@@ -115,32 +115,32 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                 size="sm"
                 variant="ghost"
               >
-                {t("nav_about")}
+                {t('nav_about')}
               </MenuButton>
               <MenuList>
                 <MenuItem>
-                  <NavLink to="/who-are-we">{t("nav_who_are_we")}</NavLink>
+                  <NavLink to="/who-are-we">{t('nav_who_are_we')}</NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/mission">{t("nav_mission")}</NavLink>
+                  <NavLink to="/mission">{t('nav_mission')}</NavLink>
                 </MenuItem>
                 <MenuItem>
                   <NavLink to="/why-another-archive">
-                    {t("nav_why_another_archive")}
+                    {t('nav_why_another_archive')}
                   </NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/tech-stack">{t("nav_tech_stack")}</NavLink>
+                  <NavLink to="/tech-stack">{t('nav_tech_stack')}</NavLink>
                 </MenuItem>
                 <MenuItem>
-                  <NavLink to="/code-of-conduct">{t("nav_coc")}</NavLink>
+                  <NavLink to="/code-of-conduct">{t('nav_coc')}</NavLink>
                 </MenuItem>
               </MenuList>
             </Menu>
             <Menu>
               <NavLink to="/contact-us">
                 <MenuButton as={Button} size="sm" variant="ghost">
-                  {t("nav_contact")}
+                  {t('nav_contact')}
                 </MenuButton>
               </NavLink>
             </Menu>
@@ -148,7 +148,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
               <Menu>
                 <NavLink to="/login">
                   <MenuButton as={Button} size="sm" variant="ghost">
-                    {t("nav_login")}
+                    {t('nav_login')}
                   </MenuButton>
                 </NavLink>
               </Menu>
@@ -159,14 +159,14 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
                 variant="ghost"
                 onClick={changeLanguageOverride || handleLanguageChange}
               >
-                {i18n.language === "en" ? "عربي" : "English"}
+                {i18n.language === 'en' ? 'عربي' : 'English'}
               </Button>
             </Box>
           </Stack>
         )}
       </>
-    );
-  };
+    )
+  }
 
   return (
     <Box
@@ -175,7 +175,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
       borderTop="3px solid"
       style={{
         borderImage:
-          "linear-gradient(to right, var(--chakra-colors-cyan-300), var(--chakra-colors-pink-600)) 1 0 0 0",
+          'linear-gradient(to right, var(--chakra-colors-cyan-300), var(--chakra-colors-pink-600)) 1 0 0 0',
       }}
     >
       <Box maxW="6xl" mx="auto" px={4}>
@@ -183,7 +183,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
           justifyContent="space-between"
           alignItems="center"
           py={4}
-          flexDir={["column", "column", "row"]}
+          flexDir={['column', 'column', 'row']}
           gridGap={[4, 4, 0]}
         >
           <Box display="flex" alignItems="center">
@@ -195,7 +195,7 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
         </HStack>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

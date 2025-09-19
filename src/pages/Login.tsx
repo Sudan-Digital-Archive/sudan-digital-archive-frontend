@@ -1,16 +1,14 @@
-import { Box, SlideFade, VStack } from "@chakra-ui/react";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
-import { Login as LoginForm } from "../components/forms/Login.tsx";
+import { Box, SlideFade, VStack } from '@chakra-ui/react'
+import Menu from '../components/Menu.tsx'
+import Footer from '../components/Footer.tsx'
+import { Login as LoginForm } from '../components/forms/Login.tsx'
 
 export default function Login() {
-
   return (
     <>
-      <Menu
-      />
+      <Menu />
       <SlideFade in>
-      <VStack alignItems="center" justifyContent="center">
+        <VStack alignItems="center" justifyContent="center">
           <Box w="100%" p={10}>
             <LoginForm />
           </Box>
@@ -18,5 +16,5 @@ export default function Login() {
         </VStack>
       </SlideFade>
     </>
-  );
+  )
 }

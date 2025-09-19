@@ -17,161 +17,161 @@ import {
   HStack,
   VStack,
   Switch,
-} from "@chakra-ui/react";
-import { ArrowLeft, ArrowRight, FilePlus } from "react-feather";
-import { CreateUpdateAccession } from "../components/forms/CreateUpdateAccession.tsx";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
-import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { ArchiveDatePicker } from "../components/DatePicker.tsx";
-import { appConfig } from "../constants.ts";
-import { AccessionsCards } from "../components/AccessionsCards.tsx";
-import type { AccessionsQueryFilters } from "../apiTypes/apiRequests.ts";
-import type { ListAccessions } from "../apiTypes/apiResponses.ts";
-import { SubjectsAutocomplete } from "../components/subjectsAutocomplete/SubjectsAutocomplete.tsx";
-import { useUser } from "../hooks/useUser.ts";
+} from '@chakra-ui/react'
+import { ArrowLeft, ArrowRight, FilePlus } from 'react-feather'
+import { CreateUpdateAccession } from '../components/forms/CreateUpdateAccession.tsx'
+import Menu from '../components/Menu.tsx'
+import Footer from '../components/Footer.tsx'
+import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ArchiveDatePicker } from '../components/DatePicker.tsx'
+import { appConfig } from '../constants.ts'
+import { AccessionsCards } from '../components/AccessionsCards.tsx'
+import type { AccessionsQueryFilters } from '../apiTypes/apiRequests.ts'
+import type { ListAccessions } from '../apiTypes/apiResponses.ts'
+import { SubjectsAutocomplete } from '../components/subjectsAutocomplete/SubjectsAutocomplete.tsx'
+import { useUser } from '../hooks/useUser.ts'
 
 export default function Archive() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation()
   const [queryFilters, setQueryFilters] = useState<AccessionsQueryFilters>({
     page: 0,
     per_page: 50,
-    lang: i18n.language === "en" ? "english" : "arabic",
-    query_term: "",
+    lang: i18n.language === 'en' ? 'english' : 'arabic',
+    query_term: '',
     metadata_subjects: [],
     metadata_subjects_inclusive_filter: true,
     is_private: false,
-  });
-  const [accessions, setAccessions] = useState<ListAccessions | null>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isLoading, setIsLoading] = useState(false);
+  })
+  const [accessions, setAccessions] = useState<ListAccessions | null>(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isLoading, setIsLoading] = useState(false)
   const [pagination, setPagination] = useState({
     currentPage: 0,
     totalPages: 0,
-  });
-  const [dateFrom, setDateFrom] = useState<null | Date>(null);
-  const [dateTo, setDateTo] = useState<null | Date>(null);
-  const [queryTerm, setQueryTerm] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const { isLoggedIn } = useUser();
+  })
+  const [dateFrom, setDateFrom] = useState<null | Date>(null)
+  const [dateTo, setDateTo] = useState<null | Date>(null)
+  const [queryTerm, setQueryTerm] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
+  const { isLoggedIn } = useUser()
   function buildFilters(queryFilters: AccessionsQueryFilters) {
-    let queryParams = "";
+    let queryParams = ''
     for (const [key, value] of Object.entries(queryFilters)) {
       if (Array.isArray(value)) {
-        value.forEach((item) => (queryParams += `${key}=${item}&`));
+        value.forEach((item) => (queryParams += `${key}=${item}&`))
       } else {
-        queryParams += `${key}=${value}&`;
+        queryParams += `${key}=${value}&`
       }
     }
-    return new URLSearchParams(queryParams);
+    return new URLSearchParams(queryParams)
   }
 
   const updateFilters = useCallback((updates: AccessionsQueryFilters) => {
     setQueryFilters((prev) => ({
       ...prev,
       ...updates,
-    }));
-  }, []);
+    }))
+  }, [])
 
   function handleDateChange(
     date: Date | null,
-    dateField: "date_from" | "date_to"
+    dateField: 'date_from' | 'date_to',
   ) {
     if (!date) {
-      updateFilters({ [dateField]: "" });
-      return;
+      updateFilters({ [dateField]: '' })
+      return
     }
 
     switch (dateField) {
-      case "date_from":
-        setDateFrom(date);
-        break;
-      case "date_to":
-        setDateTo(date);
-        break;
+      case 'date_from':
+        setDateFrom(date)
+        break
+      case 'date_to':
+        setDateTo(date)
+        break
       default:
-        throw `Unsupported dateField arg ${dateField}`;
+        throw `Unsupported dateField arg ${dateField}`
     }
 
-    const newQueryDate = `${date.toISOString().split("T")[0]}T00:00:00`;
-    updateFilters({ [dateField]: newQueryDate });
+    const newQueryDate = `${date.toISOString().split('T')[0]}T00:00:00`
+    updateFilters({ [dateField]: newQueryDate })
   }
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedQuery(queryTerm);
-    }, 300);
-    return () => clearTimeout(handler);
-  }, [queryTerm]);
+      setDebouncedQuery(queryTerm)
+    }, 300)
+    return () => clearTimeout(handler)
+  }, [queryTerm])
 
   useEffect(() => {
-    updateFilters({ query_term: debouncedQuery });
-  }, [debouncedQuery, updateFilters]);
+    updateFilters({ query_term: debouncedQuery })
+  }, [debouncedQuery, updateFilters])
 
   const fetchAccessions = useCallback(
     async (filters: AccessionsQueryFilters) => {
       try {
         const endpoint = isLoggedIn
           ? `${appConfig.apiURL}accessions/private`
-          : `${appConfig.apiURL}accessions`;
+          : `${appConfig.apiURL}accessions`
         const url = `${endpoint}?${buildFilters({
           ...filters,
-        })}`;
+        })}`
         const response = await fetch(url, {
-          credentials: "include",
+          credentials: 'include',
           headers: {
-            Accept: "application/json",
+            Accept: 'application/json',
           },
-        });
-        const data: ListAccessions = await response.json();
-        setAccessions(data);
+        })
+        const data: ListAccessions = await response.json()
+        setAccessions(data)
         setPagination({
           currentPage: data.page,
           totalPages: data.num_pages,
-        });
+        })
       } catch (error) {
-        console.error(error);
+        console.error(error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     },
-    [isLoggedIn]
-  );
+    [isLoggedIn],
+  )
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchAccessions(queryFilters);
+    setIsLoading(true)
+    fetchAccessions(queryFilters)
     return () => {
-      setAccessions(null);
-      setIsLoading(false);
-    };
-  }, [fetchAccessions, queryFilters]);
+      setAccessions(null)
+      setIsLoading(false)
+    }
+  }, [fetchAccessions, queryFilters])
 
   const handleAccessionsRefresh = () => {
-    fetchAccessions(queryFilters);
-  };
+    fetchAccessions(queryFilters)
+  }
 
   return (
     <>
       <Menu
         changeLanguageOverride={() => {
-          setIsLoading(true);
-          const newLanguage = i18n.language === "en" ? "ar" : "en";
-          i18n.changeLanguage(newLanguage);
+          setIsLoading(true)
+          const newLanguage = i18n.language === 'en' ? 'ar' : 'en'
+          i18n.changeLanguage(newLanguage)
           switch (newLanguage) {
-            case "en":
-              document.documentElement.lang = "en";
-              document.documentElement.dir = "ltr";
-              break;
-            case "ar":
-              document.documentElement.lang = "ar";
-              document.documentElement.dir = "rtl";
-              break;
+            case 'en':
+              document.documentElement.lang = 'en'
+              document.documentElement.dir = 'ltr'
+              break
+            case 'ar':
+              document.documentElement.lang = 'ar'
+              document.documentElement.dir = 'rtl'
+              break
             default:
-              throw `Language ${newLanguage} is not supported`;
+              throw `Language ${newLanguage} is not supported`
           }
-          updateFilters({ lang: newLanguage === "en" ? "english" : "arabic" });
+          updateFilters({ lang: newLanguage === 'en' ? 'english' : 'arabic' })
         }}
       />
       <SlideFade in>
@@ -183,45 +183,45 @@ export default function Archive() {
               variant="solid"
               onClick={onOpen}
             >
-              {t("archive_add_record")}
+              {t('archive_add_record')}
             </Button>
           ) : null}
           <Box w="100%" p={10}>
             <Input
               value={queryTerm}
               onChange={(event) => {
-                setQueryTerm(event.target.value);
+                setQueryTerm(event.target.value)
               }}
-              placeholder={t("archive_text_search_query_placeholder")}
+              placeholder={t('archive_text_search_query_placeholder')}
               size="lg"
               mb={5}
             />
             <Flex>
               <Tag size="lg" colorScheme="cyan" w="110px">
-                {t("archive_date_from_filter")}
+                {t('archive_date_from_filter')}
               </Tag>
               <ArchiveDatePicker
                 selected={dateFrom}
-                onChange={(date) => handleDateChange(date, "date_from")}
+                onChange={(date) => handleDateChange(date, 'date_from')}
               />
               <Tag size="lg" colorScheme="cyan" w="110px">
-                {t("archive_date_to_filter")}
+                {t('archive_date_to_filter')}
               </Tag>
               <ArchiveDatePicker
                 selected={dateTo}
-                onChange={(date) => handleDateChange(date, "date_to")}
+                onChange={(date) => handleDateChange(date, 'date_to')}
               />
               {isLoggedIn && (
                 <>
                   <Tag size="lg" colorScheme="cyan">
-                    {t("archive_filter_private_records")}
+                    {t('archive_filter_private_records')}
                   </Tag>
                   <Switch
                     my={2}
                     mx={2}
                     size="lg"
                     onChange={(e) => {
-                      updateFilters({ is_private: e.target.checked });
+                      updateFilters({ is_private: e.target.checked })
                     }}
                   />
                 </>
@@ -233,7 +233,7 @@ export default function Archive() {
                 onChange={(subjects) => {
                   updateFilters({
                     metadata_subjects: subjects.map((subject) => subject.value),
-                  });
+                  })
                 }}
               />
               {Array.isArray(queryFilters.metadata_subjects) &&
@@ -241,8 +241,8 @@ export default function Archive() {
                   <>
                     <Tag size="lg" colorScheme="blue" ml={4}>
                       {queryFilters.metadata_subjects_inclusive_filter
-                        ? t("exclusive")
-                        : t("inclusive")}
+                        ? t('exclusive')
+                        : t('inclusive')}
                     </Tag>
                     <Switch
                       my={2}
@@ -254,7 +254,7 @@ export default function Archive() {
                       onChange={(e) => {
                         updateFilters({
                           metadata_subjects_inclusive_filter: e.target.checked,
-                        });
+                        })
                       }}
                     />
                   </>
@@ -266,7 +266,7 @@ export default function Archive() {
             <ModalOverlay />
             <ModalContent>
               <ModalHeader textAlign="center">
-                {t("archive_create_modal_header")}
+                {t('archive_create_modal_header')}
               </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
@@ -300,9 +300,9 @@ export default function Archive() {
                   />
                 )}
               <Box>
-                {t("archive_pagination_page")}
+                {t('archive_pagination_page')}
                 <b>{pagination.currentPage + 1}</b>
-                {t("archive_pagination_page_out_of")}
+                {t('archive_pagination_page_out_of')}
                 <b>{pagination.totalPages}</b>
               </Box>
               {pagination.currentPage + 1 < pagination.totalPages && (
@@ -322,12 +322,12 @@ export default function Archive() {
           )}
           {!isLoading && accessions && accessions.items.length === 0 && (
             <Box mt={3} as="i">
-              {t("archive_no_records_found")}
+              {t('archive_no_records_found')}
             </Box>
           )}
           <Footer />
         </VStack>
       </SlideFade>
     </>
-  );
+  )
 }

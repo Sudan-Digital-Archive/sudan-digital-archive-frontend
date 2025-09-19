@@ -1,12 +1,10 @@
-import { Tag, TagLabel } from "@chakra-ui/react";
+import { Tag, TagLabel } from '@chakra-ui/react'
 
 interface SubjectTagProps {
-  label: string;
+  label: string
 }
 
-export const SubjectTag = ({
-  label,
-}: SubjectTagProps) => {
+export const SubjectTag = ({ label }: SubjectTagProps) => {
   return (
     <Tag
       fontSize="md"
@@ -17,5 +15,5 @@ export const SubjectTag = ({
     >
       <TagLabel>{label}</TagLabel>
     </Tag>
-  );
-};
+  )
+}

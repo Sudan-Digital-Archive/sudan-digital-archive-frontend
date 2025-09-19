@@ -4,14 +4,14 @@ import {
   Title,
   Description,
   OriginalURL,
-} from "../components/metadata/index.tsx";
-import { useParams, useSearchParams } from "react-router";
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { appConfig } from "../constants.ts";
-import type { AccessionOne } from "../apiTypes/apiResponses.ts";
-import { useWindowSize } from "../hooks/useWindowSize.ts";
-import AccessionButtons from "../components/AccessionButtons.tsx";
+} from '../components/metadata/index.tsx'
+import { useParams, useSearchParams } from 'react-router'
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { appConfig } from '../constants.ts'
+import type { AccessionOne } from '../apiTypes/apiResponses.ts'
+import { useWindowSize } from '../hooks/useWindowSize.ts'
+import AccessionButtons from '../components/AccessionButtons.tsx'
 import {
   SlideFade,
   Spinner,
@@ -34,18 +34,18 @@ import {
   AlertTitle,
   AlertDescription,
   Collapse,
-} from "@chakra-ui/react";
-import { useParsedDate } from "../hooks/useParsedDate.ts";
-import { useUser } from "../hooks/useUser.ts";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
+} from '@chakra-ui/react'
+import { useParsedDate } from '../hooks/useParsedDate.ts'
+import { useUser } from '../hooks/useUser.ts'
+import Menu from '../components/Menu.tsx'
+import Footer from '../components/Footer.tsx'
 
 interface AccessionInfoProps {
-  timestamp: string;
-  id: string | undefined;
-  lang: string;
-  onOpen: () => void;
-  isMobile: boolean;
+  timestamp: string
+  id: string | undefined
+  lang: string
+  onOpen: () => void
+  isMobile: boolean
 }
 
 function AccessionInfo({
@@ -55,14 +55,14 @@ function AccessionInfo({
   timestamp,
   isMobile,
 }: Readonly<AccessionInfoProps>) {
-  const { t } = useTranslation();
-  const { parseDate } = useParsedDate();
+  const { t } = useTranslation()
+  const { parseDate } = useParsedDate()
   return (
     <>
       <Box color="white" p={2} borderRadius="md">
-        <Heading size="sm">{t("sda_record")}</Heading>
+        <Heading size="sm">{t('sda_record')}</Heading>
         <Text fontSize="xs">
-          {t("view_accession_captured")} {parseDate(timestamp)}
+          {t('view_accession_captured')} {parseDate(timestamp)}
         </Text>
       </Box>
       {isMobile ? (
@@ -77,55 +77,55 @@ function AccessionInfo({
       )}
       <AccessionButtons onOpen={onOpen} id={id} lang={lang} />
     </>
-  );
+  )
 }
 
 export default function ViewAccession() {
-  const { id } = useParams();
-  const [replayerState, setReplayerState] = useState({ source: "", url: "" });
-  const [accession, setAccession] = useState<null | AccessionOne>(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { t, i18n } = useTranslation();
-  const width = useWindowSize();
-  const isMobile = width <= 768;
-  const [searchParams] = useSearchParams();
-  const lang = searchParams.get("lang") || "en";
-  const isPrivate = searchParams.get("isPrivate") === "true";
-  const { isLoggedIn } = useUser();
-  const metadataHeaderDisclosure = useDisclosure({ defaultIsOpen: true });
+  const { id } = useParams()
+  const [replayerState, setReplayerState] = useState({ source: '', url: '' })
+  const [accession, setAccession] = useState<null | AccessionOne>(null)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { t, i18n } = useTranslation()
+  const width = useWindowSize()
+  const isMobile = width <= 768
+  const [searchParams] = useSearchParams()
+  const lang = searchParams.get('lang') || 'en'
+  const isPrivate = searchParams.get('isPrivate') === 'true'
+  const { isLoggedIn } = useUser()
+  const metadataHeaderDisclosure = useDisclosure({ defaultIsOpen: true })
   useEffect(() => {
-    i18n.changeLanguage(lang);
-  }, [lang, i18n]);
+    i18n.changeLanguage(lang)
+  }, [lang, i18n])
 
   useEffect(() => {
     const fetchAccession = async () => {
       try {
         const endpoint = isPrivate
           ? `${appConfig.apiURL}accessions/private/${id}`
-          : `${appConfig.apiURL}accessions/${id}`;
+          : `${appConfig.apiURL}accessions/${id}`
         const response = await fetch(endpoint, {
-          credentials: "include",
+          credentials: 'include',
           headers: {
-            Accept: "application/json",
+            Accept: 'application/json',
           },
-        });
-        const data = await response.json();
+        })
+        const data = await response.json()
         setReplayerState({
           source: data.wacz_url,
           url: data.accession.seed_url,
-        });
-        setAccession(data);
+        })
+        setAccession(data)
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    };
+    }
 
-    fetchAccession();
+    fetchAccession()
     return () => {
-      setReplayerState({ source: "", url: "" });
-      setAccession(null);
-    };
-  }, [id, isPrivate]);
+      setReplayerState({ source: '', url: '' })
+      setAccession(null)
+    }
+  }, [id, isPrivate])
 
   if (isPrivate && !isLoggedIn) {
     return (
@@ -138,19 +138,19 @@ export default function ViewAccession() {
           height="30vh"
           width="100%"
         >
-          <Box width={{ base: "90%", md: "50%" }} margin="auto">
+          <Box width={{ base: '90%', md: '50%' }} margin="auto">
             <Alert status="warning">
               <AlertIcon />
-              <AlertTitle>{t("login_required")}</AlertTitle>
+              <AlertTitle>{t('login_required')}</AlertTitle>
               <AlertDescription>
-                {t("login_required_description")}
+                {t('login_required_description')}
               </AlertDescription>
             </Alert>
           </Box>
         </Box>
         <Footer />
       </>
-    );
+    )
   }
 
   return (
@@ -208,45 +208,45 @@ export default function ViewAccession() {
                     <DrawerHeader borderBottomWidth="1px">
                       <Title
                         title={
-                          i18n.language === "en"
+                          i18n.language === 'en'
                             ? accession.accession.title_en ||
-                              t("metadata_missing_title")
+                              t('metadata_missing_title')
                             : accession.accession.title_ar ||
-                              t("metadata_missing_title")
+                              t('metadata_missing_title')
                         }
-                        fontSize={i18n.language === "en" ? "md" : "lg"}
+                        fontSize={i18n.language === 'en' ? 'md' : 'lg'}
                       />
                     </DrawerHeader>
                     <DrawerBody>
                       <Subject
                         subjects={
-                          i18n.language === "en"
+                          i18n.language === 'en'
                             ? accession.accession.subjects_en
                             : accession.accession.subjects_ar
                         }
                       />
-                      {((i18n.language === "en" &&
+                      {((i18n.language === 'en' &&
                         accession.accession.description_en) ||
-                        (i18n.language === "ar" &&
+                        (i18n.language === 'ar' &&
                           accession.accession.description_ar)) && (
                         <Description
                           description={
-                            i18n.language === "en"
+                            i18n.language === 'en'
                               ? accession.accession.description_en
                               : accession.accession.description_ar
                           }
-                          fontSize={i18n.language === "en" ? "md" : "lg"}
+                          fontSize={i18n.language === 'en' ? 'md' : 'lg'}
                         />
                       )}
                       <Box>
                         <DateMetadata
                           date={accession.accession.dublin_metadata_date}
-                          fontSize={i18n.language === "en" ? "md" : "lg"}
+                          fontSize={i18n.language === 'en' ? 'md' : 'lg'}
                         />
                       </Box>
                       <OriginalURL
                         url={accession.accession.seed_url}
-                        fontSize={i18n.language === "en" ? "md" : "lg"}
+                        fontSize={i18n.language === 'en' ? 'md' : 'lg'}
                       />
                     </DrawerBody>
                   </DrawerContent>
@@ -257,9 +257,9 @@ export default function ViewAccession() {
                 variant="outline"
               >
                 {metadataHeaderDisclosure.isOpen &&
-                  t("view_accession_hide_metadata")}
+                  t('view_accession_hide_metadata')}
                 {!metadataHeaderDisclosure.isOpen &&
-                  t("view_accession_show_metadata")}
+                  t('view_accession_show_metadata')}
               </Button>
 
               <Box flex="1" w="100vw" bg="white">
@@ -276,5 +276,5 @@ export default function ViewAccession() {
         </VStack>
       </SlideFade>
     </>
-  );
+  )
 }

@@ -1,22 +1,22 @@
-import Menu from "./Menu.tsx";
-import { describe, it, expect } from "vitest";
-import { addi18n, renderWithProviders } from "../../testUtils/testHelpers.tsx";
-import { screen } from "@testing-library/react";
+import Menu from './Menu.tsx'
+import { describe, it, expect } from 'vitest'
+import { addi18n, renderWithProviders } from '../../testUtils/testHelpers.tsx'
+import { screen } from '@testing-library/react'
 
-addi18n();
-describe("Menu", () => {
-  it("should render properly in English", () => {
-    renderWithProviders(<Menu />);
-    expect(screen.getByText("The Archive")).toBeTruthy();
-    expect(screen.getByText("About")).toBeTruthy();
-    expect(screen.getByText("عربي")).toBeTruthy();
-  });
+addi18n()
+describe('Menu', () => {
+  it('should render properly in English', () => {
+    renderWithProviders(<Menu />)
+    expect(screen.getByText('The Archive')).toBeTruthy()
+    expect(screen.getByText('About')).toBeTruthy()
+    expect(screen.getByText('عربي')).toBeTruthy()
+  })
 
-  it("should render properly in Arabic", () => {
-    renderWithProviders(<Menu />, { language: "ar" });
-    expect(screen.getByText("الأرشيف")).toBeTruthy();
-    expect(screen.getByText("English")).toBeTruthy();
-    expect(document.documentElement.dir).toBe("rtl");
-    expect(document.documentElement.lang).toBe("ar");
-  });
-});
+  it('should render properly in Arabic', () => {
+    renderWithProviders(<Menu />, { language: 'ar' })
+    expect(screen.getByText('الأرشيف')).toBeTruthy()
+    expect(screen.getByText('English')).toBeTruthy()
+    expect(document.documentElement.dir).toBe('rtl')
+    expect(document.documentElement.lang).toBe('ar')
+  })
+})

@@ -1,19 +1,19 @@
-import { Box, HStack, Link, Highlight, Text, Stack } from "@chakra-ui/react";
-import { GitHub } from "react-feather";
-import { useTranslation } from "react-i18next";
-import { useWindowSize } from "../hooks/useWindowSize.ts";
+import { Box, HStack, Link, Highlight, Text, Stack } from '@chakra-ui/react'
+import { GitHub } from 'react-feather'
+import { useTranslation } from 'react-i18next'
+import { useWindowSize } from '../hooks/useWindowSize.ts'
 
 const Footer = () => {
-  const { t, i18n } = useTranslation();
-  const width = useWindowSize();
-  const isMobile = width <= 768;
+  const { t, i18n } = useTranslation()
+  const width = useWindowSize()
+  const isMobile = width <= 768
 
   return (
     <Box p={6}>
       <Box maxW="6xl" mx="auto" fontSize="xs">
         <Stack
-          direction={isMobile ? "column" : "row"}
-          textAlign={isMobile ? "center" : "center"}
+          direction={isMobile ? 'column' : 'row'}
+          textAlign={isMobile ? 'center' : 'center'}
           justifyContent="center"
           alignItems="center"
           spacing={2}
@@ -21,18 +21,18 @@ const Footer = () => {
           <Text lineHeight="2.5">
             <Highlight
               query={
-                i18n.language === "en"
-                  ? ["free", "open source", "software"]
-                  : ["برمجيات", "مفتوحة", "المصدر"]
+                i18n.language === 'en'
+                  ? ['free', 'open source', 'software']
+                  : ['برمجيات', 'مفتوحة', 'المصدر']
               }
               styles={{
-                px: "1.5",
-                py: "1",
-                rounded: "full",
-                bg: "teal.100",
+                px: '1.5',
+                py: '1',
+                rounded: 'full',
+                bg: 'teal.100',
               }}
             >
-              {t("footer_text")}
+              {t('footer_text')}
             </Highlight>
           </Text>
           <Link
@@ -49,7 +49,7 @@ const Footer = () => {
         </Stack>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

@@ -1,1 +1,1 @@
-export { SubjectsAutocomplete } from "./SubjectsAutocomplete";
+export { SubjectsAutocomplete } from './SubjectsAutocomplete'

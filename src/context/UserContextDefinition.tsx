@@ -1,8 +1,8 @@
-import { createContext } from 'react';
+import { createContext } from 'react'
 
 export interface UserContextType {
-  isLoggedIn: boolean;
-  setIsLoggedIn: (value: boolean) => void;
+  isLoggedIn: boolean
+  setIsLoggedIn: (value: boolean) => void
 }
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(undefined)
