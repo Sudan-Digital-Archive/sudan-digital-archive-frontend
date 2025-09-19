@@ -7,14 +7,14 @@ import {
   OrderedList,
   ListItem,
   Link,
-} from "@chakra-ui/react";
-import { NavLink } from "react-router";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
-import { useTranslation } from "react-i18next";
+} from '@chakra-ui/react'
+import { NavLink } from 'react-router'
+import Menu from '../components/Menu.tsx'
+import Footer from '../components/Footer.tsx'
+import { useTranslation } from 'react-i18next'
 
 export default function TechnicalStack() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation()
 
   return (
     <>
@@ -36,11 +36,11 @@ export default function TechnicalStack() {
                 bgGradient="linear(to-r, cyan.300, pink.600)"
                 bgClip="text"
               >
-                {t("tech_stack_title")}
+                {t('tech_stack_title')}
               </Heading>
 
-              <Heading as="h6" fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("tech_stack_why_build")}
+              <Heading as="h6" fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('tech_stack_why_build')}
                 <Link
                   as={NavLink}
                   color="cyan"
@@ -50,12 +50,12 @@ export default function TechnicalStack() {
                 >
                   archive.org
                 </Link>
-                {t("tech_stack_why_build_2")}
+                {t('tech_stack_why_build_2')}
               </Heading>
               <OrderedList>
                 <ListItem>
-                  <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                    {t("tech_stack_point_1_part_1")}
+                  <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                    {t('tech_stack_point_1_part_1')}
                     <Link
                       as={NavLink}
                       color="cyan"
@@ -65,12 +65,12 @@ export default function TechnicalStack() {
                     >
                       archive.org
                     </Link>
-                    {t("tech_stack_point_1_part_2")}
+                    {t('tech_stack_point_1_part_2')}
                   </Text>
                 </ListItem>
                 <ListItem>
-                  <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                    {t("tech_stack_point_2_part_1")}
+                  <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                    {t('tech_stack_point_2_part_1')}
                     <Link
                       as={NavLink}
                       color="cyan"
@@ -80,12 +80,12 @@ export default function TechnicalStack() {
                     >
                       bayanat.org
                     </Link>
-                    {t("tech_stack_point_2_part_2")}
+                    {t('tech_stack_point_2_part_2')}
                   </Text>
                 </ListItem>
                 <ListItem>
-                  <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                    {t("tech_stack_point_3_part_1")}
+                  <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                    {t('tech_stack_point_3_part_1')}
                     <Link
                       as={NavLink}
                       color="cyan"
@@ -95,12 +95,12 @@ export default function TechnicalStack() {
                     >
                       browsertrix
                     </Link>
-                    {t("tech_stack_point_3_part_2")}
+                    {t('tech_stack_point_3_part_2')}
                   </Text>
                 </ListItem>
               </OrderedList>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("tech_stack_final_part_1")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('tech_stack_final_part_1')}
                 <Link
                   as={NavLink}
                   color="cyan"
@@ -108,9 +108,9 @@ export default function TechnicalStack() {
                   isExternal
                   variant="underline"
                 >
-                  {t("tech_stack_final_link")}
+                  {t('tech_stack_final_link')}
                 </Link>
-                {t("tech_stack_final_part_2")}
+                {t('tech_stack_final_part_2')}
               </Text>
             </VStack>
           </Box>
@@ -118,6 +118,5 @@ export default function TechnicalStack() {
       </SlideFade>
       <Footer />
     </>
-  );
+  )
 }
-        

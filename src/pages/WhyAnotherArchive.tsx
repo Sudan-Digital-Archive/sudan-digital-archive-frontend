@@ -1,15 +1,9 @@
-import {
-  Box,
-  SlideFade,
-  VStack,
-  Heading,
-  Text,
-} from "@chakra-ui/react";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
-import { useTranslation } from "react-i18next";
+import { Box, SlideFade, VStack, Heading, Text } from '@chakra-ui/react'
+import Menu from '../components/Menu.tsx'
+import Footer from '../components/Footer.tsx'
+import { useTranslation } from 'react-i18next'
 export default function WhyAnotherArchive() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation()
 
   return (
     <>
@@ -31,20 +25,20 @@ export default function WhyAnotherArchive() {
                 bgGradient="linear(to-r, cyan.300, pink.600)"
                 bgClip="text"
               >
-                {t("why_another_archive_title")}
+                {t('why_another_archive_title')}
               </Heading>
 
-              <Heading as="h6" fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("why_another_archive_heading")}
+              <Heading as="h6" fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('why_another_archive_heading')}
               </Heading>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("why_another_archive_para_one")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('why_another_archive_para_one')}
               </Text>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("why_another_archive_para_two")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('why_another_archive_para_two')}
               </Text>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("why_another_archive_para_three")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('why_another_archive_para_three')}
               </Text>
             </VStack>
           </Box>
@@ -52,5 +46,5 @@ export default function WhyAnotherArchive() {
       </SlideFade>
       <Footer />
     </>
-  );
+  )
 }

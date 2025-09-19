@@ -6,28 +6,27 @@ import {
   useToast,
   Text,
   VStack,
-} from "@chakra-ui/react";
-import { CopyIcon } from "@chakra-ui/icons";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
-import { useTranslation } from "react-i18next";
+} from '@chakra-ui/react'
+import { CopyIcon } from '@chakra-ui/icons'
+import Menu from '../components/Menu.tsx'
+import Footer from '../components/Footer.tsx'
+import { useTranslation } from 'react-i18next'
 
 export default function ContactUs() {
-  const { t } = useTranslation();
-  const email = "info@sudandigitalarchive.com";
-  const { onCopy } = useClipboard(email);
-  const toast = useToast();
-
+  const { t } = useTranslation()
+  const email = 'info@sudandigitalarchive.com'
+  const { onCopy } = useClipboard(email)
+  const toast = useToast()
 
   const handleCopy = () => {
-    onCopy();
+    onCopy()
     toast({
-      title: t("email_copied"),
-      status: "success",
+      title: t('email_copied'),
+      status: 'success',
       duration: 2000,
       isClosable: true,
-    });
-  };
+    })
+  }
 
   return (
     <>
@@ -48,7 +47,7 @@ export default function ContactUs() {
             bgClip="text"
             fontSize="4xl"
           >
-            {t("get_in_touch")}
+            {t('get_in_touch')}
           </Heading>
           <Button
             colorScheme="cyan"
@@ -65,5 +64,5 @@ export default function ContactUs() {
         </VStack>
       </Box>
     </>
-  );
+  )
 }

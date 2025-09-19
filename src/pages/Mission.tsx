@@ -1,12 +1,12 @@
-import { Box, SlideFade, VStack, Heading, Text, Image } from "@chakra-ui/react";
-import Menu from "../components/Menu.tsx";
-import Footer from "../components/Footer.tsx";
-import { useTranslation } from "react-i18next";
-import atbara from "./hussein_merghani.jpg";
-import kandaka from "./merghani_salih_kandaka.jpg";
+import { Box, SlideFade, VStack, Heading, Text, Image } from '@chakra-ui/react'
+import Menu from '../components/Menu.tsx'
+import Footer from '../components/Footer.tsx'
+import { useTranslation } from 'react-i18next'
+import atbara from './hussein_merghani.jpg'
+import kandaka from './merghani_salih_kandaka.jpg'
 
 export default function Mission() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation()
 
   return (
     <>
@@ -27,45 +27,45 @@ export default function Mission() {
                 bgGradient="linear(to-r, cyan.300, pink.600)"
                 bgClip="text"
               >
-                {t("mission_title")}
+                {t('mission_title')}
               </Heading>
               <Image
                 boxSize="lg"
                 objectFit="cover"
                 src={kandaka}
-                alt={t("mission_image_one_alt")}
+                alt={t('mission_image_one_alt')}
                 fallback={<Box boxSize="lg" />}
               />
-              <Text as="i">{t("mission_image_one_caption")}</Text>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("mission_para_one")}
+              <Text as="i">{t('mission_image_one_caption')}</Text>
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('mission_para_one')}
               </Text>
-              <Text as="b" fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("mission_para_two")}
+              <Text as="b" fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('mission_para_two')}
               </Text>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("mission_para_three")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('mission_para_three')}
               </Text>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("mission_para_four")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('mission_para_four')}
               </Text>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("mission_para_five")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('mission_para_five')}
               </Text>
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("mission_para_six")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('mission_para_six')}
               </Text>
               <Image
                 boxSize="lg"
                 objectFit="cover"
                 src={atbara}
-                alt={t("mission_image_two_alt")}
+                alt={t('mission_image_two_alt')}
                 fallback={<Box boxSize="lg" />}
               />
-              <Text as="i">{t("mission_image_two_caption")}</Text>
+              <Text as="i">{t('mission_image_two_caption')}</Text>
 
-              <Text fontSize={i18n.language === "en" ? "lg" : "2xl"}>
-                {t("mission_para_seven")}
+              <Text fontSize={i18n.language === 'en' ? 'lg' : '2xl'}>
+                {t('mission_para_seven')}
               </Text>
             </VStack>
           </Box>
@@ -73,5 +73,5 @@ export default function Mission() {
       </SlideFade>
       <Footer />
     </>
-  );
+  )
 }
