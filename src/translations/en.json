@@ -1,5 +1,8 @@
 {
   "translation": {
+    "error_occurred": "Error",
+    "error_fetching_record": "An error occurred while fetching the record. Please try again later.",
+    "record_not_found": "The requested record could not be found.",
     "landing_heading": "Sudan Digital Archive",
     "landing_sentence_one_part_one": "A ",
     "landing_sentence_one_part_two_highlight": "collective ",

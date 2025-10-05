@@ -84,6 +84,10 @@ export default function ViewAccession() {
   const { id } = useParams()
   const [replayerState, setReplayerState] = useState({ source: '', url: '' })
   const [accession, setAccession] = useState<null | AccessionOne>(null)
+  const [error, setError] = useState<{
+    status: number
+    message: string
+  } | null>(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { t, i18n } = useTranslation()
   const width = useWindowSize()
@@ -109,14 +113,27 @@ export default function ViewAccession() {
             Accept: 'application/json',
           },
         })
+        if (!response.ok) {
+          if (response.status === 404) {
+            setError({ status: 404, message: t('record_not_found') })
+          } else {
+            setError({
+              status: response.status,
+              message: t('error_fetching_record'),
+            })
+          }
+          return
+        }
         const data = await response.json()
         setReplayerState({
           source: data.wacz_url,
           url: data.accession.seed_url,
         })
         setAccession(data)
+        setError(null)
       } catch (error) {
         console.error(error)
+        setError({ status: 500, message: t('error_fetching_record') })
       }
     }
 
@@ -125,9 +142,9 @@ export default function ViewAccession() {
       setReplayerState({ source: '', url: '' })
       setAccession(null)
     }
-  }, [id, isPrivate])
+  }, [id, isPrivate, t])
 
-  if (isPrivate && !isLoggedIn) {
+  if ((isPrivate && !isLoggedIn) || error) {
     return (
       <>
         <Menu />
@@ -139,11 +156,13 @@ export default function ViewAccession() {
           width="100%"
         >
           <Box width={{ base: '90%', md: '50%' }} margin="auto">
-            <Alert status="warning">
+            <Alert status={error ? 'error' : 'warning'}>
               <AlertIcon />
-              <AlertTitle>{t('login_required')}</AlertTitle>
+              <AlertTitle>
+                {error ? t('error_occurred') : t('login_required')}
+              </AlertTitle>
               <AlertDescription>
-                {t('login_required_description')}
+                {error ? error.message : t('login_required_description')}
               </AlertDescription>
             </Alert>
           </Box>
