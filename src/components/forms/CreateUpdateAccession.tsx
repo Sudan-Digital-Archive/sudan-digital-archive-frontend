@@ -257,13 +257,13 @@ export function CreateUpdateAccession({
       const payload = {
         metadata_language: i18n.language === 'en' ? 'english' : 'arabic',
         url: url,
+        metadata_format: "wacz",
         metadata_title: title,
         metadata_subjects: subjectIds,
         metadata_description: description || null,
         metadata_time: `${
           new Date(date as Date).toISOString().split('T')[0]
         }T00:00:00`,
-        // TODO: Change me - add browser profile into the backend so it's in the accession w metadata
         browser_profile: isEditMode ? null : getBrowserProfile(browserProfile),
         is_private: isPrivate,
       }
