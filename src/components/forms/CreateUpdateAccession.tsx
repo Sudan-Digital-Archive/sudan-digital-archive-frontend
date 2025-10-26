@@ -257,7 +257,7 @@ export function CreateUpdateAccession({
       const payload = {
         metadata_language: i18n.language === 'en' ? 'english' : 'arabic',
         url: url,
-        metadata_format: "wacz",
+        metadata_format: 'wacz',
         metadata_title: title,
         metadata_subjects: subjectIds,
         metadata_description: description || null,
