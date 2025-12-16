@@ -102,7 +102,7 @@ While code contributions are wonderful, there are many ways to contribute:
 - **Testing** — Help us find edge cases and ensure quality
 - **Community** — Help answer questions and welcome new contributors
 - **Translation** — Help improve the project's translations
-to/from English and Arabic
+  to/from English and Arabic
 - **Ideas** — Share your thoughts on features and improvements
 
 ## Questions or Need Help?
