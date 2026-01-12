@@ -227,7 +227,7 @@ export default function Archive() {
                 </>
               )}
             </Flex>
-            <Flex py={5}>
+            <Flex py={5} direction={{ base: 'column', md: 'row' }}>
               <SubjectsAutocomplete
                 menuPlacement="top"
                 onChange={(subjects) => {
@@ -238,8 +238,8 @@ export default function Archive() {
               />
               {Array.isArray(queryFilters.metadata_subjects) &&
                 queryFilters.metadata_subjects.length > 0 && (
-                  <>
-                    <Tag size="lg" colorScheme="blue" ml={4}>
+                  <Flex alignItems="center" mt={{ base: 4, md: 0 }}>
+                    <Tag size="lg" colorScheme="blue" ml={{ base: 0, md: 4 }}>
                       {queryFilters.metadata_subjects_inclusive_filter
                         ? t('exclusive')
                         : t('inclusive')}
@@ -257,7 +257,7 @@ export default function Archive() {
                         })
                       }}
                     />
-                  </>
+                  </Flex>
                 )}
             </Flex>
           </Box>
