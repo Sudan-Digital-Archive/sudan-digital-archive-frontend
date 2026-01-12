@@ -5,8 +5,17 @@ export function useParsedDate() {
 
   function parseDate(date: string): string {
     try {
-      const parsedDate = new Date(date)
-
+      let dateToParse = date
+      // If the date string contains a time component ('T') but no timezone indicator ('Z' or offset),
+      // treat it as UTC by appending 'Z'.
+      if (
+        dateToParse.includes('T') &&
+        !dateToParse.endsWith('Z') &&
+        !/[+-]\d{2}:?\d{2}$/.test(dateToParse)
+      ) {
+        dateToParse += 'Z'
+      }
+      const parsedDate = new Date(dateToParse)
       const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
         month: 'long',
