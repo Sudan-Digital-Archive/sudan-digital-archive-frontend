@@ -30,4 +30,17 @@ describe('DateMetadata', () => {
     expect(screen.getByText('Date:')).toBeTruthy()
     expect(screen.queryByText(/invalid-date/)).toBeFalsy()
   })
+
+  it('should handle API date format without timezone as UTC (regression #65)', () => {
+    // 2026-01-09T00:29:48.332199 should be treated as UTC, so Jan 9.
+    // We want to ensure it stays Jan 9.
+    renderWithProviders(<DateMetadata date="2026-01-09T00:29:48.332199" />)
+    expect(screen.getByText('January 9, 2026')).toBeTruthy()
+  })
+  it('should handle API date format without timezone as UTC (regression #65) no ms', () => {
+    // 2026-01-09T00:29:48.332199 should be treated as UTC, so Jan 9.
+    // We want to ensure it stays Jan 9.
+    renderWithProviders(<DateMetadata date="2026-01-09T00:00:00" />)
+    expect(screen.getByText('January 9, 2026')).toBeTruthy()
+  })
 })
