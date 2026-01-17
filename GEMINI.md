@@ -56,7 +56,8 @@ It interacts with a separate backend API (documented in the `sudan-digital-archi
 | :---------------------- | :------------------------------------------------------------------------------------ |
 | `pnpm run dev`          | Starts the development server.                                                        |
 | `pnpm run build`        | specific build command: `tsc -b && vite build`. Typechecks and builds for production. |
-| `pnpm run test`         | Runs unit tests using Vitest.                                                         |
+| `pnpm run test`         | Runs unit tests using Vitest (non-interactive).                                       |
+| `pnpm run test:watch`   | Runs unit tests using Vitest (interactive watch mode).                                |
 | `pnpm run lint`         | Runs ESLint to check for code quality issues.                                         |
 | `pnpm run lint:fix`     | Runs ESLint to autofix code quality issues.                                           |
 | `pnpm run format`       | Formats code using Prettier.                                                          |

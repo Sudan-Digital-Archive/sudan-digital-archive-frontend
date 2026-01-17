@@ -8,4 +8,5 @@ export type AccessionsQueryFilters = {
   metadata_subjects?: number[]
   metadata_subjects_inclusive_filter?: boolean
   is_private?: boolean
+  url_filter?: string
 }
