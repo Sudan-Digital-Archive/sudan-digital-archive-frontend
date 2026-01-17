@@ -56,6 +56,7 @@
     "mission_image_two_caption": "Artwork by Hussein Merghani",
     "archive_add_record": "Add record",
     "archive_text_search_query_placeholder": "Enter search term here...",
+    "archive_url_filter_placeholder": "Filter by URL...",
     "archive_date_from_filter": "Date from: ",
     "archive_date_to_filter": "Date to: ",
     "archive_create_modal_header": "Archive a URL...",

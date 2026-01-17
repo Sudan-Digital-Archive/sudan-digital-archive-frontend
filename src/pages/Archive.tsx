@@ -19,18 +19,19 @@ import {
   Switch,
 } from '@chakra-ui/react'
 import { ArrowLeft, ArrowRight, FilePlus } from 'react-feather'
-import { CreateUpdateAccession } from '../components/forms/CreateUpdateAccession.tsx'
-import Menu from '../components/Menu.tsx'
-import Footer from '../components/Footer.tsx'
+import { CreateUpdateAccession } from 'src/components/forms/CreateUpdateAccession.tsx'
+import Menu from 'src/components/Menu.tsx'
+import Footer from 'src/components/Footer.tsx'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ArchiveDatePicker } from '../components/DatePicker.tsx'
-import { appConfig } from '../constants.ts'
-import { AccessionsCards } from '../components/AccessionsCards.tsx'
-import type { AccessionsQueryFilters } from '../apiTypes/apiRequests.ts'
-import type { ListAccessions } from '../apiTypes/apiResponses.ts'
-import { SubjectsAutocomplete } from '../components/subjectsAutocomplete/SubjectsAutocomplete.tsx'
-import { useUser } from '../hooks/useUser.ts'
+import { ArchiveDatePicker } from 'src/components/DatePicker.tsx'
+import { appConfig } from 'src/constants.ts'
+import { AccessionsCards } from 'src/components/AccessionsCards.tsx'
+import type { AccessionsQueryFilters } from 'src/apiTypes/apiRequests.ts'
+import type { ListAccessions } from 'src/apiTypes/apiResponses.ts'
+import { SubjectsAutocomplete } from 'src/components/subjectsAutocomplete/SubjectsAutocomplete.tsx'
+import { useUser } from 'src/hooks/useUser.ts'
+import { buildFilters } from 'src/utils/url.ts'
 
 export default function Archive() {
   const { t, i18n } = useTranslation()
@@ -42,6 +43,7 @@ export default function Archive() {
     metadata_subjects: [],
     metadata_subjects_inclusive_filter: true,
     is_private: false,
+    url_filter: '',
   })
   const [accessions, setAccessions] = useState<ListAccessions | null>(null)
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -54,18 +56,9 @@ export default function Archive() {
   const [dateTo, setDateTo] = useState<null | Date>(null)
   const [queryTerm, setQueryTerm] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
+  const [urlFilterTerm, setUrlFilterTerm] = useState('')
+  const [debouncedUrlFilter, setDebouncedUrlFilter] = useState('')
   const { isLoggedIn } = useUser()
-  function buildFilters(queryFilters: AccessionsQueryFilters) {
-    let queryParams = ''
-    for (const [key, value] of Object.entries(queryFilters)) {
-      if (Array.isArray(value)) {
-        value.forEach((item) => (queryParams += `${key}=${item}&`))
-      } else {
-        queryParams += `${key}=${value}&`
-      }
-    }
-    return new URLSearchParams(queryParams)
-  }
 
   const updateFilters = useCallback((updates: AccessionsQueryFilters) => {
     setQueryFilters((prev) => ({
@@ -106,8 +99,19 @@ export default function Archive() {
   }, [queryTerm])
 
   useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedUrlFilter(urlFilterTerm)
+    }, 300)
+    return () => clearTimeout(handler)
+  }, [urlFilterTerm])
+
+  useEffect(() => {
     updateFilters({ query_term: debouncedQuery })
   }, [debouncedQuery, updateFilters])
+
+  useEffect(() => {
+    updateFilters({ url_filter: debouncedUrlFilter })
+  }, [debouncedUrlFilter, updateFilters])
 
   const fetchAccessions = useCallback(
     async (filters: AccessionsQueryFilters) => {
@@ -187,6 +191,15 @@ export default function Archive() {
             </Button>
           ) : null}
           <Box w="100%" p={10}>
+            <Input
+              value={urlFilterTerm}
+              onChange={(event) => {
+                setUrlFilterTerm(event.target.value)
+              }}
+              placeholder={t('archive_url_filter_placeholder')}
+              size="lg"
+              mb={5}
+            />
             <Input
               value={queryTerm}
               onChange={(event) => {
