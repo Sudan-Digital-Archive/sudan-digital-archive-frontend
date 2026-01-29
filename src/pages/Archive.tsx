@@ -20,52 +20,46 @@ import {
 } from '@chakra-ui/react'
 import { ArrowLeft, ArrowRight, FilePlus } from 'react-feather'
 import { CreateUpdateAccession } from 'src/components/forms/CreateUpdateAccession.tsx'
-import Menu from 'src/components/Menu.tsx'
+import NavMenu from 'src/components/Menu.tsx'
 import Footer from 'src/components/Footer.tsx'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ArchiveDatePicker } from 'src/components/DatePicker.tsx'
-import { appConfig } from 'src/constants.ts'
 import { AccessionsCards } from 'src/components/AccessionsCards.tsx'
-import type { AccessionsQueryFilters } from 'src/apiTypes/apiRequests.ts'
-import type { ListAccessions } from 'src/apiTypes/apiResponses.ts'
 import { SubjectsAutocomplete } from 'src/components/subjectsAutocomplete/SubjectsAutocomplete.tsx'
 import { useUser } from 'src/hooks/useUser.ts'
-import { buildFilters } from 'src/utils/url.ts'
+import { useAccessions } from 'src/hooks/useAccessions.ts'
 
 export default function Archive() {
   const { t, i18n } = useTranslation()
-  const [queryFilters, setQueryFilters] = useState<AccessionsQueryFilters>({
-    page: 0,
-    per_page: 50,
-    lang: i18n.language === 'en' ? 'english' : 'arabic',
-    query_term: '',
-    metadata_subjects: [],
-    metadata_subjects_inclusive_filter: true,
-    is_private: false,
-    url_filter: '',
+  const { isLoggedIn } = useUser()
+
+  const {
+    queryFilters,
+    updateFilters,
+    accessions,
+    isLoading,
+    pagination,
+    handleRefresh,
+  } = useAccessions({
+    isLoggedIn,
+    baseFilters: {
+      lang: i18n.language === 'en' ? 'english' : 'arabic',
+      query_term: '',
+      metadata_subjects: [],
+      metadata_subjects_inclusive_filter: true,
+      is_private: false,
+      url_filter: '',
+    },
   })
-  const [accessions, setAccessions] = useState<ListAccessions | null>(null)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [isLoading, setIsLoading] = useState(false)
-  const [pagination, setPagination] = useState({
-    currentPage: 0,
-    totalPages: 0,
-  })
   const [dateFrom, setDateFrom] = useState<null | Date>(null)
   const [dateTo, setDateTo] = useState<null | Date>(null)
   const [queryTerm, setQueryTerm] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const [urlFilterTerm, setUrlFilterTerm] = useState('')
   const [debouncedUrlFilter, setDebouncedUrlFilter] = useState('')
-  const { isLoggedIn } = useUser()
-
-  const updateFilters = useCallback((updates: AccessionsQueryFilters) => {
-    setQueryFilters((prev) => ({
-      ...prev,
-      ...updates,
-    }))
-  }, [])
 
   function handleDateChange(
     date: Date | null,
@@ -113,54 +107,10 @@ export default function Archive() {
     updateFilters({ url_filter: debouncedUrlFilter })
   }, [debouncedUrlFilter, updateFilters])
 
-  const fetchAccessions = useCallback(
-    async (filters: AccessionsQueryFilters) => {
-      try {
-        const endpoint = isLoggedIn
-          ? `${appConfig.apiURL}accessions/private`
-          : `${appConfig.apiURL}accessions`
-        const url = `${endpoint}?${buildFilters({
-          ...filters,
-        })}`
-        const response = await fetch(url, {
-          credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-          },
-        })
-        const data: ListAccessions = await response.json()
-        setAccessions(data)
-        setPagination({
-          currentPage: data.page,
-          totalPages: data.num_pages,
-        })
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [isLoggedIn],
-  )
-
-  useEffect(() => {
-    setIsLoading(true)
-    fetchAccessions(queryFilters)
-    return () => {
-      setAccessions(null)
-      setIsLoading(false)
-    }
-  }, [fetchAccessions, queryFilters])
-
-  const handleAccessionsRefresh = () => {
-    fetchAccessions(queryFilters)
-  }
-
   return (
     <>
-      <Menu
+      <NavMenu
         changeLanguageOverride={() => {
-          setIsLoading(true)
           const newLanguage = i18n.language === 'en' ? 'ar' : 'en'
           i18n.changeLanguage(newLanguage)
           switch (newLanguage) {
@@ -293,7 +243,7 @@ export default function Archive() {
           ) : (
             <AccessionsCards
               accessions={accessions.items}
-              onRefresh={handleAccessionsRefresh}
+              onRefresh={handleRefresh}
             />
           )}
           {accessions && accessions?.items.length > 0 && !isLoading && (

@@ -59,7 +59,10 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
               />
               <MenuList>
                 <MenuItem>
-                  <NavLink to="/archive">{t('nav_the_archive')}</NavLink>
+                  <NavLink to="/archive">{t('nav_search')}</NavLink>
+                </MenuItem>
+                <MenuItem>
+                  <NavLink to="/collections">{t('nav_collections')}</NavLink>
                 </MenuItem>
                 <MenuItem>
                   <NavLink to="/who-are-we">{t('nav_who_are_we')}</NavLink>
@@ -102,11 +105,22 @@ const Navbar = ({ changeLanguageOverride }: NavbarProps) => {
             aria-label="navigation-menu"
           >
             <Menu>
-              <NavLink to="/archive">
-                <MenuButton as={Button} size="sm" variant="ghost">
-                  {t('nav_the_archive')}
-                </MenuButton>
-              </NavLink>
+              <MenuButton
+                as={Button}
+                rightIcon={<ChevronDown />}
+                size="sm"
+                variant="ghost"
+              >
+                {t('nav_the_archive')}
+              </MenuButton>
+              <MenuList>
+                <MenuItem>
+                  <NavLink to="/archive">{t('nav_search')}</NavLink>
+                </MenuItem>
+                <MenuItem>
+                  <NavLink to="/collections">{t('nav_collections')}</NavLink>
+                </MenuItem>
+              </MenuList>
             </Menu>
             <Menu>
               <MenuButton
