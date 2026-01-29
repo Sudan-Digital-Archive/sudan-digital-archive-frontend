@@ -6,6 +6,8 @@ import ViewAccession from './pages/ViewAccession.tsx'
 import WhoAreWe from './pages/WhoAreWe.tsx'
 import WhyAnotherArchive from './pages/WhyAnotherArchive.tsx'
 import TechnicalStack from './pages/TechnicalStack.tsx'
+import Collections from './pages/Collections.tsx'
+import CollectionView from './pages/CollectionView.tsx'
 import './il18n.ts'
 import './css/styles.css'
 import { Routes, Route } from 'react-router'
@@ -40,6 +42,8 @@ export const App = () => {
       <Route path="tech-stack" element={<TechnicalStack />} />
       <Route path="code-of-conduct" element={<CodeOfConduct />} />
       <Route path="archive" element={<Archive />} />
+      <Route path="collections" element={<Collections />} />
+      <Route path="collections/:id" element={<CollectionView />} />
       <Route path="contact-us" element={<ContactUs />} />
       <Route path="archive/:id" element={<ViewAccession />} />
       <Route path="login" element={<Login />} />

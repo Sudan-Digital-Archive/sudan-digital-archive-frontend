@@ -271,7 +271,7 @@ export function CreateUpdateAccession({
       const method = isEditMode ? 'PUT' : 'POST'
       const urlPath = isEditMode
         ? `${appConfig.apiURL}accessions/${accessionToUpdate?.id}`
-        : `${appConfig.apiURL}accessions`
+        : `${appConfig.apiURL}accessions/crawl`
       const response = await fetch(urlPath, {
         method,
         credentials: 'include',
